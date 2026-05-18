@@ -5,18 +5,23 @@ using CsvHelper;
 using UnityEngine;
 
 public static class StringTableManager {
-	private const string k_TablePath = "Datas/KorStringData";
+	private const string k_StringTablePath = "Datas/KorStringData";
+	private const string k_CardNameTablePath = "Datas/KorCardData";
 	private static Dictionary<string, string> _stringTable = new();
 	public static Dictionary<string, string> StringTable => _stringTable;
+	private static Dictionary<string, string> _cardNameTable = new();
+	public static Dictionary<string, string> CardNameTable => _cardNameTable;
 	
 	static StringTableManager() {
-		Load(k_TablePath);
-
-	}
+		Load(k_StringTablePath, _stringTable);
+		Load(k_CardNameTablePath, _cardNameTable);
+	} 
 	
-	private static void Load(string path) {
+	private static void Load(string path, Dictionary<string, string> table) {
+		table.Clear();
+		
 		TextAsset csvFile = Resources.Load<TextAsset>(path);
-		if (csvFile == null) { Debug.LogError($"{k_TablePath} 파일이 없습니다.");}
+		if (csvFile == null) { Debug.LogError($"{k_StringTablePath} 파일이 없습니다.");}
 		
 		StringReader reader = new StringReader(csvFile.text);
 		CsvReader csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
@@ -24,7 +29,7 @@ public static class StringTableManager {
 		IEnumerable<DataRow> rows = csvReader.GetRecords<DataRow>();
 		
 		foreach (DataRow row in rows) {
-			_stringTable.Add(row.id, row.value);
+			table.Add(row.id, row.value);
 		}
 	}
 }
