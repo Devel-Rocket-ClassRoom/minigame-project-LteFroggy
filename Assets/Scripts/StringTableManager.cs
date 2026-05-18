@@ -12,10 +12,6 @@ public static class StringTableManager {
 	static StringTableManager() {
 		Load(k_TablePath);
 
-		Debug.Log($"로드 완료. 로딩 결과 출력");
-		foreach (var row in _stringTable) {
-			Debug.Log($"{row.Key} : {row.Value}");
-		}
 	}
 	
 	private static void Load(string path) {
