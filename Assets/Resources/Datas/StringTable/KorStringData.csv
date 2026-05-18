@@ -1,0 +1,12 @@
+﻿id,value
+Attack,공격
+Defense,방어
+MultiHit,연타
+Util,유틸
+Fire,화염
+Common,커먼
+Uncommon,언커먼
+Rare,희귀
+AttackCardText,피해를 @ 줍니다.
+DefenceCardText,방어도를 @ 얻습니다.
+DrawCardText,카드를 @장 뽑습니다.
