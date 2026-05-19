@@ -713,9 +713,9 @@ GameObject:
   - component: {fileID: 7857585320080387896}
   - component: {fileID: 3607843076329311568}
   - component: {fileID: 1931879457280972975}
-  - component: {fileID: 4549940123971724374}
   - component: {fileID: 5178661013827533493}
-  m_Layer: 5
+  - component: {fileID: 5739213078583797811}
+  m_Layer: 6
   m_Name: Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -783,19 +783,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4549940123971724374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4216889092611749246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80ba7a4aae5d4bd497f88bdc7ee9a815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Card
-  cardDefinition: {fileID: 0}
 --- !u!114 &5178661013827533493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -822,6 +809,23 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &5739213078583797811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4216889092611749246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f344e2b512bf40b69c747886830adde9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardController
+  CardInstance: {fileID: 0}
+  _cardIcon: {fileID: 7453457844374210671}
+  _cardNameText: {fileID: 5765055563301011514}
+  _cardDescriptionText: {fileID: 3610516915730536778}
+  _cardCostText: {fileID: 4463725427975096243}
 --- !u!1 &5127504596227597308
 GameObject:
   m_ObjectHideFlags: 0

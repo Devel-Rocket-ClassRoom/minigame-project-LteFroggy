@@ -8,7 +8,7 @@ public class DrawCardEffect : CardEffect {
 		
 	}
 
-	public override string GetPreviewText(BattleContext ctx) {
+	public override string GetPreviewTextWithContext(BattleContext ctx) {
 		return StringTableManager.StringTable["DrawCardText"].Replace("@", amount.ToString());
 	}
 }

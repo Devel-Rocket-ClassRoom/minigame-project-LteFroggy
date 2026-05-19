@@ -9,7 +9,7 @@ public class GetArmorEffect : CardEffect {
 		context.player.GetArmor(amount);
 	}
 
-	public override string GetPreviewText(BattleContext ctx) {
+	public override string GetPreviewTextWithContext(BattleContext ctx) {
 		return StringTableManager.StringTable["DefenceCardText"].Replace("@", amount.ToString());
 	}
 }

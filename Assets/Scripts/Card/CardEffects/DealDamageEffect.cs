@@ -10,7 +10,7 @@ public class DealDamageEffect : CardEffect {
 		context.target.GetDamage(amount);
 	}
 
-	public override string GetPreviewText(BattleContext ctx) {
+	public override string GetPreviewTextWithContext(BattleContext ctx) {
 		return StringTableManager.StringTable["AttackCardText"].Replace("@", amount.ToString());
 	}
 }

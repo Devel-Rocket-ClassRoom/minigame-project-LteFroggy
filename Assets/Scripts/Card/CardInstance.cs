@@ -4,10 +4,10 @@ using UnityEngine;
 public class CardInstance : MonoBehaviour {
 	public CardDefinition cardDefinition;
 	
-	private string GetCardTextPreview(BattleContext context) {
+	public string GetCardDescription() {
 		StringBuilder sb = new StringBuilder();
 		foreach (var effect in cardDefinition.effects) {
-			sb.AppendLine(effect.GetPreviewText(context));
+			sb.AppendLine(effect.GetPreviewText());
 		}
 		return sb.ToString();
 	}
