@@ -7,27 +7,37 @@ public class HandLayoutController : MonoBehaviour {
 	[SerializeField] private float _arcHeight = 200f;
 	[SerializeField] private float _arcOffset = 50f;
 
+	[Header("=== 카드가 처음 드로우될 때 출발할 Position ===")]
+	[SerializeField] private RectTransform _drawPileLocation;
+
+	[Header("=== 카드가 사용되고 들어갈 때 도착할 Position ===")]
+	[SerializeField] private RectTransform _discardPileLocation;
+
 	[Header("=== Card Prefab 등록 ===")]
 	[SerializeField] private CardOnHandController _cardPrefab;
 
 	[Header("=== CardPool 등록 ===")]
 	[SerializeField] private CardPool _cardPool;
 	
-	private List<CardOnHandController> _cards = new();
+	private readonly List<CardOnHandController> _cards = new();
 	
 	public void AddCard(CardInstance cardInstance) {
 		CardOnHandController cardController = _cardPool.GetCard(transform);
 		_cards.Add(cardController);
 		cardController.Init(cardInstance, _cards.Count - 1);
+		
+		// 처음 뽑을 때 덱에서 나오는 것처럼 연출하기 위해 표시
+		cardController.SetCardPosition(_drawPileLocation.position, Quaternion.identity);
+		
 		Arrange();
 	}
 
 	public void RemoveCard(CardInstance card) {
 		for (int i = 0; i < _cards.Count; i++) {
-			if (_cards[i].CardInstance == card) {
-				_cards.RemoveAt(i);
-				_cardPool.ReturnCard(_cards[i]);
-			}
+			if (_cards[i].CardInstance != card) continue;
+			_cardPool.ReturnCard(_cards[i]);
+			_cards.RemoveAt(i);
+			break;
 		}
 		Arrange();
 	}

@@ -7,15 +7,13 @@ public class CardPool : MonoBehaviour {
 	
 	public CardOnHandController GetCard(Transform parent) {
 		// 카드풀이 0이면, 새 카드 만들어주기
-		if (_cardPool.Count == 0) {
-			var instance = Instantiate(_cardPrefab);
-			return instance;
-		}
-		
-		var controller = _cardPool.Pop();
-		controller.transform.parent = parent;
-		controller.gameObject.SetActive(true);
-		return controller;
+		CardOnHandController result;
+		if (_cardPool.Count == 0) { result = Instantiate(_cardPrefab); }
+		else { result = _cardPool.Pop(); }
+		result.transform.SetParent(parent);
+		result.transform.localScale = Vector3.one;
+		result.gameObject.SetActive(true);
+		return result;
 	}
 	
 	public void ReturnCard(CardOnHandController card) {

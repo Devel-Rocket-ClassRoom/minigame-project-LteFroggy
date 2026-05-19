@@ -773,8 +773,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: bd656af9ccaa4214bb2d7bdd054dc9f2, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -821,7 +821,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f344e2b512bf40b69c747886830adde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardController
-  CardInstance: {fileID: 0}
   _cardIcon: {fileID: 7453457844374210671}
   _cardNameText: {fileID: 5765055563301011514}
   _cardDescriptionText: {fileID: 3610516915730536778}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,8 +12,21 @@ public class DeckManager : MonoBehaviour {
 	private readonly List<CardInstance> _discardPile = new();
 	private readonly List<CardInstance> _exhaustPile = new();
 	private readonly List<CardInstance> _handPile = new();
+
+	private void OnDisable() {
+		_drawPile.Clear();
+		_discardPile.Clear();
+		_exhaustPile.Clear();
+		_handPile.Clear();
+	}
 	
-	
+	// 전투 시작 시, PlayerData에서 덱 목록 가져오기
+	public void StartGame() {
+		foreach (var card in PlayerData.Instance.Cards) {
+			_discardPile.Add(card);
+		}
+	}
+
 	/// <summary>
 	/// 카드 한 장 드로우
 	/// </summary>
@@ -33,12 +47,16 @@ public class DeckManager : MonoBehaviour {
 	/// </summary>
 	private void Shuffle() {
 		_drawPile.Clear();
+
+		Debug.Log($"Shuffle 시작");
+		Debug.Log($"DrawPile Count : {_drawPile.Count}");
+		Debug.Log($"DiscardPile Count : {_discardPile.Count}");
 		
 		List<List<int>> temp = new List<List<int>>(_discardPile.Count);
 		
 		// 정렬 기준으로 0 ~ 100까지의 값 랜덤 할당
-		for (int i = 0; i < temp.Count; i++) {
-			temp[i] = new List<int>();
+		for (int i = 0; i < _discardPile.Count; i++) {
+			temp.Add(new List<int>());
 			temp[i].Add(i);
 			temp[i].Add(Random.Range(0, 100));
 		}
@@ -51,5 +69,9 @@ public class DeckManager : MonoBehaviour {
 		}
 		// 버려진 카드 목록 초기화
 		_discardPile.Clear();
+
+		Debug.Log($"Shuffle 종료");
+		Debug.Log($"DrawPile Count : {_drawPile.Count}");
+		Debug.Log($"DiscardPile Count : {_discardPile.Count}");
 	}
 }

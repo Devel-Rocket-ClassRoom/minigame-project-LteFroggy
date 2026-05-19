@@ -1,13 +1,17 @@
 ﻿using System.Text;
-using UnityEngine;
 
-public class CardInstance : MonoBehaviour {
-	public CardDefinition cardDefinition;
+public class CardInstance {
+	public readonly CardDefinition _cardDefinition;
+	
+	public CardInstance(CardDefinition cardDefinition) {
+		_cardDefinition = cardDefinition;
+	}
 	
 	public string GetCardDescription() {
 		StringBuilder sb = new StringBuilder();
-		foreach (var effect in cardDefinition.effects) {
-			sb.AppendLine(effect.GetPreviewText());
+		sb.Append($"[{_cardDefinition.TagText}] \n");
+		foreach (var effect in _cardDefinition.effects) {
+			sb.AppendLine(effect.GetCardDescription());
 		}
 		return sb.ToString();
 	}
