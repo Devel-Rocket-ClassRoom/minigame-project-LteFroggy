@@ -4,7 +4,6 @@ public class BattleManager : MonoBehaviour {
 	[SerializeField] private DeckManager _deckManager;
 	[SerializeField] private CardUseManager _cardUseManager;
 	[SerializeField] private EnemyManager _enemyManager;
-	[SerializeField] private CardUseManager cardUseManager;
 	
 	// 턴 관리
 	private int _turnCount;
@@ -18,7 +17,14 @@ public class BattleManager : MonoBehaviour {
 	
 	public void StartTurn() {
 		_turnCount++;
-		_deckManager.StartTurn();
-		cardUseManager.StartTurn();
+		// 카드 5장 드로우
+		for (int i = 0; i < 5; i++) {
+			_deckManager.DrawCard();
+			_cardUseManager.StartTurn();
+		}
+	}
+	
+	public void EndTurn() {
+		
 	}
 }	
