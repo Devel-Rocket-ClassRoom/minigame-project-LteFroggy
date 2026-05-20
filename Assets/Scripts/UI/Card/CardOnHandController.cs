@@ -16,18 +16,23 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 
 	// 마우스 올렸을 때 사용할 값
 	private const float k_HoverY = 215f;
+	private const float k_UseY = 525f;
 	
-	// 카드가 사용 대기 상태가 되었을 때 이동할 위치
-	private readonly Vector3 _usingPosition = new Vector3(0, 215f, 0);
+	// 카드가 선택 상태가 되었을 때 이동할 위치
+	private readonly Vector3 _selectedPosition = new Vector3(0, k_HoverY, 0);
+	
+	// 카드가 사용되었을 때 이동할 위치
+	private readonly Vector3 _usePosition = new Vector3(0, k_UseY, 0);
 
 	// 마우스 올렸다 뗐을 때 돌아오기 위한 변수들
 	[SerializeField] private Vector3 _fanPosition;
 	[SerializeField] private Quaternion _fanRotation;
-	private int _originalIndex;
 	
 	// Init시에 필요한 정보 세팅하기 위해 사용
 	private CardInstance _cardInstance;
 	public CardInstance CardInstance => _cardInstance;
+	
+	// 제자리로 돌아올 때 Sibling 사이 위치 결정하기 위해 사용
 	public int CardIdxInHand { get; set; }
 
 	[Header("=== 세팅할 정보 UI ===")]
@@ -61,12 +66,11 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		_rectTransform = GetComponent<RectTransform>();
 	}
 	
-	public void Init(CardInstance instance, RectTransform drawPile, RectTransform discardPile, CardPool cardPool, int cardIdxInHand) {
+	public void Init(CardInstance instance, RectTransform drawPile, RectTransform discardPile, CardPool cardPool) {
 		// Instance 세팅 후, 정보 넣기
 		_cardInstance = instance;
 		
 		_isSelected = false;
-		CardIdxInHand = cardIdxInHand;
 		_cardIcon.sprite = instance._cardDefinition.icon;
 		_cardNameText.text = instance._cardDefinition.CardName;
 		_cardDescriptionText.text = instance.GetCardDescription();
@@ -98,8 +102,8 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	public void OnPointerExit(PointerEventData eventData) {
 		// 지금 선택된 카드는 커서 벗어나도 제자리로 돌아가지 않음
 		if (_isSelected) {
-			// 타겟이 필요한 카드는 사용 위치로 이동
-			if (_cardInstance.NeedsTarget) { ToUsingPosition(); }
+			// 타겟이 필요한 카드는 선택 위치로 이동
+			if (_cardInstance.NeedsTarget) { ToSelectedPosition(); }
 			return;
 		}
 		
@@ -110,24 +114,26 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// 카드에 마우스를 올렸을 때, 카드 내용이 다 보이도록 카드를 이동시킨다.
 	/// </summary>
 	private void ToHoverPosition() {
-		_originalIndex = transform.GetSiblingIndex();
-
 		_rectTransform.SetAsLastSibling();
 		SetCardPosition(new Vector3(_fanPosition.x, k_HoverY, 0), Quaternion.identity);
 	}
 	
 	/// <summary>
-	/// 사용 위치로 카드를 이동
+	/// 선택된 카드 위치로 카드를 이동
 	/// </summary>
-	private void ToUsingPosition() {
-		SetCardPosition(_usingPosition, Quaternion.identity);
+	private void ToSelectedPosition() {
+		SetCardPosition(_selectedPosition, Quaternion.identity);
+	}
+	
+	public void ToUsePosition() {
+		SetCardPosition(_usePosition, Quaternion.identity);
 	}
 	
 	/// <summary>
 	/// 카드의 위치를 원래 위치로 되돌린다.
 	/// </summary>
 	public void ToOriginalPosition() {
-		_rectTransform.SetSiblingIndex(_originalIndex);
+		_rectTransform.SetSiblingIndex(CardIdxInHand);
 		SetCardPosition(_fanPosition, _fanRotation);
 	}
 	
