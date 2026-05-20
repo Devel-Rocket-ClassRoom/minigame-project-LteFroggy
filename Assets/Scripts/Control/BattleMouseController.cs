@@ -30,21 +30,17 @@ public class BattleMouseController : MonoBehaviour {
 	// 선택된 카드
 	private CardOnHandController _selectedCard;
 	
+	// 대상 선택해야 할 상황이라면, 
+	private RectTransform _lineStartPoint;
+	
 	private bool _needsTarget;
-	private Vector3 _lineStartPoint;
-	// 타겟팅 필요 여부에 따라 LineDrawer 활성화, 비활성화 및 StartPoint 초기화
+	// 타겟팅 필요 여부에 따라 LineDrawer 활성화, 비활성화
 	public bool NeedsTarget {
 		get => _needsTarget;
 		set {
 			_needsTarget = value;
-			if (value) {
-				_lineStartPoint = _mainCamera.ScreenToWorldPoint( 
-					_mousePositionAction.ReadValue<Vector2>());
-				_cardLineDrawer.Show();
-			} else {
-				_lineStartPoint = Vector3.zero;
-				_cardLineDrawer.Hide();
-			}
+			if (value) { _cardLineDrawer.Show(); } 
+			else { _cardLineDrawer.Hide(); }
 		}
 	}
 	
@@ -105,6 +101,7 @@ public class BattleMouseController : MonoBehaviour {
 
 			// 있다면 등록, 타겟이 필요한 카드인지도 검사해서 저장
 			_selectedCard = cardController;
+			_lineStartPoint = cardController.GetComponent<RectTransform>();
 			cardController.IsSelected = true;
 			NeedsTarget = cardController.CardInstance._cardDefinition.needsTarget;
 			break;
@@ -138,6 +135,7 @@ public class BattleMouseController : MonoBehaviour {
 		// 클릭된 카드 정보 초기화 및 제자리로 돌리기
 		NeedsTarget = false;
 		_selectedCard = null;
+		_lineStartPoint = null;
 		
 		// 대상이 선택되었었다면, 대상 지정 UI 없애기
 		if (TargetInstance != null) { TargetInstance.SetTargetHighlight(false); }
@@ -161,13 +159,13 @@ public class BattleMouseController : MonoBehaviour {
 					EnemyInstance enemyInstance = hit.collider.gameObject.GetComponent<EnemyInstance>();
 					TargetInstance = enemyInstance;
 					_cardLineDrawer.DrawTargetLine(
-						_lineStartPoint,
+						_mainCamera.ScreenToWorldPoint(_lineStartPoint.position),
 						TargetInstance.transform.position);					
 				}
 				// 선택되지 않았다면, 마우스 따라오게
 				else {
 					_cardLineDrawer.DrawTargetLine(
-						_lineStartPoint,
+						_mainCamera.ScreenToWorldPoint(_lineStartPoint.position),
 						_mainCamera.ScreenToWorldPoint(_mousePositionAction.ReadValue<Vector2>())
 					);
 					TargetInstance = null;

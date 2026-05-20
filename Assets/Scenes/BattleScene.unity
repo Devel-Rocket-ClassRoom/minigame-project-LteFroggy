@@ -1532,9 +1532,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1341086202}
   - {fileID: 1316074753}
   - {fileID: 1490730136}
-  - {fileID: 1341086202}
   - {fileID: 253944940}
   - {fileID: 1266715707}
   - {fileID: 1343037837}
@@ -2413,7 +2413,7 @@ MonoBehaviour:
   _cardUseManager: {fileID: 932453413}
   _enemyManager: {fileID: 269936698}
   _turnManager: {fileID: 706546615}
-  _turnEndButton: {fileID: 0}
+  _turnEndButton: {fileID: 253944941}
 --- !u!1 &706546613
 GameObject:
   m_ObjectHideFlags: 0
@@ -3381,9 +3381,11 @@ MonoBehaviour:
   _fanAngle: 20
   _arcHeight: 200
   _arcOffset: 50
+  _drawPileLocation: {fileID: 1631891641}
+  _discardPileLocation: {fileID: 1704591093}
   _cardPrefab: {fileID: 5739213078583797811, guid: f498e654973e02a448f046b978fa822f, type: 3}
   _cardPool: {fileID: 1868573259}
-  _cardUseManager: {fileID: 0}
+  _cardUseManager: {fileID: 932453413}
 --- !u!1 &1509821702
 GameObject:
   m_ObjectHideFlags: 0
