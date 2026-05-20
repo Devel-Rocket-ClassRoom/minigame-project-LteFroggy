@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,6 +8,10 @@ public class DeckManager : MonoBehaviour {
 
 	[Header("=== 실제 UI카드상에 보이는 카드를 관리할 Controller ===")]
 	[SerializeField] private HandLayoutController _handLayoutController;
+
+	[Header("=== 뽑을 카드 더미, 사용한 카드 더미 텍스트 ===")] 
+	[SerializeField] private TextMeshProUGUI _drawPileText;
+	[SerializeField] private TextMeshProUGUI _discardPileText;
 	
 	private readonly List<CardInstance> _drawPile = new();
 	private readonly List<CardInstance> _discardPile = new();
@@ -66,5 +71,10 @@ public class DeckManager : MonoBehaviour {
 		}
 		// 버려진 카드 목록 초기화
 		_discardPile.Clear();
+	}
+
+	private void Update() {
+		_drawPileText.text = _drawPile.Count.ToString();
+		_discardPileText.text = _discardPile.Count.ToString();
 	}
 }
