@@ -1,36 +1,49 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
-public class BattleManager : MonoBehaviour {
+public class BattleManager : BattleSystemManager {
 	[SerializeField] private DeckManager _deckManager;
 	[SerializeField] private CardUseManager _cardUseManager;
 	[SerializeField] private EnemyManager _enemyManager;
+	[SerializeField] private TurnManager _turnManager;
 	
-	private int _maxEnergy = 3;
-	
-	// 턴 관리
-	private int _turnCount;
-	private bool _isEnemyTurn;
-	
-	public int Turn => _turnCount;
+	[Header("=== 턴 종료 버튼 ===")]
+	[SerializeField] private Button _turnEndButton;
 
 	// Start에서 게임 시작
 	private void Start() {
-		_turnCount = 1;
-		_deckManager.StartGame();
-		StartTurn();
+		StartBattle();
 	}
 
-	public void StartTurn() {
-		_turnCount++;
-		// 카드 5장 드로우
-		for (int i = 0; i < 5; i++) {
-			_deckManager.DrawCard();
-		}
-		// 에너지 꽉 채우기
-		_cardUseManager.StartTurn();
+	public override void StartBattle() {
+		_deckManager.StartBattle();
+		_cardUseManager.StartBattle();
+		_enemyManager.StartBattle();
+		_turnManager.StartBattle();
+		
+		StartPlayerTurn();
 	}
-	public void EndTurn() {
+
+	private void OnEnable() {
+		_enemyManager.OnEnemyTurnEnd.AddListener(StartPlayerTurn);
+	}
+
+	private void OnDisable() {
+		_enemyManager.OnEnemyTurnEnd.RemoveListener(StartPlayerTurn);
+	}
+
+	public override void StartPlayerTurn() {
+		_turnManager.StartPlayerTurn();
+		_cardUseManager.StartPlayerTurn();
+		_enemyManager.StartPlayerTurn();
+		_deckManager.StartPlayerTurn();
+	}
+	
+	public override void EndPlayerTurn() {
+		_turnManager.EndPlayerTurn();
+		_enemyManager.EndPlayerTurn();
+		_cardUseManager.EndPlayerTurn();
+		_deckManager.EndPlayerTurn();
 	}
 	
 	/// <summary>

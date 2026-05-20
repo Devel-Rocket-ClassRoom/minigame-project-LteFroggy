@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
-public class DeckManager : MonoBehaviour {
+public class DeckManager : BattleSystemManager {
 
 	[Header("=== 실제 UI카드상에 보이는 카드를 관리할 Controller ===")]
 	[SerializeField] private HandLayoutController _handLayoutController;
@@ -17,19 +16,37 @@ public class DeckManager : MonoBehaviour {
 	private readonly List<CardInstance> _discardPile = new();
 	private readonly List<CardInstance> _exhaustPile = new();
 	private readonly List<CardInstance> _handPile = new();
+	
+	public int DrawCountOnNextTurn { get; set; } = 5;
+	
+	// 전투 시작 시, PlayerData에서 덱 목록 가져오기
+	public override void StartBattle() {
+		foreach (var card in PlayerData.Instance.Cards) {
+			_discardPile.Add(card);
+		}
+	}
+	
+	// 턴 시작되면, 카드 설정된 만큼 드로우 (기본 5장)
+	public override void StartPlayerTurn() {
+		for (int i = 0; i < DrawCountOnNextTurn; i++) {
+			DrawCard();
+		}
+	}
+	
+	// 턴 종료되면, 손에 있는 카드 모두 discardPile로
+	public override void EndPlayerTurn() {
+		while (_handPile.Count > 0) {
+			_handLayoutController.RemoveCard(_handPile[0]);
+			_discardPile.Add(_handPile[0]);
+			_handPile.RemoveAt(0);
+		}
+	}
 
 	private void OnDisable() {
 		_drawPile.Clear();
 		_discardPile.Clear();
 		_exhaustPile.Clear();
 		_handPile.Clear();
-	}
-	
-	// 전투 시작 시, PlayerData에서 덱 목록 가져오기
-	public void StartGame() {
-		foreach (var card in PlayerData.Instance.Cards) {
-			_discardPile.Add(card);
-		}
 	}
 
 	/// <summary>
@@ -42,6 +59,10 @@ public class DeckManager : MonoBehaviour {
 		_handLayoutController.AddCard(_handPile[_handPile.Count - 1]);
 	}
 	
+	/// <summary>
+	/// 손에서 특정 카드 제거
+	/// </summary>
+	/// <param name="card">제거할 카드</param>
 	public void RemoveCardFromHand(CardInstance card) { 
 		_discardPile.Add(card);
 		_handPile.Remove(card);

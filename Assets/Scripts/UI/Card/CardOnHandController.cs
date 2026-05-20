@@ -32,6 +32,10 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	[SerializeField] private TextMeshProUGUI _cardNameText;
 	[SerializeField] private TextMeshProUGUI _cardDescriptionText;
 	[SerializeField] private TextMeshProUGUI _cardCostText;
+
+	[Header("=== 카드 사용, 삭제 시 이동할 위치 구하기 위함 ===")]
+	[SerializeField] private Image _drawPile;
+	[SerializeField] private Image _discardPile;
 	
 	public void SetCardPosition(Vector3 location, Quaternion rotation) {
 		if (_cardMoveCoroutine != null) {

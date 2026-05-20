@@ -2,21 +2,30 @@
 using TMPro;
 using UnityEngine;
 
-public class CardUseManager : MonoBehaviour {
+public class CardUseManager : BattleSystemManager {
 	private int _energyMax = 3;
 	private int _energyCurrent;
 
 	[Header("=== 에너지 표시 텍스트 ===")]
 	[SerializeField] private TextMeshProUGUI _energyText;
 	
-	public void StartTurn() {
+	public override void StartPlayerTurn() {
 		_energyCurrent = _energyMax;
 	}
 	
+	/// <summary>
+	/// 특정 카드 사용 가능 여부 확인
+	/// </summary>
+	/// <param name="instance">판별할 카드</param>
+	/// <returns>사용 가능 여부</returns>
 	public bool isUsable(CardInstance instance) {
 		return instance.Cost <= _energyCurrent;
 	}
 	
+	/// <summary>
+	/// 카드의 효과를 발동한다.
+	/// </summary>
+	/// <param name="instance">효과 발동할 카드</param>
 	public void UseCard(CardInstance instance) {
 		_energyCurrent -= instance._cardDefinition.cost;
 		
@@ -24,7 +33,7 @@ public class CardUseManager : MonoBehaviour {
 			Debug.Log($"{effect.GetCardDescription()} 수행됨!");
 		}
 	}
-
+	
 	private void Update() {
 		_energyText.text = $"{_energyCurrent}/{_energyMax}";
 	}

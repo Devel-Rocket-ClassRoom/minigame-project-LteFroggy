@@ -25,7 +25,6 @@ public class HandLayoutController : MonoBehaviour {
 	
 	private readonly List<CardOnHandController> _cards = new();
 	
-	
 	/// <summary>
 	/// Hand에서 카드 추가. 직접 호출하지 않고 DeckManager에 의해서만 호출되어야 함
 	/// </summary>
@@ -34,6 +33,7 @@ public class HandLayoutController : MonoBehaviour {
 		CardOnHandController cardController = _cardPool.GetCard(transform);
 		_cards.Add(cardController);
 		cardController.Init(cardInstance, _cards.Count - 1);
+		cardController.transform.SetAsLastSibling();
 		
 		// // 처음 뽑을 때 덱에서 나오는 것처럼 연출하기 위해 표시
 		// cardController.SetCardPosition(_drawPileLocation.position, Quaternion.identity);
