@@ -1,11 +1,15 @@
-﻿public class BattleContext {
-	public readonly CharacterBase user;
-	public readonly CharacterBase[] targets;
-	public readonly CharacterBase target;
+﻿using System.Collections.Generic;
+
+public class BattleContext {
+	public readonly PlayerCharacter user;
+	public readonly List<EnemyInstance> targets;
+	public readonly EnemyInstance target;
+	public BattleManager manager;
 	
-	public BattleContext(CharacterBase user, CharacterBase[] targets, CharacterBase target) {
+	public BattleContext(BattleManager manager, PlayerCharacter user, List<EnemyInstance> targets, EnemyInstance target) {
 		this.user = user;
 		this.targets = targets;
 		this.target = target;
+		this.manager = manager;
 	}
 }

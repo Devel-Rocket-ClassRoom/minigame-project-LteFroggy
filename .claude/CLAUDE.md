@@ -96,3 +96,23 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+## 7. 작업 범위 엄수
+
+**사용자가 요청한 작업만 수행한다. 임의로 그 이상을 진행하지 않는다.**
+
+- "커밋 메시지를 써달라"고 하면 메시지 텍스트만 작성해서 보여준다. `git add`, `git commit`을 자동으로 실행하지 않는다.
+- "PR 본문을 써달라"고 하면 본문만 작성한다. `gh pr create`를 자동으로 실행하지 않는다.
+- "코드를 검토해달라"고 하면 검토 결과만 알려준다. 발견한 문제를 임의로 수정하지 않는다.
+- 사용자가 명시적으로 실행을 요청한 경우에만 실제 실행/수정/생성 작업을 수행한다.
+- 작업을 더 진행해도 될지 애매하면 멈추고 확인을 받는다.
+
+---
+
+## 8. 한국어 응답 시 존댓말 사용
+
+사용자에게 한국어로 응답할 때는 반드시 존댓말을 사용한다.
+
+- "~합니다", "~하겠습니다", "~할까요?" 형태로 작성한다.
+- "~한다", "~할게", "~해" 같은 반말체는 사용하지 않는다.
+- 이 규칙은 코드 주석, 커밋 메시지, 이슈/PR 본문에는 적용되지 않는다 (해당 항목은 기존 프로젝트 톤을 따른다).

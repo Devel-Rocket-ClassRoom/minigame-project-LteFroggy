@@ -14,4 +14,9 @@ public class DealDamageAction : CardAction {
 	public override string GetCardDescription() {
 		return StringTableManager.StringTable["AttackCardText"].Replace("@", amount.ToString());
 	}
+
+	public override string GetCardDescriptionWithContext(BattleContext ctx) {
+		
+		return base.GetCardDescriptionWithContext(ctx);
+	}
 }

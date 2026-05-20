@@ -6,6 +6,7 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private CardUseManager _cardUseManager;
 	[SerializeField] private EnemyManager _enemyManager;
 	[SerializeField] private TurnManager _turnManager;
+	[SerializeField] private CharacterSpawner _characterSpawner;
 	
 	[Header("=== 턴 종료 버튼 ===")]
 	[SerializeField] private Button _turnEndButton;
@@ -76,5 +77,23 @@ public class BattleManager : BattleSystemManager {
 		// 사용한 카드는 핸드에서 제거
 		_deckManager.RemoveUsedCardFromHand(cardInstance);
 		return true;
+	}
+	
+	public BattleContext GetPreviewContext() {
+		return new BattleContext(
+			this,
+			_characterSpawner.Player,
+			_enemyManager.EnemyList,
+			null
+		);
+	}
+	
+	public BattleContext GetBattleContext(EnemyInstance target) {
+		return new BattleContext(
+			this,
+			_characterSpawner.Player,
+			_enemyManager.EnemyList,
+			target
+		);
 	}
 }	
