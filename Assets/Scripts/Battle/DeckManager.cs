@@ -36,9 +36,7 @@ public class DeckManager : BattleSystemManager {
 	// 턴 종료되면, 손에 있는 카드 모두 discardPile로
 	public override void EndPlayerTurn() {
 		while (_handPile.Count > 0) {
-			_handLayoutController.RemoveCard(_handPile[0]);
-			_discardPile.Add(_handPile[0]);
-			_handPile.RemoveAt(0);
+			RemoveCardFromHand(_handPile[0]);
 		}
 	}
 
@@ -60,13 +58,23 @@ public class DeckManager : BattleSystemManager {
 	}
 	
 	/// <summary>
-	/// 손에서 특정 카드 제거
+	/// 손에서 카드 제거
 	/// </summary>
 	/// <param name="card">제거할 카드</param>
 	public void RemoveCardFromHand(CardInstance card) { 
 		_discardPile.Add(card);
 		_handPile.Remove(card);
 		_handLayoutController.RemoveCard(card);
+	}
+	
+	/// <summary>
+	/// 손에서 사용한 카드 제거 (애니메이션 다름)
+	/// </summary>
+	/// <param name="card">사용한 카드</param>
+	public void RemoveUsedCardFromHand(CardInstance card) {
+		_discardPile.Add(card);
+		_handPile.Remove(card);
+		_handLayoutController.UseCard(card);
 	}
 	
 	/// <summary>

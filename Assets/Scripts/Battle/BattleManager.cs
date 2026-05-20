@@ -68,7 +68,7 @@ public class BattleManager : BattleSystemManager {
 		// 위의 사항에 해당 없다면, 카드 사용 처리
 		_cardUseManager.UseCard(cardInstance);
 		// 사용한 카드는 핸드에서 제거
-		_deckManager.RemoveCardFromHand(cardInstance);
+		_deckManager.RemoveUsedCardFromHand(cardInstance);
 		return true;
 	}
 }	
