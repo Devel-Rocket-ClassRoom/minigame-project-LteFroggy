@@ -1,4 +1,4 @@
 ﻿public class BattleContext {
 	public PlayerCharacter player;
-	public EnemyCharacter target;
+	public EnemyInstance target;
 }

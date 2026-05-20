@@ -7,7 +7,7 @@ public class DealDamageAction : CardAction {
 	public int amount;
 	
 	public override void Execute(BattleContext context) {
-		context.target.GetDamage(amount);
+		
 	}
 
 	public override string GetCardDescription() {

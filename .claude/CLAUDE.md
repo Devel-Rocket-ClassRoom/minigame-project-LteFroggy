@@ -72,4 +72,13 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ---
 
+## 6. 커밋 메시지 작성 규칙
+
+커밋 메시지를 작성하기 전에 반드시 `git log --oneline`으로 기존 커밋 히스토리를 확인하고, 그 형식을 그대로 따른다.
+
+- 형식을 먼저 읽지 않고 임의로 작성하지 않는다.
+- 타입, 이슈번호 표기 방식, 언어(한/영), 구두점, 세부항목 나열 방식을 기존과 일치시킨다.
+
+---
+
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.

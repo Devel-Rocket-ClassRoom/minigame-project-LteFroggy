@@ -40,6 +40,7 @@ public class DeckManager : MonoBehaviour {
 	public void RemoveCardFromHand(CardInstance card) { 
 		_discardPile.Add(card);
 		_handPile.Remove(card);
+		_handLayoutController.RemoveCard(card);
 	}
 	
 	/// <summary>
@@ -47,10 +48,6 @@ public class DeckManager : MonoBehaviour {
 	/// </summary>
 	private void Shuffle() {
 		_drawPile.Clear();
-
-		Debug.Log($"Shuffle 시작");
-		Debug.Log($"DrawPile Count : {_drawPile.Count}");
-		Debug.Log($"DiscardPile Count : {_discardPile.Count}");
 		
 		List<List<int>> temp = new List<List<int>>(_discardPile.Count);
 		
@@ -69,9 +66,5 @@ public class DeckManager : MonoBehaviour {
 		}
 		// 버려진 카드 목록 초기화
 		_discardPile.Clear();
-
-		Debug.Log($"Shuffle 종료");
-		Debug.Log($"DrawPile Count : {_drawPile.Count}");
-		Debug.Log($"DiscardPile Count : {_discardPile.Count}");
 	}
 }

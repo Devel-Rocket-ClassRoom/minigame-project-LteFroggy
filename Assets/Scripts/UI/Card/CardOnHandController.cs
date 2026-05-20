@@ -10,7 +10,6 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	
 	// 카드 위치 이동시킬 때 소요될 시간
 	private readonly float _cardMoveDuration= 0.2f;
-	
 	private Coroutine _cardMoveCoroutine;
 
 	// 마우스 올렸을 때 사용할 값
@@ -19,11 +18,11 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 
 	// 마우스 올렸다 뗐을 때 돌아오기 위한 변수들
 	private Vector3 _originalScale;
-	private Vector3 _fanPosition;
-	private Quaternion _fanRotation;
+	[SerializeField] private Vector3 _fanPosition;
+	[SerializeField] private Quaternion _fanRotation;
 	private int _originalIndex;
 	
-	// Init시에 자신의 정보 직접 세팅하기 위해 사용
+	// Init시에 필요한 정보 세팅하기 위해 사용
 	private CardInstance _cardInstance;
 	public CardInstance CardInstance => _cardInstance;
 	public int CardIdxInHand { get; set; }
@@ -57,6 +56,7 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		// Instance 세팅 후, 정보 넣기
 		_cardInstance = instance;
 		
+		_isSelected = false;
 		CardIdxInHand = cardIdxInHand;
 		_cardIcon.sprite = instance._cardDefinition.icon;
 		_cardNameText.text = instance._cardDefinition.CardName;
@@ -96,8 +96,8 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	}
 	
 	public IEnumerator CoCardMove(Vector3 targetPos, Quaternion targetRot) {
-		Vector3 startPos = _rectTransform.position;
-		Quaternion startRot = _rectTransform.rotation;
+		Vector3 startPos = _rectTransform.localPosition;
+		Quaternion startRot = _rectTransform.localRotation;
 		
 		float timer = 0f;
 		while (timer <= _cardMoveDuration) {
