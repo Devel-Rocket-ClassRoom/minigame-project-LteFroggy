@@ -7,14 +7,14 @@ public class CardDefinition : ScriptableObject {
 	public string cardId;
 	public string cardName;
 	public CardRarity rarity;
-	
 	public Sprite icon;
-	
 	public int cost;
 	public CardTag tag;
-	
 	public bool needsTarget;
-
+	
+	public string CardName => StringTableManager.CardNameTable[cardName];
+	public string TagText => StringTableManager.StringTable[tag.ToString()];
+	public string RarityText => StringTableManager.StringTable[rarity.ToString()];
 	[Header("=== 카드 효과들 ===")]
-	public List<CardEffect> effects;
+	public List<CardAction> effects;
 }

@@ -5,8 +5,8 @@ using CsvHelper;
 using UnityEngine;
 
 public static class StringTableManager {
-	private const string k_StringTablePath = "Datas/KorStringData";
-	private const string k_CardNameTablePath = "Datas/KorCardData";
+	private const string k_StringTablePath = "Datas/StringTable/KorStringData";
+	private const string k_CardNameTablePath = "Datas/StringTable/KorCardData";
 	private static Dictionary<string, string> _stringTable = new();
 	public static Dictionary<string, string> StringTable => _stringTable;
 	private static Dictionary<string, string> _cardNameTable = new();

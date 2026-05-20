@@ -1,0 +1,75 @@
+{
+    "version": 1,
+    "name": "MouseActionMap",
+    "maps": [
+        {
+            "name": "Mouse",
+            "id": "0b879c6f-48eb-43e6-8e56-9e72f5095a5d",
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "55d337e7-d892-4257-91d7-d3a7896e0118",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Position",
+                    "type": "PassThrough",
+                    "id": "64de7eb0-da1f-49bc-b6b6-f97eab40ca33",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Drag",
+                    "type": "PassThrough",
+                    "id": "76a8ad6c-cf4b-4529-96c2-40b1a2d15cc8",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "97fbd215-7fca-448b-97ef-1749bfb8a594",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "61083588-0aa7-461c-ade9-87a97f869f13",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8edf2fd3-a224-4e6f-91cc-46677bc1bb40",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

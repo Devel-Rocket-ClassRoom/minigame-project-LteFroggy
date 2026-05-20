@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,8 +12,21 @@ public class DeckManager : MonoBehaviour {
 	private readonly List<CardInstance> _discardPile = new();
 	private readonly List<CardInstance> _exhaustPile = new();
 	private readonly List<CardInstance> _handPile = new();
+
+	private void OnDisable() {
+		_drawPile.Clear();
+		_discardPile.Clear();
+		_exhaustPile.Clear();
+		_handPile.Clear();
+	}
 	
-	
+	// 전투 시작 시, PlayerData에서 덱 목록 가져오기
+	public void StartGame() {
+		foreach (var card in PlayerData.Instance.Cards) {
+			_discardPile.Add(card);
+		}
+	}
+
 	/// <summary>
 	/// 카드 한 장 드로우
 	/// </summary>
@@ -26,6 +40,7 @@ public class DeckManager : MonoBehaviour {
 	public void RemoveCardFromHand(CardInstance card) { 
 		_discardPile.Add(card);
 		_handPile.Remove(card);
+		_handLayoutController.RemoveCard(card);
 	}
 	
 	/// <summary>
@@ -37,8 +52,8 @@ public class DeckManager : MonoBehaviour {
 		List<List<int>> temp = new List<List<int>>(_discardPile.Count);
 		
 		// 정렬 기준으로 0 ~ 100까지의 값 랜덤 할당
-		for (int i = 0; i < temp.Count; i++) {
-			temp[i] = new List<int>();
+		for (int i = 0; i < _discardPile.Count; i++) {
+			temp.Add(new List<int>());
 			temp[i].Add(i);
 			temp[i].Add(Random.Range(0, 100));
 		}

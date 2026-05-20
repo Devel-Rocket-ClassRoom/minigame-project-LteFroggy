@@ -1,27 +1,31 @@
-﻿using UnityEngine;
+﻿using System;
+using TMPro;
+using UnityEngine;
 
 public class CardUseManager : MonoBehaviour {
-	private int _energyMax;
+	private int _energyMax = 3;
 	private int _energyCurrent;
+
+	[Header("=== 에너지 표시 텍스트 ===")]
+	[SerializeField] private TextMeshProUGUI _energyText;
 	
 	public void StartTurn() {
 		_energyCurrent = _energyMax;
 	}
 	
-	public bool UsableCheck(CardInstance instance) {
-		return instance.cardDefinition.cost <= _energyCurrent;
+	public bool isUsable(CardInstance instance) {
+		return instance.Cost <= _energyCurrent;
 	}
 	
 	public void UseCard(CardInstance instance) {
-		if (instance.cardDefinition.cost > _energyCurrent) {
-			Debug.Log($"에너지가 충분하지 않습니다.");
-			return;
+		_energyCurrent -= instance._cardDefinition.cost;
+		
+		foreach (var effect in instance._cardDefinition.effects) {
+			Debug.Log($"{effect.GetCardDescription()} 수행됨!");
 		}
-		
-		_energyCurrent -= instance.cardDefinition.cost;
-		
-		foreach (var effect in instance.cardDefinition.effects) {
-		}
-		
+	}
+
+	private void Update() {
+		_energyText.text = $"{_energyCurrent}/{_energyMax}";
 	}
 }

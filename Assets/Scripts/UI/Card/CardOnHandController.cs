@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,6 +7,10 @@ using UnityEngine.UI;
 public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
 	private RectTransform _rectTransform;
+	
+	// 카드 위치 이동시킬 때 소요될 시간
+	private readonly float _cardMoveDuration= 0.2f;
+	private Coroutine _cardMoveCoroutine;
 
 	// 마우스 올렸을 때 사용할 값
 	private readonly float _hoverY = 264f;
@@ -13,13 +18,13 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 
 	// 마우스 올렸다 뗐을 때 돌아오기 위한 변수들
 	private Vector3 _originalScale;
-	private Vector3 _fanPosition;
-	private Quaternion _fanRotation;
+	[SerializeField] private Vector3 _fanPosition;
+	[SerializeField] private Quaternion _fanRotation;
 	private int _originalIndex;
 	
-	// Init시에 자신의 정보 직접 세팅하기 위해 사용
+	// Init시에 필요한 정보 세팅하기 위해 사용
 	private CardInstance _cardInstance;
-	public CardInstance CardInstance;
+	public CardInstance CardInstance => _cardInstance;
 	public int CardIdxInHand { get; set; }
 
 	[Header("=== 세팅할 정보 UI ===")]
@@ -28,9 +33,19 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	[SerializeField] private TextMeshProUGUI _cardDescriptionText;
 	[SerializeField] private TextMeshProUGUI _cardCostText;
 	
-	private bool _isFocused;
-
-	private CardInstance _instance;
+	public void SetCardPosition(Vector3 location, Quaternion rotation) {
+		if (_cardMoveCoroutine != null) {
+			StopCoroutine(_cardMoveCoroutine);
+			_cardMoveCoroutine = null;
+		}
+		_cardMoveCoroutine = StartCoroutine(CoCardMove(location, rotation));
+	}
+	
+	private bool _isSelected;
+	public bool IsSelected {
+		get => _isSelected;
+		set => _isSelected = value;
+	}
 
 	private void Awake() {
 		_rectTransform = GetComponent<RectTransform>();
@@ -39,47 +54,60 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	
 	public void Init(CardInstance instance, int cardIdxInHand) {
 		// Instance 세팅 후, 정보 넣기
-		_instance = instance;
+		_cardInstance = instance;
 		
+		_isSelected = false;
 		CardIdxInHand = cardIdxInHand;
-		_cardIcon.sprite = instance.cardDefinition.icon;
-		_cardNameText.text = instance.cardDefinition.name;
+		_cardIcon.sprite = instance._cardDefinition.icon;
+		_cardNameText.text = instance._cardDefinition.CardName;
 		_cardDescriptionText.text = instance.GetCardDescription();
-		_cardCostText.text = instance.cardDefinition.cost.ToString();
+		_cardCostText.text = instance._cardDefinition.cost.ToString();
 	}
 
+	// 팬포지션 이동 시에 자연스럽게 움직이도록 하기 위함.
 	public void SetFanTransform(Vector3 position, Quaternion rotation) {
 		_fanPosition = position;
 		_fanRotation = rotation;
-		if (!_isFocused) {
-			_rectTransform.localPosition = position;
-			_rectTransform.localRotation = rotation;
+		if (!_isSelected) {
+			SetCardPosition(_fanPosition, _fanRotation);
 		}
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
-		if (_isFocused) {
-			return;
-		}
+		ToHoverPosition();
+	}
 
-		_isFocused = true;
+	public void OnPointerExit(PointerEventData eventData) {
+		ToOriginalPosition();
+	}
+	
+	private void ToHoverPosition() {
 		_originalIndex = transform.GetSiblingIndex();
 
 		_rectTransform.SetAsLastSibling();
 		_rectTransform.localScale = _hoverScale;
-		_rectTransform.localPosition = new Vector3(_fanPosition.x, _hoverY, 0);
-		_rectTransform.localRotation = Quaternion.identity;
+		SetCardPosition(new Vector3(_fanPosition.x, _hoverY, 0), Quaternion.identity);
 	}
-
-	public void OnPointerExit(PointerEventData eventData) {
-		if (!_isFocused) {
-			return;
-		}
-
-		_isFocused = false;
+	
+	public void ToOriginalPosition() {
 		_rectTransform.SetSiblingIndex(_originalIndex);
 		_rectTransform.localScale = _originalScale;
-		_rectTransform.localPosition = _fanPosition;
-		_rectTransform.localRotation = _fanRotation;
+		SetCardPosition(_fanPosition, _fanRotation);
+	}
+	
+	public IEnumerator CoCardMove(Vector3 targetPos, Quaternion targetRot) {
+		Vector3 startPos = _rectTransform.localPosition;
+		Quaternion startRot = _rectTransform.localRotation;
+		
+		float timer = 0f;
+		while (timer <= _cardMoveDuration) {
+			timer += Time.deltaTime;
+			yield return null;
+			_rectTransform.localPosition = Vector3.Lerp(startPos, targetPos, timer / _cardMoveDuration);
+			_rectTransform.localRotation = Quaternion.Lerp(startRot, targetRot, timer / _cardMoveDuration);
+		}
+		
+		_rectTransform.localPosition = targetPos;
+		_rectTransform.localRotation = targetRot;
 	}
 }
