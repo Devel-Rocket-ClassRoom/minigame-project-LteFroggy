@@ -4,6 +4,7 @@
 public class DrawCardAction : CardAction {
 	public int amount;
 	
+	// 카드를 뽑는다.
 	public override void Execute(BattleContext context) {
 		
 	}

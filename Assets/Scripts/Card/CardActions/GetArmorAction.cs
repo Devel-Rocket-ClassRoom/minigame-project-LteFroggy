@@ -6,7 +6,7 @@ public class GetArmorAction : CardAction {
 	public int amount;
 	
 	public override void Execute(BattleContext context) {
-		context.player.GetArmor(amount);
+		context.user.AddBlock(amount);
 	}
 
 	public override string GetCardDescription() {

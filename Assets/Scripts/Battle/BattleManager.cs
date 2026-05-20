@@ -23,6 +23,10 @@ public class BattleManager : BattleSystemManager {
 		
 		StartPlayerTurn();
 	}
+	
+	public void DrawCard() {
+		
+	}
 
 	private void OnEnable() {
 		_enemyManager.OnEnemyTurnEnd.AddListener(StartPlayerTurn);
@@ -66,6 +70,8 @@ public class BattleManager : BattleSystemManager {
 		}
 		
 		// 위의 사항에 해당 없다면, 카드 사용 처리
+		// 사용에 필요한 맥락 만들어서 주기
+		// BattleContext context = 
 		_cardUseManager.UseCard(cardInstance);
 		// 사용한 카드는 핸드에서 제거
 		_deckManager.RemoveUsedCardFromHand(cardInstance);
