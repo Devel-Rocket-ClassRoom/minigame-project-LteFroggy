@@ -6,7 +6,7 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private CardUseManager _cardUseManager;
 	[SerializeField] private EnemyManager _enemyManager;
 	[SerializeField] private TurnManager _turnManager;
-	[SerializeField] private CharacterSpawner _characterSpawner;
+	[SerializeField] private CharacterManager _characterManager;
 	
 	[Header("=== 턴 종료 버튼 ===")]
 	[SerializeField] private Button _turnEndButton;
@@ -42,6 +42,7 @@ public class BattleManager : BattleSystemManager {
 		_cardUseManager.StartPlayerTurn();
 		_enemyManager.StartPlayerTurn();
 		_deckManager.StartPlayerTurn();
+		_characterManager.StartPlayerTurn();
 	}
 	
 	public override void EndPlayerTurn() {
@@ -49,6 +50,7 @@ public class BattleManager : BattleSystemManager {
 		_enemyManager.EndPlayerTurn();
 		_cardUseManager.EndPlayerTurn();
 		_deckManager.EndPlayerTurn();
+		_characterManager.EndPlayerTurn();
 	}
 	
 	/// <summary>
@@ -82,7 +84,7 @@ public class BattleManager : BattleSystemManager {
 	public BattleContext GetPreviewContext() {
 		return new BattleContext(
 			this,
-			_characterSpawner.Player,
+			_characterManager.Player,
 			_enemyManager.EnemyList,
 			null
 		);
@@ -91,7 +93,7 @@ public class BattleManager : BattleSystemManager {
 	public BattleContext GetBattleContext(EnemyInstance target) {
 		return new BattleContext(
 			this,
-			_characterSpawner.Player,
+			_characterManager.Player,
 			_enemyManager.EnemyList,
 			target
 		);

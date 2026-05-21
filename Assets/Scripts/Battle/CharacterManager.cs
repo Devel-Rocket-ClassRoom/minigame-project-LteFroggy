@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CharacterSpawner : MonoBehaviour {
+public class CharacterManager : BattleSystemManager {
 	
 	[Header("=== 생성할 플레이어 캐릭터의 Prefab ===")]
 	[SerializeField] private PlayerCharacter _playerPrefab;
@@ -9,6 +9,16 @@ public class CharacterSpawner : MonoBehaviour {
 	public PlayerCharacter Player => _player;
 	
 	private readonly Vector3 playerSpawnPoint = new Vector3(-4.2f, 0f, 0f);
+
+	public override void StartPlayerTurn() {
+		base.StartPlayerTurn();
+		_player.OnTurnStart();
+	}
+	
+	public override void EndPlayerTurn() {
+		base.EndPlayerTurn();
+		_player.OnTurnEnd();
+	}
 
 	private void Start() {
 		// 캐릭터 새로 만들고, 생성
