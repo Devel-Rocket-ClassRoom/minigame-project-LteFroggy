@@ -13,6 +13,7 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private CharacterManager _characterManager;
 	[SerializeField] private BattleMouseController _mouseController;
 	
+	
 	// 외부에서 드로우하려고 할 때 사용
 	public DeckManager DeckManager => _deckManager;
 	

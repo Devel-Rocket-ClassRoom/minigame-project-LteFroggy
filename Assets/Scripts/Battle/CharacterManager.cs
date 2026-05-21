@@ -8,11 +8,12 @@ public class CharacterManager : BattleSystemManager {
 	private PlayerCharacter _player;
 	public PlayerCharacter Player => _player;
 	
-	private readonly Vector3 playerSpawnPoint = new Vector3(-4.2f, 0f, 0f);
+	private readonly Vector3 playerSpawnPoint = new Vector3(-6.2f, 0f, 0f);
 	
 	public override void StartBattle() {
 		// 캐릭터 새로 만들고, 생성
 		_player = Instantiate(_playerPrefab);
+		_player.Init();
 		_player.transform.position = playerSpawnPoint;
 	}
 
