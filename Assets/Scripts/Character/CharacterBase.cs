@@ -28,7 +28,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	private readonly Dictionary<Type, StatusRenderer> _statuses = new();
 	
 	// MaxHealth, CurrentHealth는 시작하면서 PlayerData에서 받아오기
-	public virtual void Awake() {
+	public virtual void Init() {
 		SetHealth();
 	}
 	

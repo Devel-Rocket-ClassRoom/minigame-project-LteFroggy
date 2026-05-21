@@ -15,7 +15,6 @@ public class StatusRenderer : MonoBehaviour {
 	public void UpdateStatus() {
 		SetImage(Status.Icon);
 		SetText(Status.TextToShow);
-		Debug.Log($"{Status.GetType().Name} 턴 : {Status.TextToShow}");
 	}
 	
 	public void SetImage(Sprite sprite) {

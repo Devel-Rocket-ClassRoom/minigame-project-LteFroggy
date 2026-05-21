@@ -481,9 +481,10 @@ MonoBehaviour:
   - {fileID: 3673097850091243782}
   - {fileID: 1846299689238955313}
   - {fileID: 9103153830285368833}
-  _intentRendererPrefab: {fileID: 3793985125923208789, guid: ce5f4e0bc67e18b4883b733eb286f7e5, type: 3}
+  _intentRendererPrefab: {fileID: 982698950700779723, guid: ce5f4e0bc67e18b4883b733eb286f7e5, type: 3}
   _enemyRenderer: {fileID: 8249577401243052171}
   _intentParent: {fileID: 3587125253142364679}
+  _enemyData: {fileID: 0}
 --- !u!61 &8192774008414474432
 BoxCollider2D:
   m_ObjectHideFlags: 0

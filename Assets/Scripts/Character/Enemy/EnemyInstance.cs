@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,17 +13,22 @@ public class EnemyInstance : CharacterBase {
 	[Header("=== 자기 자신 렌더링할 이미지 ===")]
 	[SerializeField] private SpriteRenderer _enemyRenderer;
 
-	[Header("=== 의도 부모 아이콘 ===")]
+	[Header("=== 의도가 렌더링될 부모 오브젝트 ===")]
 	[SerializeField] private Transform _intentParent;
 	
-	[SerializeField] private EnemyData _enemyData;
+	private EnemyData _enemyData;
 	private EnemyManager _enemyManager;
 	private int _turnCount;
 	
 	private readonly List<EnemyIntentRenderer> _intentRenderers = new();
 	
+	private readonly float _actionDuration = 0.5f;
+	
+	// 이번 턴에 수행할 PatternInThisTurn 가져오기
+	public EnemyActionPattern PatternInThisTurn => _enemyData.actions[_turnCount % _enemyData.actions.Count];
+	
 	public void Init(EnemyData data, EnemyManager enemyManager) {
-		// _enemyData = data;
+		_enemyData = data;
 		_enemyManager = enemyManager;
 		_enemyRenderer.sprite = _enemyData.sprite;
 		
@@ -33,6 +39,8 @@ public class EnemyInstance : CharacterBase {
 		
 		// 시작 시에 의도 표시 표현
 		MakeIntentIcon(_enemyManager.GetEnemyActionContext(this));
+		
+		base.Init();
 	}
 	
 	public override void OnTurnEnd() {
@@ -47,25 +55,18 @@ public class EnemyInstance : CharacterBase {
 		// 허수아비 방어용 코드
 		if (_enemyData == null) return;
 		
-		Debug.Log($"MakeIntentIcon 실행");
-		
-		// 이번 턴에 할 액션 리스트 받아오기
-		EnemyActionPattern pattern = _enemyData.actions[_turnCount % _enemyData.actions.Count];
-
-		Debug.Log($"이번 턴 액션 {pattern.actions.Count}개");
-		
 		// 이전 액션 아이콘 싹 비운다.
 		foreach (var intent in _intentRenderers) { Destroy(intent.gameObject); }
 		_intentRenderers.Clear();
 		
 		// 이번 턴 의도 아이콘 리스트로 다시 만들기
-		foreach (var action in pattern.actions) {
+		foreach (var action in PatternInThisTurn.actions) {
 			var newRenderer = Instantiate(_intentRendererPrefab, _intentParent);
 			newRenderer.Init(action, context);
 			
 			_intentRenderers.Add(newRenderer);
 		}
-	} 
+	}
 	
 	public void UpdateIntentIcon(BattleContext context) {
 		// 허수아비 방어용 코드
@@ -77,11 +78,18 @@ public class EnemyInstance : CharacterBase {
 		}
 	}
 	
+	public IEnumerator CoExecutePattern() {
+		foreach (EnemyAction action in PatternInThisTurn.actions) {
+			action.Execute(_enemyManager.GetEnemyActionContext(this));
+			// 패턴 하나 수행하고 대기시간
+			yield return new WaitForSeconds(_actionDuration);
+		}
+	}
+	
 	
 	public override void SetHealth() {
-		// Data에서 가져오도록 해야 함
-		// 일단 기본 세팅
-		MaxHealth = 10;
+		// Data에서 가져와서 체력 세팅
+		MaxHealth = _enemyData.health;
 		CurrentHealth = MaxHealth;
 	}
 

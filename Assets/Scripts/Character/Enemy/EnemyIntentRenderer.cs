@@ -18,6 +18,5 @@ public class EnemyIntentRenderer : MonoBehaviour {
 	public void UpdateIntentInfo(BattleContext context) {
 		_intentIcon.sprite = _enemyAction.IntentIcon;
 		_intentText.text = _enemyAction.GetIntentTextWithContext(context);
-		Debug.Log($"IntentText : {_enemyAction.GetIntentTextWithContext(context)}");
 	}
 }
