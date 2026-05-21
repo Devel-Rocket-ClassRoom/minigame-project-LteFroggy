@@ -31,6 +31,7 @@ public class AttackAction : EnemyAction {
 	
 	// 데미지 주기
 	public override void Execute(BattleContext context) {
+		if (context.target.IsDead) return;
 		context.target.GetDamage(CalculateAmountWithContext(context));
 	}
 }

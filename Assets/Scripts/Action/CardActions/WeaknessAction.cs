@@ -8,6 +8,8 @@ public class WeaknessAction : CardAction {
 	
 	// 취약 효과 부여
 	public override void Execute(BattleContext context) {
+		if (context.target.IsDead) return;
+		
 		var weakness = new Weakness();
 		weakness.Init(context.target, 0, Amount);
 		context.target.AddStatus(weakness);

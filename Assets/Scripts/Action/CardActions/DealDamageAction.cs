@@ -11,6 +11,7 @@ public class DealDamageAction : CardAction {
 	public override string CardDescriptionKey => "AttackCardText";
 
 	public override void Execute(BattleContext context) {
+		if (context.target.IsDead) return;
 		context.target.GetDamage(CalculateAmountWithContext(context));
 	}
 
