@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -97,7 +100,7 @@ public class BattleManager : BattleSystemManager {
 		return new BattleContext(
 			this,
 			_characterManager.Player,
-			_enemyManager.EnemyList,
+			_enemyManager.EnemyList.Cast<CharacterBase>().ToList(),
 			_mouseController.TargetInstance
 		);
 	}

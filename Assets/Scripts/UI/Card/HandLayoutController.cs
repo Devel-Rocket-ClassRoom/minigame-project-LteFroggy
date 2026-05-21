@@ -57,27 +57,21 @@ public class HandLayoutController : MonoBehaviour {
 	public void RemoveCard(CardInstance card) {
 		for (int i = 0; i < _cards.Count; i++) {
 			if (_cards[i].CardInstance != card) continue;
-			RemoveCard(i);
+			RemoveCard(_cards[i]);
 			break;
 		}
 	}
 	
-	/// <summary>
-	/// Hand에서 카드 삭제. 직접 호출하지 않고 DeckManager에 의해서만 호출되어야 함
-	/// 일반 카드 사용 로직에서는 직접 호출하지 않음
-	/// </summary>
-	/// <param name="card"></param>
-	private void RemoveCard(int idx) {
-		// 만약 이미 삭제된 카드(턴 종료 등으로 인해)라면, 오류 생기므로 방어코드 삽입.
-		if (_cards.Count <= idx) return;
-		
-		// 이벤트 삭제
-		_battleManager.OnCardUse.RemoveListener(_cards[idx].RefreshCardDescription);
-		_battleMouseController.OnTargetChange.RemoveListener(_cards[idx].RefreshCardDescription);
-		
-		_cards[idx].RemoveCard();
+	private void RemoveCard(CardOnHandController target) {
+		int idx = _cards.IndexOf(target);
+		// 이미 제거됐으면 조용히 종료
+		if (idx < 0) return;             
+
+		_battleManager.OnCardUse.RemoveListener(target.RefreshCardDescription);
+		_battleMouseController.OnTargetChange.RemoveListener(target.RefreshCardDescription);
+
+		target.RemoveCard();
 		_cards.RemoveAt(idx);
-		
 		Arrange();
 	}
 
@@ -90,6 +84,17 @@ public class HandLayoutController : MonoBehaviour {
 			StartCoroutine(CoUseCard(i));
 			break;
 		}
+	}
+	
+	public IEnumerator CoUseCard(int idx) {
+		// 참조 미리 캡처 - 추후 Index 기반 삭제 시에 문제 생김
+		var cardInstance = _cards[idx].CardInstance;  
+		_cards[idx].ToUsePosition();
+		
+		// 일정 시간 기다렸다 Instance 삭제
+		yield return new WaitForSeconds(_useCardDuration);
+		
+		RemoveCard(cardInstance); 
 	}
 
 	public void Arrange() {
@@ -116,11 +121,5 @@ public class HandLayoutController : MonoBehaviour {
 			_cards[i].CardIdxInHand = i;
 			_cards[i].transform.SetSiblingIndex(i);
 		}
-	}
-	
-	public IEnumerator CoUseCard(int idx) {
-		_cards[idx].ToUsePosition();
-		yield return new WaitForSeconds(_useCardDuration);
-		RemoveCard(idx);
 	}
 }

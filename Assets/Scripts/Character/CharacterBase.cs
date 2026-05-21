@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
+using System;
 using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
+using Image = UnityEngine.UI.Image;
 
 public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	public int MaxHealth { get; set; } = 100;
@@ -19,9 +19,13 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	[Header("=== 방어도 표시 관련 이미지 ===")] 
 	[SerializeField] private Image _blockExistImage;
 	[SerializeField] private Image _blockImage;
+
+	[Header("=== 상태 효과 표시용 ===")] 
+	[SerializeField] private Transform _statusParent;
+	[SerializeField] private StatusRenderer _statusPrefab; 
 	
 	// 걸린 강화효과, 약화효과 등 저장
-	public List<StatusBase> Statuses = new List<StatusBase>();
+	private readonly Dictionary<Type, StatusRenderer> _statuses = new();
 	
 	// MaxHealth, CurrentHealth는 시작하면서 PlayerData에서 받아오기
 	public virtual void Awake() {
@@ -37,6 +41,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		LoseBlock(reduceBlockAmount);
 		
 		CurrentHealth -= amount;
+		
+		// 체력 0 이하로 내려가지 않게
+		CurrentHealth = Mathf.Max(CurrentHealth, 0);
 	}
 
 	public void GetHeal(int amount) { CurrentHealth += amount; }
@@ -48,22 +55,22 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	public void ClearBlock() { Block = 0; }
 	
 	public int CalculateAttackingDamage(int amount) {
-		foreach (StatusBase status in Statuses) {
-			amount = status.ModifyAttackingDamage(amount);
+		foreach (var status in _statuses) {
+			amount = status.Value.Status.ModifyAttackingDamage(amount);
 		}
 		return amount;
 	}
 	
 	public int CalculateDefendingDamage(int amount) {
-		foreach (StatusBase status in Statuses) {
-			amount = status.ModifyDefendingDamage(amount);
+		foreach (var status in _statuses) {
+			amount = status.Value.Status.ModifyGainingDamage(amount);
 		}
 		return amount;
 	}
 	
 	public int CalculateGainingArmor(int amount) {
-		foreach (StatusBase status in Statuses) {
-			amount = status.ModifyGainingArmor(amount);
+		foreach (var status in _statuses) {
+			amount = status.Value.Status.ModifyGainingArmor(amount);
 		}
 		return amount;
 	}
@@ -71,17 +78,60 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	public void OnTurnStart() {
 		// 매 턴 시작 시 방어도 초기화
 		ClearBlock();
-		foreach (StatusBase status in Statuses) {
-			status.OnTurnStart();
+		// 턴 시작 시 액션 있는 상태효과 적용
+		foreach (var status in _statuses) {
+			status.Value.Status.OnTurnStart();
 		}
 	}
 	
 	public void OnTurnEnd() {
-		foreach (StatusBase status in Statuses) {
-			status.OnTurnEnd();
+		// 턴 종료 시 액션 있는 상태효과 적용
+		foreach (var status in _statuses) {
+			status.Value.Status.OnTurnEnd();
 		}
+		
+		// 상태효과 정보 갱신
+		RefreshStatusesInfo();
 	}
 	
+	// 특정 효과 추가하기
+	public void AddStatus(StatusBase status) {
+		// 이미 있는 상태이상이면, 합친다.
+		if (_statuses.ContainsKey(status.GetType())) { _statuses[status.GetType()].Status.Merge(status); }
+		// 없다면, 생성한다
+		else {
+			var newStatus = Instantiate(_statusPrefab, _statusParent);
+			newStatus.Init(status);
+			_statuses.Add(status.GetType(), newStatus);
+		}
+		
+		// 상태이상이 더해졌다면, 정보 한번 갱신
+		RefreshStatusesInfo();
+	}
+	
+	/// <summary>
+	/// 상태이상 정보를 한번 싹 갱신한다.
+	/// </summary>
+	private void RefreshStatusesInfo() {
+		List<Type> pendingDelete = new();
+		
+		foreach (var pair in _statuses) {
+			// 효과가 끝난 값들은 삭제 대기열에 더해두기
+			if (!pair.Value.Status.IsActive) { pendingDelete.Add(pair.Key); }
+		}
+		
+		// 삭제할 상태이상은 삭제
+		foreach (var status in pendingDelete) {
+			// 이미 삭제되었거나 해서 없다면, Destroy 중복으로 호출하지 않도록 continue;
+			if (!_statuses.Remove(status, out var statusInstance)) continue;
+			Destroy(statusInstance.gameObject);
+		}
+		
+		// 이후 상태 갱신
+		foreach (var pair in _statuses) {
+			pair.Value.UpdateStatus();
+		}
+	}
 
 	protected virtual void Update() {
 		// 체력 값 갱신
