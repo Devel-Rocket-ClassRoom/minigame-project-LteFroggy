@@ -50,7 +50,11 @@ public class TurnManager : BattleSystemManager {
 		_turnEndButton.interactable = true;
 	}
 	
+	// 적 턴 표시
 	public override void EndPlayerTurn() {
+		if (_displayTextCoroutine != null) StopCoroutine(_displayTextCoroutine);
+		_displayTextCoroutine = StartCoroutine(CoDisplayText($"적 턴"));
+		
 		_turnEndButton.gameObject.SetActive(false);
 		_turnEndButton.interactable = false;
 	}

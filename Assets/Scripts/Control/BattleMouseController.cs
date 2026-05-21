@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -30,11 +31,11 @@ public class BattleMouseController : MonoBehaviour {
 	// 선택된 카드
 	private CardOnHandController _selectedCard;
 	
-	// 대상 선택해야 할 상황이라면, 
+	// 대상 선택해야 할 상황이라면, 라인 만들어주기
 	private RectTransform _lineStartPoint;
 	
-	private bool _needsTarget;
 	// 타겟팅 필요 여부에 따라 LineDrawer 활성화, 비활성화
+	private bool _needsTarget;
 	public bool NeedsTarget {
 		get => _needsTarget;
 		set {
@@ -44,18 +45,23 @@ public class BattleMouseController : MonoBehaviour {
 		}
 	}
 	
+	// 대상 지정 혹은 지정 해제시마다 발생할 이벤트
+	[HideInInspector] public UnityEvent OnTargetChange;
+	
 	private EnemyInstance _targetInstance;
 	public EnemyInstance TargetInstance {
 		get => _targetInstance;
 		set {
-			// 타겟이 생길 때, 하이라이트 박스 쳐주기
+			// 타겟이 생길 때, 하이라이트 박스 쳐주기 및 이벤트 발생
 			if (value != null && _targetInstance == null) {
 				value.SetTargetHighlight(true);
+				OnTargetChange?.Invoke();
 			}
 			
-			// 타겟이 사라질 때, 하이라이트 박스 없애주기
+			// 타겟이 사라질 때, 하이라이트 박스 없애주기 및 이벤트 발생
 			if (_targetInstance != null && value == null) {
 				_targetInstance.SetTargetHighlight(false);
+				OnTargetChange?.Invoke();
 			}
 			_targetInstance = value;
 		}

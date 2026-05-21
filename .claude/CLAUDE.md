@@ -92,6 +92,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 - 형식을 먼저 읽지 않고 임의로 작성하지 않는다.
 - 타입, 이슈번호 표기 방식, 언어(한/영), 구두점, 세부항목 나열 방식을 기존과 일치시킨다.
+- 세부항목은 **무엇을 했는지(what)보다 왜 그렇게 했는지(why)** 중심으로 작성한다. 변경 내용 자체는 diff로 확인 가능하므로, 그 결정의 이유와 의도를 기록하는 데 집중한다.
 
 ---
 

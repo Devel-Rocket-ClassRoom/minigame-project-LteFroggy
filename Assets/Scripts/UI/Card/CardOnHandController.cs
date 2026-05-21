@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -44,10 +45,12 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	[Header("=== 카드 사용, 삭제 시 이동할 위치 구하기 위함 ===")]
 	private RectTransform _drawPile;
 	private RectTransform _discardPile;
-	private BattleManager _battleManager;
 	
 	// 본인 직접 삭제 시 카드풀에 반환하기 위함.
 	private CardPool _cardPool;
+	
+	// BattleContext를 받기 위해 사용하는 함수
+	[HideInInspector] public Func<BattleContext> GetBattleContext;
 	
 	public void SetCardPosition(Vector3 location, Quaternion rotation) {
 		if (_cardMoveCoroutine != null) {
@@ -67,23 +70,31 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		_rectTransform = GetComponent<RectTransform>();
 	}
 	
-	public void Init(CardInstance instance, RectTransform drawPile, RectTransform discardPile, CardPool cardPool, BattleManager battleManager) {
+	public void Init(
+		CardInstance instance,
+		RectTransform drawPile,
+		RectTransform discardPile,
+		CardPool cardPool,
+		BattleManager battleManager) 
+	{
 		// Instance 세팅 후, 정보 넣기
 		_cardInstance = instance;
+		
+		// 값 초기화
+		_isSelected = false;
+		GetBattleContext = null;
 		
 		// 필요한 클래스 할당
 		_drawPileLocation = drawPile;
 		_discardPileLocation = discardPile;
 		_cardPool = cardPool;
-		_battleManager = battleManager;
 		
 		// 값 할당
-		_isSelected = false;
+		GetBattleContext = battleManager.GetBattleContext;
 		_cardIcon.sprite = instance._cardDefinition.icon;
 		_cardNameText.text = instance._cardDefinition.CardName;
-		_cardDescriptionText.text = instance.GetCardDescriptionWithContext(_battleManager.GetPreviewContext());
 		_cardCostText.text = instance._cardDefinition.cost.ToString();
-		
+		RefreshCardDescription();
 		// 시작 위치를 DrawPile쪽으로 해서 생성되면 그쪽에서 오는 것처럼 표현
 		_rectTransform.position = _drawPileLocation.position;
 	}
@@ -176,5 +187,12 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	public IEnumerator CoCardRemove() {
 		yield return CoCardMove(_discardPileLocation.position, Quaternion.identity);
 		_cardPool.ReturnCard(this);
+	}
+	
+	/// <summary>
+	/// 카드 텍스트를 갱신한다. 마우스로 타겟을 잡거나, 카드를 사용할 때마다 갱신됨.
+	/// </summary>
+	public void RefreshCardDescription() {
+		_cardDescriptionText.text = _cardInstance.GetCardDescriptionWithContext(GetBattleContext());
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class CardUseManager : BattleSystemManager {
@@ -21,16 +20,17 @@ public class CardUseManager : BattleSystemManager {
 	public bool isUsable(CardInstance instance) {
 		return instance.Cost <= _energyCurrent;
 	}
-	
+
 	/// <summary>
 	/// 카드의 효과를 발동한다.
 	/// </summary>
 	/// <param name="instance">효과 발동할 카드</param>
-	public void UseCard(CardInstance instance) {
+	/// <param name="context">효과 발동 시의 전투 맥락</param>
+	public void UseCard(CardInstance instance, BattleContext context) {
 		_energyCurrent -= instance._cardDefinition.cost;
 		
 		foreach (var effect in instance._cardDefinition.effects) {
-			Debug.Log($"{effect.GetCardDescription()} 수행됨!");
+			effect.Execute(context);
 		}
 	}
 	

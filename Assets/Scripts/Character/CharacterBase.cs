@@ -69,6 +69,8 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	}
 	
 	public void OnTurnStart() {
+		// 매 턴 시작 시 방어도 초기화
+		ClearBlock();
 		foreach (StatusBase status in Statuses) {
 			status.OnTurnStart();
 		}
@@ -85,7 +87,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		// 체력 값 갱신
 		_healthText.text = $"{CurrentHealth}/{MaxHealth}";
 		// 체력바 갱신
-		_healthBarImage.fillAmount = CurrentHealth / MaxHealth;
+		_healthBarImage.fillAmount = (float)CurrentHealth / MaxHealth;
 		
 		// 방어도가 있다면, 방어도 표시 표현
 		if (Block > 0) {
