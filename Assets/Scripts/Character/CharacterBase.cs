@@ -61,7 +61,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return amount;
 	}
 	
-	public int CalculateDefendingDamage(int amount) {
+	public int CalculateGainingDamage(int amount) {
 		foreach (var status in _statuses) {
 			amount = status.Value.Status.ModifyGainingDamage(amount);
 		}
@@ -75,7 +75,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return amount;
 	}
 	
-	public void OnTurnStart() {
+	public virtual void OnTurnStart() {
 		// 매 턴 시작 시 방어도 초기화
 		ClearBlock();
 		// 턴 시작 시 액션 있는 상태효과 적용
@@ -84,7 +84,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		}
 	}
 	
-	public void OnTurnEnd() {
+	public virtual void OnTurnEnd() {
 		// 턴 종료 시 액션 있는 상태효과 적용
 		foreach (var status in _statuses) {
 			status.Value.Status.OnTurnEnd();
