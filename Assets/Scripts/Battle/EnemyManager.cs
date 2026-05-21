@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class EnemyManager : BattleSystemManager {
-	public List<EnemyInstance> EnemyList { get; set; } = new();
+	public List<EnemyInstance> EnemyList => _enemyList;
+	[SerializeField] private List<EnemyInstance> _enemyList;
 
 	[HideInInspector] public UnityEvent OnEnemyTurnEnd;
 	

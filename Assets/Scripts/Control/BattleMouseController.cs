@@ -28,6 +28,7 @@ public class BattleMouseController : MonoBehaviour {
 	private InputAction _clickAction;
 	private InputAction _mousePositionAction;
 	private Camera _mainCamera;
+	
 	// 선택된 카드
 	private CardOnHandController _selectedCard;
 	
@@ -52,18 +53,20 @@ public class BattleMouseController : MonoBehaviour {
 	public EnemyInstance TargetInstance {
 		get => _targetInstance;
 		set {
+			var oldTarget = _targetInstance;
+			_targetInstance = value;
+			
 			// 타겟이 생길 때, 하이라이트 박스 쳐주기 및 이벤트 발생
-			if (value != null && _targetInstance == null) {
+			if (value != null && oldTarget == null) {
 				value.SetTargetHighlight(true);
 				OnTargetChange?.Invoke();
 			}
 			
 			// 타겟이 사라질 때, 하이라이트 박스 없애주기 및 이벤트 발생
-			if (_targetInstance != null && value == null) {
-				_targetInstance.SetTargetHighlight(false);
+			if (oldTarget != null && value == null) {
+				oldTarget.SetTargetHighlight(false);
 				OnTargetChange?.Invoke();
 			}
-			_targetInstance = value;
 		}
 	}
 
@@ -145,6 +148,7 @@ public class BattleMouseController : MonoBehaviour {
 		
 		// 대상이 선택되었었다면, 대상 지정 UI 없애기
 		if (TargetInstance != null) { TargetInstance.SetTargetHighlight(false); }
+		TargetInstance = null;
 	}
 
 	private void Update() {
