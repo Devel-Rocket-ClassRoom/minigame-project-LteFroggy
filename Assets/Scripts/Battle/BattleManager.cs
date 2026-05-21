@@ -6,6 +6,7 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private CardUseManager _cardUseManager;
 	[SerializeField] private EnemyManager _enemyManager;
 	[SerializeField] private TurnManager _turnManager;
+	[SerializeField] private CharacterManager _characterManager;
 	
 	[Header("=== 턴 종료 버튼 ===")]
 	[SerializeField] private Button _turnEndButton;
@@ -23,6 +24,10 @@ public class BattleManager : BattleSystemManager {
 		
 		StartPlayerTurn();
 	}
+	
+	public void DrawCard() {
+		
+	}
 
 	private void OnEnable() {
 		_enemyManager.OnEnemyTurnEnd.AddListener(StartPlayerTurn);
@@ -37,6 +42,7 @@ public class BattleManager : BattleSystemManager {
 		_cardUseManager.StartPlayerTurn();
 		_enemyManager.StartPlayerTurn();
 		_deckManager.StartPlayerTurn();
+		_characterManager.StartPlayerTurn();
 	}
 	
 	public override void EndPlayerTurn() {
@@ -44,6 +50,7 @@ public class BattleManager : BattleSystemManager {
 		_enemyManager.EndPlayerTurn();
 		_cardUseManager.EndPlayerTurn();
 		_deckManager.EndPlayerTurn();
+		_characterManager.EndPlayerTurn();
 	}
 	
 	/// <summary>
@@ -66,9 +73,29 @@ public class BattleManager : BattleSystemManager {
 		}
 		
 		// 위의 사항에 해당 없다면, 카드 사용 처리
+		// 사용에 필요한 맥락 만들어서 주기
+		// BattleContext context = 
 		_cardUseManager.UseCard(cardInstance);
 		// 사용한 카드는 핸드에서 제거
 		_deckManager.RemoveUsedCardFromHand(cardInstance);
 		return true;
+	}
+	
+	public BattleContext GetPreviewContext() {
+		return new BattleContext(
+			this,
+			_characterManager.Player,
+			_enemyManager.EnemyList,
+			null
+		);
+	}
+	
+	public BattleContext GetBattleContext(EnemyInstance target) {
+		return new BattleContext(
+			this,
+			_characterManager.Player,
+			_enemyManager.EnemyList,
+			target
+		);
 	}
 }	

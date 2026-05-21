@@ -20,7 +20,7 @@ public class BattleMouseController : MonoBehaviour {
 	[Header("=== 카드 사용 가능한지 확인할 영역 ===")]
 	[SerializeField] private RectTransform _cardUseArea;
 
-	[Header("=== BattleManager ===")] 
+	[Header("=== Battle Manager ===")] 
 	[SerializeField] private BattleManager _battleManager;
 	
 	// 클릭, 드래그,
@@ -160,7 +160,7 @@ public class BattleMouseController : MonoBehaviour {
 					TargetInstance = enemyInstance;
 					_cardLineDrawer.DrawTargetLine(
 						_mainCamera.ScreenToWorldPoint(_lineStartPoint.position),
-						TargetInstance.transform.position);					
+						TargetInstance.transform.position);
 				}
 				// 선택되지 않았다면, 마우스 따라오게
 				else {
@@ -170,7 +170,6 @@ public class BattleMouseController : MonoBehaviour {
 					);
 					TargetInstance = null;
 				}
-				
 			}
 		}
 	}

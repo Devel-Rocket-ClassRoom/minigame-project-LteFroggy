@@ -42,8 +42,9 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	[SerializeField] private TextMeshProUGUI _cardCostText;
 
 	[Header("=== 카드 사용, 삭제 시 이동할 위치 구하기 위함 ===")]
-	[SerializeField] private RectTransform _drawPile;
-	[SerializeField] private RectTransform _discardPile;
+	private RectTransform _drawPile;
+	private RectTransform _discardPile;
+	private BattleManager _battleManager;
 	
 	// 본인 직접 삭제 시 카드풀에 반환하기 위함.
 	private CardPool _cardPool;
@@ -66,19 +67,22 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		_rectTransform = GetComponent<RectTransform>();
 	}
 	
-	public void Init(CardInstance instance, RectTransform drawPile, RectTransform discardPile, CardPool cardPool) {
+	public void Init(CardInstance instance, RectTransform drawPile, RectTransform discardPile, CardPool cardPool, BattleManager battleManager) {
 		// Instance 세팅 후, 정보 넣기
 		_cardInstance = instance;
 		
-		_isSelected = false;
-		_cardIcon.sprite = instance._cardDefinition.icon;
-		_cardNameText.text = instance._cardDefinition.CardName;
-		_cardDescriptionText.text = instance.GetCardDescription();
-		_cardCostText.text = instance._cardDefinition.cost.ToString();
-		
+		// 필요한 클래스 할당
 		_drawPileLocation = drawPile;
 		_discardPileLocation = discardPile;
 		_cardPool = cardPool;
+		_battleManager = battleManager;
+		
+		// 값 할당
+		_isSelected = false;
+		_cardIcon.sprite = instance._cardDefinition.icon;
+		_cardNameText.text = instance._cardDefinition.CardName;
+		_cardDescriptionText.text = instance.GetCardDescriptionWithContext(_battleManager.GetPreviewContext());
+		_cardCostText.text = instance._cardDefinition.cost.ToString();
 		
 		// 시작 위치를 DrawPile쪽으로 해서 생성되면 그쪽에서 오는 것처럼 표현
 		_rectTransform.position = _drawPileLocation.position;

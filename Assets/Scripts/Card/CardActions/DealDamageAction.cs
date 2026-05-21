@@ -6,11 +6,17 @@ using UnityEngine;
 public class DealDamageAction : CardAction {
 	public int amount;
 	
+	// 특정 적 하나에게 데미지를 준다
 	public override void Execute(BattleContext context) {
-		
+		context.target.GetDamage(amount);
 	}
 
 	public override string GetCardDescription() {
 		return StringTableManager.StringTable["AttackCardText"].Replace("@", amount.ToString());
+	}
+
+	public override string GetCardDescriptionWithContext(BattleContext ctx) {
+		
+		return base.GetCardDescriptionWithContext(ctx);
 	}
 }

@@ -23,6 +23,7 @@ public class HandLayoutController : MonoBehaviour {
 
 	[Header("=== 각 카드별로 주입해주기 위함 ===")] 
 	[SerializeField] private CardUseManager _cardUseManager;
+	[SerializeField] private BattleManager _battleManager;
 	
 	private readonly List<CardOnHandController> _cards = new();
 	
@@ -35,7 +36,7 @@ public class HandLayoutController : MonoBehaviour {
 	public void AddCard(CardInstance cardInstance) {
 		CardOnHandController cardController = _cardPool.GetCard(transform);
 		_cards.Add(cardController);
-		cardController.Init(cardInstance, _drawPileLocation, _discardPileLocation, _cardPool);
+		cardController.Init(cardInstance, _drawPileLocation, _discardPileLocation, _cardPool, _battleManager); 
 		cardController.transform.SetAsLastSibling();
 		cardController.gameObject.name = $"Card {_cards.Count}";
 		
