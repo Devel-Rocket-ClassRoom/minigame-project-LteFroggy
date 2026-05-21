@@ -6,7 +6,7 @@ public class DrawCardAction : CardAction {
 	
 	// 카드를 뽑는다.
 	public override int Amount => amount;
-	public override string DescriptionKey => "DrawCardText";
+	public override string CardDescriptionKey => "DrawCardText";
 
 	public override void Execute(BattleContext context) {
 		for (int i = 0; i < amount; i++) {
@@ -14,7 +14,7 @@ public class DrawCardAction : CardAction {
 		}
 	}
 	
-	public override int CalculateAmountWithContext(BattleContext ctx) {
+	public override int CalculateAmountWithContext(BattleContext context) {
 		return amount;
 	}
 }
