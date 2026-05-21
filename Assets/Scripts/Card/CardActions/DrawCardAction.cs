@@ -5,11 +5,16 @@ public class DrawCardAction : CardAction {
 	public int amount;
 	
 	// 카드를 뽑는다.
-	public override void Execute(BattleContext context) {
-		
-	}
+	public override int Amount => amount;
+	public override string DescriptionKey => "DrawCardText";
 
-	public override string GetCardDescription() {
-		return StringTableManager.StringTable["DrawCardText"].Replace("@", amount.ToString());
+	public override void Execute(BattleContext context) {
+		for (int i = 0; i < amount; i++) {
+			context.manager.DeckManager.DrawCard();	
+		}
+	}
+	
+	public override int CalculateAmountWithContext(BattleContext ctx) {
+		return amount;
 	}
 }

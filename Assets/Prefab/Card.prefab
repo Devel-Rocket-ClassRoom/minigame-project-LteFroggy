@@ -356,7 +356,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD53C\uD574\uB97C 5 \uC90D\uB2C8\uB2E4.\n\uCE74\uB4DC\uB97C 1\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
+  m_text: "\uD53C\uD574\uB97C <color=#00ff00>5</color> \uC90D\uB2C8\uB2E4.\n\uCE74\uB4DC\uB97C
+    1\uC7A5 \uBF51\uC2B5\uB2C8\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3c1fed1c1dafd83459a569dcb6841562, type: 2}
   m_sharedMaterial: {fileID: -1721384684077698468, guid: 3c1fed1c1dafd83459a569dcb6841562, type: 2}
@@ -821,6 +822,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f344e2b512bf40b69c747886830adde9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardController
+  _fanPosition: {x: 0, y: 0, z: 0}
+  _fanRotation: {x: 0, y: 0, z: 0, w: 0}
   _cardIcon: {fileID: 7453457844374210671}
   _cardNameText: {fileID: 5765055563301011514}
   _cardDescriptionText: {fileID: 3610516915730536778}

@@ -21,13 +21,15 @@ public class HandLayoutController : MonoBehaviour {
 	[Header("=== CardPool 등록 ===")]
 	[SerializeField] private CardPool _cardPool;
 
+	[Header("=== 카드 생성 시 이벤트 등록을 위함  ===")]
+	[SerializeField] private BattleMouseController _battleMouseController;
+
 	[Header("=== 각 카드별로 주입해주기 위함 ===")] 
-	[SerializeField] private CardUseManager _cardUseManager;
 	[SerializeField] private BattleManager _battleManager;
 	
 	private readonly List<CardOnHandController> _cards = new();
 	
-	private float _useCardDuration = 1.0f;
+	private float _useCardDuration = 0.5f;
 	
 	/// <summary>
 	/// Hand에서 카드 추가. 직접 호출하지 않고 DeckManager에 의해서만 호출되어야 함
@@ -39,6 +41,10 @@ public class HandLayoutController : MonoBehaviour {
 		cardController.Init(cardInstance, _drawPileLocation, _discardPileLocation, _cardPool, _battleManager); 
 		cardController.transform.SetAsLastSibling();
 		cardController.gameObject.name = $"Card {_cards.Count}";
+		
+		// 생성 시 이벤트 등록
+		_battleManager.OnCardUse.AddListener(cardController.RefreshCardDescription);
+		_battleMouseController.OnTargetChange.AddListener(cardController.RefreshCardDescription);
 		
 		Arrange();
 	}
@@ -62,6 +68,13 @@ public class HandLayoutController : MonoBehaviour {
 	/// </summary>
 	/// <param name="card"></param>
 	private void RemoveCard(int idx) {
+		// 만약 이미 삭제된 카드(턴 종료 등으로 인해)라면, 오류 생기므로 방어코드 삽입.
+		if (_cards.Count <= idx) return;
+		
+		// 이벤트 삭제
+		_battleManager.OnCardUse.RemoveListener(_cards[idx].RefreshCardDescription);
+		_battleMouseController.OnTargetChange.RemoveListener(_cards[idx].RefreshCardDescription);
+		
 		_cards[idx].RemoveCard();
 		_cards.RemoveAt(idx);
 		
@@ -101,6 +114,7 @@ public class HandLayoutController : MonoBehaviour {
 			);
 			
 			_cards[i].CardIdxInHand = i;
+			_cards[i].transform.SetSiblingIndex(i);
 		}
 	}
 	
