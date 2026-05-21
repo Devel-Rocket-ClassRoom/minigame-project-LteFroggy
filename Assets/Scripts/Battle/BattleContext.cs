@@ -6,7 +6,7 @@ public class BattleContext {
 	public readonly CharacterBase target;
 	public BattleManager manager;
 	
-	public BattleContext(BattleManager manager, PlayerCharacter user, List<CharacterBase> targets, EnemyInstance target) {
+	public BattleContext(BattleManager manager, CharacterBase user, List<CharacterBase> targets, CharacterBase target) {
 		this.user = user;
 		this.targets = targets;
 		this.target = target;

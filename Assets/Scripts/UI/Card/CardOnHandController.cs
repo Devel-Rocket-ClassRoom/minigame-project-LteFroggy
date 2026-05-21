@@ -193,7 +193,6 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// 카드 텍스트를 갱신한다. 마우스로 타겟을 잡거나, 카드를 사용할 때마다 갱신됨.
 	/// </summary>
 	public void RefreshCardDescription() {
-		Debug.Log($"텍스트 갱신됨");
 		_cardDescriptionText.text = _cardInstance.GetCardDescriptionWithContext(GetBattleContext());
 	}
 }

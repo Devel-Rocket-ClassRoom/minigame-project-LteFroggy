@@ -4,4 +4,8 @@
 		MaxHealth = PlayerData.Instance.MaxHealth;
 		CurrentHealth = PlayerData.Instance.CurrentHealth;
 	}
+
+	public override void Init() {
+		base.Init();
+	}
 }
