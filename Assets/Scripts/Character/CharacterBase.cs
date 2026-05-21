@@ -2,12 +2,16 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Events;
 using Image = UnityEngine.UI.Image;
 
 public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	public int MaxHealth { get; set; } = 100;
 	public int CurrentHealth { get; protected set; }
 	public int Block { get; protected set; }
+	
+	public UnityEvent OnDeath;
+	public bool IsDead => CurrentHealth <= 0;
 
 	[Header("=== 체력, 방어도 텍스트 ===")]
 	[SerializeField] private TextMeshProUGUI _healthText;
@@ -44,6 +48,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		
 		// 체력 0 이하로 내려가지 않게
 		CurrentHealth = Mathf.Max(CurrentHealth, 0);
+		
+		// 사망했으면, 사망 애니메이션
+		if (IsDead) OnDeath?.Invoke();
 	}
 
 	public void GetHeal(int amount) { CurrentHealth += amount; }

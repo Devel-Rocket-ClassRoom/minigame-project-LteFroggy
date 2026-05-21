@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BattleManager : BattleSystemManager {
@@ -12,6 +14,12 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private TurnManager _turnManager;
 	[SerializeField] private CharacterManager _characterManager;
 	[SerializeField] private BattleMouseController _mouseController;
+
+	[Header("=== 전투 종료 이후 상태 보여주는 임시 정보판 ===")] 
+	[SerializeField] private GameObject _battleEndPanel;
+	[SerializeField] private TextMeshProUGUI _battleEndText;
+	[SerializeField] private TextMeshProUGUI _buttonText;
+	[SerializeField] private Button _button;
 	
 	
 	// 외부에서 드로우하려고 할 때 사용
@@ -22,9 +30,16 @@ public class BattleManager : BattleSystemManager {
 	
 	// 카드 사용했을 때 발생시킬 이벤트
 	[HideInInspector] public UnityEvent OnCardUse;
+	
+	private bool IsGameEnd;
 
 	// Start에서 게임 시작
-	private void Start() { StartBattle(); }
+	private void Start() {
+		StartBattle();
+		
+		// 전투 결과 패널 비활성화
+		_battleEndPanel.SetActive(false);
+	}
 
 	public override void StartBattle() {
 		_deckManager.StartBattle();
@@ -33,11 +48,41 @@ public class BattleManager : BattleSystemManager {
 		_turnManager.StartBattle();
 		_characterManager.StartBattle();
 		
+		// 캐릭터 사망 시 게임오버되도록 함
+		_characterManager.Player.OnDeath.AddListener(GameOver);
+		
+		// 적 모두 사망 시 스테이지 클리어
+		_enemyManager.OnEnemyAllDead.AddListener(BattleEnd);
+		
 		StartPlayerTurn();
 	}
 	
-	public void DrawCard() {
+	private void GameOver() {
+		IsGameEnd = true;
 		
+		// 전투 결과 패널 활성화
+		_battleEndPanel.SetActive(true);
+		_battleEndText.text = "패배하였습니다";
+		_buttonText.text = "다시 시도하기";
+		_button.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
+		
+		_characterManager.Player.OnDeath.RemoveListener(GameOver);
+		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
+	}
+	
+	private void BattleEnd() {
+		IsGameEnd = true;
+		
+		// 전투 종료되면, 현재 내 체력 저장
+		PlayerData.Instance.CurrentHealth = _characterManager.Player.CurrentHealth;
+		
+		_battleEndPanel.SetActive(true);
+		_battleEndText.text = "전투 승리";
+		_buttonText.text = "다음 전투로";
+		_button.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
+		
+		_characterManager.Player.OnDeath.RemoveListener(GameOver);
+		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
 	}
 
 	private void OnEnable() {
@@ -49,6 +94,8 @@ public class BattleManager : BattleSystemManager {
 	}
 
 	public override void StartPlayerTurn() {
+		if (IsGameEnd) return;
+		
 		_turnManager.StartPlayerTurn();
 		_cardUseManager.StartPlayerTurn();
 		_enemyManager.StartPlayerTurn();

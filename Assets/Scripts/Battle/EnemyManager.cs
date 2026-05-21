@@ -22,6 +22,8 @@ public class EnemyManager : BattleSystemManager {
 	private readonly Vector3 _enemySpawnPoint = new(5.4f, 0f, 0f);
 	private readonly float _enemySpawnSpacing = -3.3f;
 
+	[HideInInspector] public UnityEvent OnEnemyAllDead; 
+
 	// 전투 시작 시에, 불러와야 할 적 리스트대로 생성
 	public override void StartBattle() {
 		// 테이블에서 랜덤한 인스턴스 고르기
@@ -33,6 +35,15 @@ public class EnemyManager : BattleSystemManager {
 			enemy.Init(enemySpawnTable.enemyList[i], this);
 			
 			_enemyList.Add(enemy);
+		}
+	}
+	
+	public void DeleteEnemy(EnemyInstance instance) {
+		_enemyList.Remove(instance);
+		
+		// 적 모두 죽어서 사라졌으면 승리 처리
+		if (_enemyList.Count == 0) {
+			OnEnemyAllDead?.Invoke();
 		}
 	}
 
