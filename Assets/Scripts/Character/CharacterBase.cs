@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using Image = UnityEngine.UI.Image;
 
+[RequireComponent(typeof(Animator))]
 public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	public int MaxHealth { get; set; } = 100;
 	public int CurrentHealth { get; protected set; }
@@ -30,11 +31,18 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	
 	// 현재 캐릭터에게 걸린 상태 효과 저장용
 	private readonly Dictionary<Type, StatusRenderer> _statuses = new();
+	protected Animator _animator;
 	
-	// MaxHealth, CurrentHealth는 시작하면서 PlayerData에서 받아오기
 	public virtual void Init() {
+		// MaxHealth, CurrentHealth는 시작하면서 설정
 		SetHealth();
+		
+		_animator = GetComponent<Animator>();
 	}
+	
+	public abstract void PlayAttackAnimation();
+	public abstract void PlayHitAnimation();
+	public abstract void PlaySkillAnimation();
 	
 	public abstract void SetHealth();
 

@@ -5313,7 +5313,7 @@
         </member>
         <member name="P:CsvHelper.Expressions.RecordCreator.ExpressionManager">
             <summary>
-            The expression manager.
+            The expression battleManager.
             </summary>
         </member>
         <member name="M:CsvHelper.Expressions.RecordCreator.#ctor(CsvHelper.CsvReader)">
@@ -5434,7 +5434,7 @@
         </member>
         <member name="P:CsvHelper.Expressions.RecordWriter.ExpressionManager">
             <summary>
-            The expression manager.
+            The expression battleManager.
             </summary>
         </member>
         <member name="M:CsvHelper.Expressions.RecordWriter.#ctor(CsvHelper.CsvWriter)">

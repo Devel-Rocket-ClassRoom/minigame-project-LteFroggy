@@ -17,9 +17,9 @@ public class AttackAction : EnemyAction {
 		return calculatedAmount.ToString();
 	}
 
-	public override int Amount => amount;
+	protected override int Amount => amount;
 
-	public override int CalculateAmountWithContext(EnemyActionContext context) {
+	protected override int CalculateAmountWithContext(EnemyActionContext context) {
 		int result = amount;
 		// 사용자 기반 주는 데미지 계산
 		result = context.user.CalculateAttackingDamage(result);

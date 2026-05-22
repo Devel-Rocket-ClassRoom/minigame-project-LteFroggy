@@ -2,19 +2,19 @@
 	public abstract string CardDescriptionKey { get; }
 	
 	/// <summary>
-	/// 카드 기본 텍스트 반환
+	/// 카드 기본 텍스트 반환. 카드 설명에서 사용한다.
 	/// </summary>
-	public string GetCardDescription() {
+	public virtual string GetCardDescription() {
 		return StringTableManager.StringTable[CardDescriptionKey].Replace("@", Amount.ToString());
 	}
 	
 	/// <summary>
 	/// 맥락 기반 텍스트 반환. 강화되었으면 초록색, 약화되면 빨간색
 	/// </summary>
-	/// <param name="ctx"></param>
+	/// <param name="context"></param>
 	/// <returns></returns>
-	public string GetCardDescriptionWithContext(CardUseContext ctx) {
-		int calculatedAmount = CalculateAmountWithContext(ctx);
+	public virtual string GetCardDescriptionWithContext(CardUseContext context) {
+		int calculatedAmount = CalculateAmountWithContext(context);
 		string replaceText;
 		// 강화되었으면 초록색 텍스트
 		if (calculatedAmount > Amount) { replaceText = GetGreenText(calculatedAmount.ToString()); }

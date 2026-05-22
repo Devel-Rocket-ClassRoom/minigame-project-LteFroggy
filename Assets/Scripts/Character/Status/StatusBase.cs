@@ -7,7 +7,7 @@ public abstract class StatusBase {
 	public int Duration { get; protected set; }
 	
 	public abstract string IconName { get; }
-	public Sprite Icon => Resources.Load<Sprite>($"Sprites/Status/{IconName}");
+	public Sprite Icon => Resources.Load<Sprite>($"Sprites/Statuses/{IconName}");
 	// 상태이상 창 아래에 보일 텍스트
 	public abstract string TextToShow { get; }
 	// 해당 상태이상이 아직 적용되는건지

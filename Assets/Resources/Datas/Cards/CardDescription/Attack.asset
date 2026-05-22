@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: Attack
   m_EditorClassIdentifier: Assembly-CSharp::CardDefinition
   cardId: 0
-  cardName: Card0Name
   rarity: 0
   icon: {fileID: 21300000, guid: d002e52d8b059d44c839d1e636de9968, type: 3}
   cost: 1
   tag: 0
   needsTarget: 1
-  effects:
+  actions:
   - {fileID: 11400000, guid: a6eab10fb73d3924885d0608eb6a92d3, type: 2}
