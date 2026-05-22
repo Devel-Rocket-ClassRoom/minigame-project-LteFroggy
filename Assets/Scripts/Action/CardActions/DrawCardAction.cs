@@ -8,13 +8,13 @@ public class DrawCardAction : CardAction {
 	public override int Amount => amount;
 	public override string CardDescriptionKey => "DrawCardText";
 
-	public override void Execute(BattleContext context) {
+	public override void Execute(CardUseContext context) {
 		for (int i = 0; i < amount; i++) {
 			context.manager.DeckManager.DrawCard();	
 		}
 	}
 	
-	public override int CalculateAmountWithContext(BattleContext context) {
+	public override int CalculateAmountWithContext(CardUseContext context) {
 		return amount;
 	}
 }

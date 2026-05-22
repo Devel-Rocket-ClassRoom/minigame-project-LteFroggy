@@ -70,7 +70,7 @@ public class EnemyInstance : CharacterBase {
 		MakeIntentIcon(_enemyManager.GetEnemyActionContext(this));
 	}
 	
-	public void MakeIntentIcon(BattleContext context) {
+	public void MakeIntentIcon(EnemyActionContext context) {
 		// 허수아비 방어용 코드
 		if (_enemyData == null) return;
 		
@@ -87,7 +87,7 @@ public class EnemyInstance : CharacterBase {
 		}
 	}
 	
-	public void UpdateIntentIcon(BattleContext context) {
+	public void UpdateIntentIcon(EnemyActionContext context) {
 		// 허수아비 방어용 코드
 		if (_enemyData == null) return;
 		

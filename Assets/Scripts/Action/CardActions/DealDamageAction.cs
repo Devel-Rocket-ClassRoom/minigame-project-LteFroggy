@@ -10,12 +10,12 @@ public class DealDamageAction : CardAction {
 	public override int Amount => amount;
 	public override string CardDescriptionKey => "AttackCardText";
 
-	public override void Execute(BattleContext context) {
+	public override void Execute(CardUseContext context) {
 		if (context.target.IsDead) return;
 		context.target.GetDamage(CalculateAmountWithContext(context));
 	}
 
-	public override int CalculateAmountWithContext(BattleContext context) {
+	public override int CalculateAmountWithContext(CardUseContext context) {
 		int result = amount;
 		// 사용자 기반 주는 데미지 계산
 		result = context.user.CalculateAttackingDamage(result);

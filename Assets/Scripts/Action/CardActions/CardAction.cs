@@ -1,4 +1,4 @@
-﻿public abstract class CardAction : ActionBase {
+﻿public abstract class CardAction : ActionBase<CardUseContext> {
 	public abstract string CardDescriptionKey { get; }
 	
 	/// <summary>
@@ -13,7 +13,7 @@
 	/// </summary>
 	/// <param name="ctx"></param>
 	/// <returns></returns>
-	public string GetCardDescriptionWithContext(BattleContext ctx) {
+	public string GetCardDescriptionWithContext(CardUseContext ctx) {
 		int calculatedAmount = CalculateAmountWithContext(ctx);
 		string replaceText;
 		// 강화되었으면 초록색 텍스트

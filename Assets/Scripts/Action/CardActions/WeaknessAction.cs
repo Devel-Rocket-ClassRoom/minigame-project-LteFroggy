@@ -7,7 +7,7 @@ public class WeaknessAction : CardAction {
 	public override string CardDescriptionKey => "WeaknessCardText";
 	
 	// 취약 효과 부여
-	public override void Execute(BattleContext context) {
+	public override void Execute(CardUseContext context) {
 		if (context.target.IsDead) return;
 		
 		var weakness = new Weakness();
@@ -15,7 +15,7 @@ public class WeaknessAction : CardAction {
 		context.target.AddStatus(weakness);
 	}
 	
-	public override int CalculateAmountWithContext(BattleContext context) {
+	public override int CalculateAmountWithContext(CardUseContext context) {
 		return Amount;
 	}
 }

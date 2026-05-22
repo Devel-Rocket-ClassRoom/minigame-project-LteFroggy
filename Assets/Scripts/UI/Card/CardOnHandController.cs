@@ -50,7 +50,7 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	private CardPool _cardPool;
 	
 	// BattleContext를 받기 위해 사용하는 함수
-	[HideInInspector] public Func<BattleContext> GetBattleContext;
+	[HideInInspector] public Func<CardUseContext> GetBattleContext;
 	
 	public void SetCardPosition(Vector3 location, Quaternion rotation) {
 		if (_cardMoveCoroutine != null) {
@@ -90,7 +90,7 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		_cardPool = cardPool;
 		
 		// 값 할당
-		GetBattleContext = battleManager.GetBattleContext;
+		GetBattleContext = () => battleManager.GetBattleContext(_cardInstance);
 		_cardIcon.sprite = instance._cardDefinition.icon;
 		_cardNameText.text = instance._cardDefinition.StringCardName;
 		_cardCostText.text = instance._cardDefinition.cost.ToString();
