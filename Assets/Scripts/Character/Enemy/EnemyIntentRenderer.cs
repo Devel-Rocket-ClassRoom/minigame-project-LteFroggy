@@ -9,13 +9,13 @@ public class EnemyIntentRenderer : MonoBehaviour {
 	[SerializeField] private Image _intentIcon;
 	[SerializeField] private TextMeshProUGUI _intentText;
 	
-	public void Init(EnemyAction action, BattleContext context) {
+	public void Init(EnemyAction action, EnemyActionContext context) {
 		_enemyAction = action;
 		
 		UpdateIntentInfo(context);
 	}
 	
-	public void UpdateIntentInfo(BattleContext context) {
+	public void UpdateIntentInfo(EnemyActionContext context) {
 		_intentIcon.sprite = _enemyAction.IntentIcon;
 		_intentText.text = _enemyAction.GetIntentTextWithContext(context);
 	}

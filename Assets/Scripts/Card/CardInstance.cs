@@ -24,7 +24,7 @@ public class CardInstance {
 		return sb.ToString();
 	}
 	
-	public string GetCardDescriptionWithContext(BattleContext context) {
+	public string GetCardDescriptionWithContext(CardUseContext context) {
 		StringBuilder sb = new StringBuilder();
 		sb.Append($"[{_cardDefinition.TagText}] \n");
 		foreach (var effect in _cardDefinition.effects) {

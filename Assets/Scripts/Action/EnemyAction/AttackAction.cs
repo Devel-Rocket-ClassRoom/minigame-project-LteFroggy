@@ -7,7 +7,7 @@ public class AttackAction : EnemyAction {
 	public override string IntentIconName => "Attack";
 	
 	// 공격량은 실제 Amount와 동일하게 작성
-	public override string GetIntentTextWithContext(BattleContext context) {
+	public override string GetIntentTextWithContext(EnemyActionContext context) {
 		var calculatedAmount = CalculateAmountWithContext(context);
 		// 피해량보다 높으면 초록색
 		if (calculatedAmount > amount) { return GetGreenText(calculatedAmount.ToString()); }
@@ -19,7 +19,7 @@ public class AttackAction : EnemyAction {
 
 	public override int Amount => amount;
 
-	public override int CalculateAmountWithContext(BattleContext context) {
+	public override int CalculateAmountWithContext(EnemyActionContext context) {
 		int result = amount;
 		// 사용자 기반 주는 데미지 계산
 		result = context.user.CalculateAttackingDamage(result);
@@ -30,7 +30,7 @@ public class AttackAction : EnemyAction {
 	}
 	
 	// 데미지 주기
-	public override void Execute(BattleContext context) {
+	public override void Execute(EnemyActionContext context) {
 		if (context.target.IsDead) return;
 		context.target.GetDamage(CalculateAmountWithContext(context));
 	}

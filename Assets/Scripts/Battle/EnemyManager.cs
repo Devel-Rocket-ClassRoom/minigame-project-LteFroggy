@@ -64,13 +64,11 @@ public class EnemyManager : BattleSystemManager {
 		OnEnemyTurnEnd?.Invoke();
 	}
 	
-	public BattleContext GetEnemyActionContext(EnemyInstance instance) {
+	public EnemyActionContext GetEnemyActionContext(EnemyInstance instance) {
 		// 적의 경우 공격받는 대상이 항상 Player
 		// 공격하는 대상은 매개변수로 받아서 입력
-		return new BattleContext(
-			_battleManager,
+		return new EnemyActionContext(
 			instance,
-			null,
 			_characterManager.Player
 		);
 	}

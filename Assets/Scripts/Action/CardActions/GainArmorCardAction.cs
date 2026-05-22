@@ -8,11 +8,11 @@ public class GainArmorCardAction : CardAction {
 	public override int Amount => amount;
 	public override string CardDescriptionKey => "GainArmorCardText";
 
-	public override void Execute(BattleContext context) {
+	public override void Execute(CardUseContext context) {
 		context.user.AddBlock(CalculateAmountWithContext(context));
 	}
 
-	public override int CalculateAmountWithContext(BattleContext context) {
+	public override int CalculateAmountWithContext(CardUseContext context) {
 		int result = amount;
 		
 		// 사용자의 Gain Block 양 기반으로 아머 얻기

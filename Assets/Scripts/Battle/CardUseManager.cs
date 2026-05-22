@@ -26,7 +26,7 @@ public class CardUseManager : BattleSystemManager {
 	/// </summary>
 	/// <param name="instance">효과 발동할 카드</param>
 	/// <param name="context">효과 발동 시의 전투 맥락</param>
-	public void UseCard(CardInstance instance, BattleContext context) {
+	public void UseCard(CardInstance instance, CardUseContext context) {
 		_energyCurrent -= instance._cardDefinition.cost;
 		
 		foreach (var effect in instance._cardDefinition.effects) {
