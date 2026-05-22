@@ -14,6 +14,7 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private TurnManager _turnManager;
 	[SerializeField] private CharacterManager _characterManager;
 	[SerializeField] private BattleMouseController _mouseController;
+	[SerializeField] private RelicManager _relicManager;
 
 	[Header("=== 전투 종료 이후 상태 보여주는 임시 정보판 ===")] 
 	[SerializeField] private GameObject _battleEndPanel;
@@ -47,6 +48,7 @@ public class BattleManager : BattleSystemManager {
 		_enemyManager.StartBattle();
 		_turnManager.StartBattle();
 		_characterManager.StartBattle();
+		_relicManager.StartBattle();
 		
 		// 캐릭터 사망 시 게임오버되도록 함
 		_characterManager.Player.OnDeath.AddListener(GameOver);
@@ -132,7 +134,7 @@ public class BattleManager : BattleSystemManager {
 		
 		// 위의 사항에 해당 없다면, 카드 사용 처리
 		// 사용에 필요한 맥락 만들어서 주기
-		_cardUseManager.UseCard(cardInstance, GetBattleContext(cardInstance));
+		_cardUseManager.UseCard(cardInstance, GetCardUseContext(cardInstance));
 		// 사용한 카드는 핸드에서 제거
 		_deckManager.RemoveUsedCardFromHand(cardInstance);
 		// 카드 사용했음 이벤트 발생
@@ -144,9 +146,10 @@ public class BattleManager : BattleSystemManager {
 	/// BattleContext 만들 때에는, _mouseController가 지정한 타겟 정보를 참조한다.
 	/// </summary>
 	/// <returns>만들어진 전투 맥락</returns>
-	public CardUseContext GetBattleContext(CardInstance cardInstance) {
+	public CardUseContext GetCardUseContext(CardInstance cardInstance) {
 		return new CardUseContext(
 			this,
+			_relicManager,
 			_characterManager.Player,
 			_enemyManager.EnemyList.Cast<CharacterBase>().ToList(),
 			_mouseController.TargetInstance,

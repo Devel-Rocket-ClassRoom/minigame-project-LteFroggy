@@ -3,10 +3,10 @@
 [CreateAssetMenu(menuName = "Enemy/Enemy Actions/Gain Armor")]
 public class GainArmorAction : EnemyAction {
 	public int amount;
-	public override int Amount => amount;
+	protected override int Amount => amount;
 	public override string IntentIconName => $"Defend";
 	
-	public override int CalculateAmountWithContext(EnemyActionContext context) {
+	protected override int CalculateAmountWithContext(EnemyActionContext context) {
 		// 본인 강화값에 기반한 강화도 보기
 		return context.user.CalculateGainingArmor(amount);
 	}

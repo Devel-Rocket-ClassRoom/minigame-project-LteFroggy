@@ -3,7 +3,7 @@
 [CreateAssetMenu(menuName = "Card/Card Actions/Give Weakness")]
 public class WeaknessAction : CardAction {
 	public int amount;
-	public override int Amount => amount; 
+	protected override int Amount => amount; 
 	public override string CardDescriptionKey => "WeaknessCardText";
 	
 	// 취약 효과 부여
@@ -15,7 +15,7 @@ public class WeaknessAction : CardAction {
 		context.target.AddStatus(weakness);
 	}
 	
-	public override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context) {
 		return Amount;
 	}
 }
