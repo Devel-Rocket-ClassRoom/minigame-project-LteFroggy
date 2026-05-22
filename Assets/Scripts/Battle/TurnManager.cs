@@ -9,6 +9,7 @@ public class TurnManager : BattleSystemManager {
 
 	[Header("=== 턴 종료 버튼 ===")]
 	[SerializeField] private Button _turnEndButton;
+	[SerializeField] private TextMeshProUGUI _turnEndText;
 
 	[Header("=== Battle Manager ===")]
 	[SerializeField] private BattleManager _battleManager;
@@ -24,6 +25,7 @@ public class TurnManager : BattleSystemManager {
 
 	private void OnEnable() {
 		_turnEndButton.onClick.AddListener(_battleManager.EndPlayerTurn);
+		_turnEndText.text = StringTableManager.StringTable["EndTurn"];
 	}
 
 	private void OnDisable() {

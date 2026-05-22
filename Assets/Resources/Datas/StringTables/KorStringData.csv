@@ -7,6 +7,7 @@ Fire,화염
 Common,일반
 Uncommon,고급
 Rare,희귀
+EndTurn,턴 종료
 AttackCardText,피해를 @ 줍니다.
 GainArmorCardText,방어도를 @ 얻습니다.
 DrawCardText,카드를 @장 뽑습니다.
