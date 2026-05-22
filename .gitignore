@@ -97,7 +97,9 @@ desktop.ini
 # Optional: ignore large local config
 # =========================
 # Uncomment if needed
+*.zip
 # *.pid
 # *.seed
 # *.log
 # *.stackdump
+
