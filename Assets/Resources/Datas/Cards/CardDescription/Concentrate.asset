@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: Concentrate
   m_EditorClassIdentifier: Assembly-CSharp::CardDefinition
   cardId: 2
-  cardName: Card2Name
   rarity: 0
   icon: {fileID: 21300000, guid: 8acb5e7ce2cf1804bbbb22e6de25ceb9, type: 3}
   cost: 1
   tag: 3
   needsTarget: 0
-  effects:
+  actions:
   - {fileID: 11400000, guid: 49672b2ad7ad42e4389ebdbd645388c8, type: 2}

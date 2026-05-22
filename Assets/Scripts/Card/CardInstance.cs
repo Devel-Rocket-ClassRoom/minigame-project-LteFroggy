@@ -15,19 +15,10 @@ public class CardInstance {
 		_cardDefinition = cardDefinition;
 	}
 	
-	public string GetCardDescription() {
-		StringBuilder sb = new StringBuilder();
-		sb.Append($"[{_cardDefinition.TagText}] \n");
-		foreach (var effect in _cardDefinition.effects) {
-			sb.AppendLine(effect.GetCardDescription());
-		}
-		return sb.ToString();
-	}
-	
 	public string GetCardDescriptionWithContext(CardUseContext context) {
 		StringBuilder sb = new StringBuilder();
 		sb.Append($"[{_cardDefinition.TagText}] \n");
-		foreach (var effect in _cardDefinition.effects) {
+		foreach (var effect in _cardDefinition.actions) {
 			sb.AppendLine(effect.GetCardDescriptionWithContext(context));
 		}
 		return sb.ToString();

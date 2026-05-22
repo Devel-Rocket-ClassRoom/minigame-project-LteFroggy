@@ -17,5 +17,5 @@ public class CardDefinition : ScriptableObject {
 	public string TagText => StringTableManager.StringTable[tag.ToString()];
 	public string RarityText => StringTableManager.StringTable[rarity.ToString()];
 	[Header("=== 카드 효과들 ===")]
-	public List<CardAction> effects;
+	public List<CardAction> actions;
 }

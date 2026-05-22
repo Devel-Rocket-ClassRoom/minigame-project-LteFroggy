@@ -2,14 +2,14 @@
 using UnityEngine;
 
 public class CardUseManager : BattleSystemManager {
-	private int _energyMax = 3;
-	private int _energyCurrent;
+	private int _maxEnergy = 3;
+	private int _currentEnergy;
 
 	[Header("=== 에너지 표시 텍스트 ===")]
 	[SerializeField] private TextMeshProUGUI _energyText;
 	
 	public override void StartPlayerTurn() {
-		_energyCurrent = _energyMax;
+		_currentEnergy = _maxEnergy;
 	}
 	
 	/// <summary>
@@ -18,7 +18,7 @@ public class CardUseManager : BattleSystemManager {
 	/// <param name="instance">판별할 카드</param>
 	/// <returns>사용 가능 여부</returns>
 	public bool isUsable(CardInstance instance) {
-		return instance.Cost <= _energyCurrent;
+		return instance.Cost <= _currentEnergy;
 	}
 
 	/// <summary>
@@ -27,14 +27,14 @@ public class CardUseManager : BattleSystemManager {
 	/// <param name="instance">효과 발동할 카드</param>
 	/// <param name="context">효과 발동 시의 전투 맥락</param>
 	public void UseCard(CardInstance instance, CardUseContext context) {
-		_energyCurrent -= instance._cardDefinition.cost;
+		_currentEnergy -= instance._cardDefinition.cost;
 		
-		foreach (var effect in instance._cardDefinition.effects) {
-			effect.Execute(context);
+		foreach (var action in instance._cardDefinition.actions) {
+			action.Execute(context);
 		}
 	}
 	
 	private void Update() {
-		_energyText.text = $"{_energyCurrent}/{_energyMax}";
+		_energyText.text = $"{_currentEnergy}/{_maxEnergy}";
 	}
 }
