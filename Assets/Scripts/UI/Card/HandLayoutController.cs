@@ -7,8 +7,7 @@ public class HandLayoutController : MonoBehaviour {
 	[SerializeField] private float _fanAngle = 20f;
 	[SerializeField] private float _arcHeight = 200f;
 	[SerializeField] private float _arcOffset = 50f;
-
-	// 빌드 깨지지 않게 임시 주석처리. 이후 DrawPile, DiscardPile 완성되면 넣을 예정
+	
 	[Header("=== 카드가 처음 드로우될 때 출발할 Position ===")]
 	[SerializeField] private RectTransform _drawPileLocation;
 	

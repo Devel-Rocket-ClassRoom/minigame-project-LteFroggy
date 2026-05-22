@@ -8,7 +8,7 @@
 		return damage = (int)(damage * 1.5f);
 	}
 
-	// 약화는 합쳐질 때 턴만 더해진다.
+	// 취약은 합쳐질 때 턴만 더해진다.
 	public override void Merge(StatusBase status) {
 		Duration += status.Duration;
 	}

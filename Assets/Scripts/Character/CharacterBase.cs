@@ -28,7 +28,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	[SerializeField] private Transform _statusParent;
 	[SerializeField] private StatusRenderer _statusPrefab; 
 	
-	// 걸린 강화효과, 약화효과 등 저장
+	// 현재 캐릭터에게 걸린 상태 효과 저장용
 	private readonly Dictionary<Type, StatusRenderer> _statuses = new();
 	
 	// MaxHealth, CurrentHealth는 시작하면서 PlayerData에서 받아오기
