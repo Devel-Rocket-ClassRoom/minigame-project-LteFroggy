@@ -106,7 +106,12 @@ public class EnemyInstance : CharacterBase {
 			yield return new WaitForSeconds(_actionDuration);
 		}
 	}
-	
+
+	// 아직 공격, 피격, 스킬 애니메이션 없음
+	public override void PlayAttackAnimation() { }
+	public override void PlayHitAnimation() { }
+	public override void PlaySkillAnimation() { }
+
 	public override void SetHealth() {
 		// Data에서 가져와서 체력 세팅
 		MaxHealth = _enemyData.health;

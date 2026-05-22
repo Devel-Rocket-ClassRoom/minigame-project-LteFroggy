@@ -4,8 +4,9 @@
 		MaxHealth = PlayerData.Instance.MaxHealth;
 		CurrentHealth = PlayerData.Instance.CurrentHealth;
 	}
-
-	public override void Init() {
-		base.Init();
-	}
+	
+	// 아직 애니메이션 없음
+	public override void PlaySkillAnimation() { }
+	public override void PlayAttackAnimation() { }
+	public override void PlayHitAnimation() { }
 }
