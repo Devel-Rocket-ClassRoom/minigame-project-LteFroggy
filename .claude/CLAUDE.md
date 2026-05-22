@@ -72,19 +72,21 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ### Project / Iteration / Milestone
 
-- **Project**: 이슈 생성 후 GitHub Projects "Break The Crown"에 추가한다.
-  - 단, 현재 토큰에 `read:project` 스코프가 없어 API 자동 설정 불가. 이슈 생성 후 사용자에게 수동 추가를 안내한다.
-- **Iteration**: 요청 날짜에 해당하는 Iteration으로 설정한다 (Project 설정과 동일하게 토큰 스코프 문제로 수동 안내).
-- **Milestone**: 요청 날짜에 맞는 마일스톤을 `milestone` 파라미터로 설정한다. 아래 기준 사용:
+- **Project**: 이슈 생성 후 GitHub Projects "break-the-crown" (`PVT_kwDODykJwc4BYO7A`)에 추가한다.
+  - 이슈를 프로젝트에 추가한 뒤, Status를 **Backlog** (`3f8128b9`)로 설정한다.
+  - 아래 GraphQL 순서로 처리한다:
+    1. `addProjectV2ItemById` 뮤테이션으로 이슈를 프로젝트에 추가 → `itemId` 획득
+    2. `updateProjectV2ItemFieldValue` 뮤테이션으로 Status = Backlog 설정
+    3. `updateProjectV2ItemFieldValue` 뮤테이션으로 Iteration 설정
+- **Iteration**: 요청 날짜(또는 이슈의 마일스톤 기간)에 맞는 Iteration ID를 사용한다.
 
-| 마일스톤 번호 | 제목 | 기간 |
+| Iteration | ID | 기간 |
 |---|---|---|
-| 1 | 빌드 1 — 핵심 전투 루프 + 기본 유물 | ~ 2026-05-22 |
-| 2 | 빌드 2 — 속성 키워드 + 고급 유물 + 메타 진행 | 2026-05-23 ~ 2026-05-29 |
-| 3 | 빌드 3 — 폴리싱 + 완성 | 2026-05-30 ~ 2026-06-05 |
-| 4 | 출시 | 2026-06-06 ~ 2026-06-08 |
+| Iteration 1 | `84f0f4d3` | 2026-05-16 ~ 2026-05-22 |
+| Iteration 2 | `ae0a886e` | 2026-05-23 ~ 2026-05-29 |
+| Iteration 3 | `8ddad5bf` | 2026-05-30 ~ 2026-06-05 |
 
----
+- **Milestone**: 요청 날짜에 맞는 마일스톤을 `milestone` 파라미터로 설정한다. 아래 기준 사용:
 
 ## 6. 커밋 메시지 작성 규칙
 
