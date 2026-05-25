@@ -13,3 +13,5 @@ GainArmorCardText,방어도를 @ 얻습니다.
 DrawCardText,카드를 @장 뽑습니다.
 WeaknessCardText,취약을 @ 부여합니다.
 RepeatAttackCardText,피해를 @씩 #번 줍니다.
+MapButton,지도
+DeckButton,덱

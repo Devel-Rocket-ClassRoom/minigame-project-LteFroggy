@@ -4,7 +4,11 @@
 		MaxHealth = PlayerData.Instance.MaxHealth;
 		CurrentHealth = PlayerData.Instance.CurrentHealth;
 	}
-	
+
+	protected override void OnHealthChanged() {
+		PlayerData.Instance.SetHealth(CurrentHealth);
+	}
+
 	// 아직 애니메이션 없음
 	public override void PlaySkillAnimation() { }
 	public override void PlayAttackAnimation() { }
