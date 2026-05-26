@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class PlayerData : Singleton<PlayerData> {
+public class PlayData : Singleton<PlayData> {
 	// 덱에 들어간 카드 목록
 	public List<CardInstance> Deck { get; } = new();
 
@@ -10,9 +10,9 @@ public class PlayerData : Singleton<PlayerData> {
 	private readonly List<RelicBase> _relics = new();
 	public IReadOnlyList<RelicBase> Relics => _relics;
 
-	public event Action<int, int> HealthChanged;
-	public event Action<int> GoldChanged;
-	public event Action RelicsChanged;
+	public event UnityAction<int, int> OnHealthChanged;
+	public event UnityAction<int> OnGoldChanged;
+	public event UnityAction OnRelicsChanged;
 
 	[Header("=== 시작 카드들 등록 ===")]
 	[SerializeField] private CardDefinition[] _startCards;
@@ -39,28 +39,28 @@ public class PlayerData : Singleton<PlayerData> {
 
 	public void SetHealth(int current) {
 		CurrentHealth = Mathf.Clamp(current, 0, MaxHealth);
-		HealthChanged?.Invoke(CurrentHealth, MaxHealth);
+		OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
 	}
 
 	public void AddGold(int amount) {
 		Gold += amount;
-		GoldChanged?.Invoke(Gold);
+		OnGoldChanged?.Invoke(Gold);
 	}
 
 	public bool SpendGold(int amount) {
 		if (Gold < amount) return false;
 		Gold -= amount;
-		GoldChanged?.Invoke(Gold);
+		OnGoldChanged?.Invoke(Gold);
 		return true;
 	}
 
 	public void AddRelic(RelicBase relic) {
 		_relics.Add(relic);
-		RelicsChanged?.Invoke();
+		OnRelicsChanged?.Invoke();
 	}
 
 	public void RemoveRelic(RelicBase relic) {
 		_relics.Remove(relic);
-		RelicsChanged?.Invoke();
+		OnRelicsChanged?.Invoke();
 	}
 }
