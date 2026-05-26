@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
 public class RelicManager : BattleSystemManager {
-	private List<RelicBase> _relics = new();
+	private IReadOnlyList<RelicBase> _relics = new List<RelicBase>();
 	
 	// PlayerData의 RelicList에서 정보 가져오고, 렌더링
 	public override void StartBattle() {
 		base.StartBattle();
-		_relics = PlayerData.Instance.Relics;
+		_relics = PlayData.Instance.Relics;
 	}
 	
 	public int CalculateAmountWithRelics(CardInstance card, CardAction action, int amount) {

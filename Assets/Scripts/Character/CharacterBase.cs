@@ -48,20 +48,26 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 
 	public void GetDamage(int amount) {
 		int reduceBlockAmount = Math.Min(amount, Block);
-		// 피해를 받았을 땐 방어도부터 제거 
+		// 피해를 받았을 땐 방어도부터 제거
 		amount -= reduceBlockAmount;
 		LoseBlock(reduceBlockAmount);
-		
+
 		CurrentHealth -= amount;
-		
+
 		// 체력 0 이하로 내려가지 않게
 		CurrentHealth = Mathf.Max(CurrentHealth, 0);
-		
+
 		// 사망했으면, 사망 애니메이션
 		if (IsDead) OnDeath?.Invoke();
+		OnHealthChanged();
 	}
 
-	public void GetHeal(int amount) { CurrentHealth += amount; }
+	public void GetHeal(int amount) {
+		CurrentHealth += amount;
+		OnHealthChanged();
+	}
+
+	protected virtual void OnHealthChanged() { }
 	
 	public void AddBlock(int amount) { Block += amount; }
 

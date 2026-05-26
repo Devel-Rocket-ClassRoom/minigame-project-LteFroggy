@@ -9,6 +9,7 @@ public class TurnManager : BattleSystemManager {
 
 	[Header("=== 턴 종료 버튼 ===")]
 	[SerializeField] private Button _turnEndButton;
+	[SerializeField] private TextMeshProUGUI _turnEndText;
 
 	[Header("=== Battle Manager ===")]
 	[SerializeField] private BattleManager _battleManager;
@@ -24,6 +25,7 @@ public class TurnManager : BattleSystemManager {
 
 	private void OnEnable() {
 		_turnEndButton.onClick.AddListener(_battleManager.EndPlayerTurn);
+		_turnEndText.text = StringTableManager.StringTable["EndTurn"];
 	}
 
 	private void OnDisable() {
@@ -44,7 +46,9 @@ public class TurnManager : BattleSystemManager {
 		_turnCount++;
 		
 		if (_displayTextCoroutine != null) StopCoroutine(_displayTextCoroutine);
-		_displayTextCoroutine = StartCoroutine(CoDisplayText($"{_turnCount}번째 턴"));
+		_displayTextCoroutine = StartCoroutine(CoDisplayText(
+			StringTableManager.StringTable["TurnText"].
+			Replace("@", _turnCount.ToString())));
 		
 		_turnEndButton.gameObject.SetActive(true);
 		_turnEndButton.interactable = true;
@@ -53,7 +57,7 @@ public class TurnManager : BattleSystemManager {
 	// 적 턴 표시
 	public override void EndPlayerTurn() {
 		if (_displayTextCoroutine != null) StopCoroutine(_displayTextCoroutine);
-		_displayTextCoroutine = StartCoroutine(CoDisplayText($"적 턴"));
+		_displayTextCoroutine = StartCoroutine(CoDisplayText(StringTableManager.StringTable["EnemyTurn"]));
 		
 		_turnEndButton.gameObject.SetActive(false);
 		_turnEndButton.interactable = false;

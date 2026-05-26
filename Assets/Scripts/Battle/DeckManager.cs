@@ -21,7 +21,7 @@ public class DeckManager : BattleSystemManager {
 	
 	// 전투 시작 시, PlayerData에서 덱 목록 가져오기
 	public override void StartBattle() {
-		foreach (var card in PlayerData.Instance.Deck) {
+		foreach (var card in PlayData.Instance.Deck) {
 			_discardPile.Add(card);
 		}
 	}

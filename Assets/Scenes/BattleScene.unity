@@ -1528,6 +1528,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ab04a398b90751741a444cdd7514e11e, type: 2}
   - {fileID: 11400000, guid: c94f911a4534eb24fb2422f263f4a8bc, type: 2}
   _maxHealth: 50
+  _startGold: 0
 --- !u!1 &506454057
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,7 +1723,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3/3
+  m_text: 10/10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
@@ -1749,8 +1750,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1907,6 +1908,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TurnManager
   _turnText: {fileID: 269289085}
   _turnEndButton: {fileID: 253944941}
+  _turnEndText: {fileID: 1724821817}
   _battleManager: {fileID: 689757849}
 --- !u!1 &832575517
 GameObject:
@@ -2348,8 +2350,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 437}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchoredPosition: {x: -743, y: -340}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1316074754
 MonoBehaviour:
@@ -2689,6 +2691,50 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.97, z: 0}
   m_LocalScale: {x: 1.8, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1515821522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1515821524}
+  - component: {fileID: 1515821523}
+  m_Layer: 0
+  m_Name: UISceneBootstrapper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1515821523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515821522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1185e75fc84b1ff4a8b35d738da43040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISceneBootstrapper
+--- !u!4 &1515821524
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515821522}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -3537,9 +3583,10 @@ SceneRoots:
   - {fileID: 353561517}
   - {fileID: 307796130}
   - {fileID: 1509821704}
+  - {fileID: 1801630215}
+  - {fileID: 456949862}
+  - {fileID: 1515821524}
   - {fileID: 5212930854062607650}
   - {fileID: 6611813478633412966}
   - {fileID: 205265810}
   - {fileID: 1084769043}
-  - {fileID: 1801630215}
-  - {fileID: 456949862}
