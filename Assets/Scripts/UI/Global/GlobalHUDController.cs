@@ -19,20 +19,20 @@ public class GlobalHUDController : MonoBehaviour {
 	[SerializeField] private OverlayPanelController _mapOverlay;
 	[SerializeField] private OverlayPanelController _deckOverlay;
 
-	private PlayData _playData;
+	private GamePlayData _gamePlayData;
 
 	private void OnEnable() {
-		_playData = PlayData.Instance;
-		_playData.OnHealthChanged += OnHealthChanged;
-		_playData.OnGoldChanged += OnGoldChanged;
-		_playData.OnRelicsChanged += OnRelicsChanged;
+		_gamePlayData = GamePlayData.Instance;
+		_gamePlayData.OnHealthChanged += OnHealthChanged;
+		_gamePlayData.OnGoldChanged += OnGoldChanged;
+		_gamePlayData.OnRelicsChanged += OnRelicsChanged;
 	}
 
 	private void OnDisable() {
-		if (_playData == null) return;
-		_playData.OnHealthChanged -= OnHealthChanged;
-		_playData.OnGoldChanged -= OnGoldChanged;
-		_playData.OnRelicsChanged -= OnRelicsChanged;
+		if (_gamePlayData == null) return;
+		_gamePlayData.OnHealthChanged -= OnHealthChanged;
+		_gamePlayData.OnGoldChanged -= OnGoldChanged;
+		_gamePlayData.OnRelicsChanged -= OnRelicsChanged;
 	}
 
 	private void Start() {
@@ -42,8 +42,8 @@ public class GlobalHUDController : MonoBehaviour {
 	}
 
 	private void RefreshAll() {
-		OnHealthChanged(_playData.CurrentHealth, _playData.MaxHealth);
-		OnGoldChanged(_playData.Gold);
+		OnHealthChanged(_gamePlayData.CurrentHealth, _gamePlayData.MaxHealth);
+		OnGoldChanged(_gamePlayData.Gold);
 		OnRelicsChanged();
 	}
 
@@ -57,7 +57,7 @@ public class GlobalHUDController : MonoBehaviour {
 
 	private void OnRelicsChanged() {
 		foreach (Transform child in _relicRow) Destroy(child.gameObject);
-		foreach (var relic in _playData.Relics) {
+		foreach (var relic in _gamePlayData.Relics) {
 			var icon = Instantiate(_relicIconPrefab, _relicRow);
 			icon.Set(relic);
 		}

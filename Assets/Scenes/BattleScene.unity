@@ -1529,6 +1529,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c94f911a4534eb24fb2422f263f4a8bc, type: 2}
   _maxHealth: 50
   _startGold: 0
+  mapGeneratingConfig: {fileID: 11400000, guid: d7419c4f5a7a7bf4c93b25c841f8ae0e, type: 2}
 --- !u!1 &506454057
 GameObject:
   m_ObjectHideFlags: 0

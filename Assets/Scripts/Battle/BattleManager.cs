@@ -74,12 +74,12 @@ public class BattleManager : BattleSystemManager {
 		IsGameEnd = true;
 		
 		// 전투 종료되면, 현재 내 체력 저장
-		PlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
+		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
 		
 		_battleEndPanel.SetActive(true);
 		_battleEndText.text = "전투 승리";
-		_buttonText.text = "다음 전투로";
-		_button.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
+		_buttonText.text = "지도로 돌아가기";
+		_button.onClick.AddListener(() => SceneManager.LoadScene("MapSelectScene"));
 		
 		_characterManager.Player.OnDeath.RemoveListener(GameOver);
 		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
