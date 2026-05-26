@@ -1,12 +1,12 @@
 ﻿public class PlayerCharacter : CharacterBase {
 	// MaxHealth, CurrentHealth는 PlayerData에서 받아오기
 	public override void SetHealth() {
-		MaxHealth = PlayerData.Instance.MaxHealth;
-		CurrentHealth = PlayerData.Instance.CurrentHealth;
+		MaxHealth = PlayData.Instance.MaxHealth;
+		CurrentHealth = PlayData.Instance.CurrentHealth;
 	}
 
 	protected override void OnHealthChanged() {
-		PlayerData.Instance.SetHealth(CurrentHealth);
+		PlayData.Instance.SetHealth(CurrentHealth);
 	}
 
 	// 아직 애니메이션 없음

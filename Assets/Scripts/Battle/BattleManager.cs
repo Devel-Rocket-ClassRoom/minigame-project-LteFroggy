@@ -74,7 +74,7 @@ public class BattleManager : BattleSystemManager {
 		IsGameEnd = true;
 		
 		// 전투 종료되면, 현재 내 체력 저장
-		PlayerData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
+		PlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
 		
 		_battleEndPanel.SetActive(true);
 		_battleEndText.text = "전투 승리";
