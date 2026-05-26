@@ -46,7 +46,9 @@ public class TurnManager : BattleSystemManager {
 		_turnCount++;
 		
 		if (_displayTextCoroutine != null) StopCoroutine(_displayTextCoroutine);
-		_displayTextCoroutine = StartCoroutine(CoDisplayText($"{_turnCount}번째 턴"));
+		_displayTextCoroutine = StartCoroutine(CoDisplayText(
+			StringTableManager.StringTable["TurnText"].
+			Replace("@", _turnCount.ToString())));
 		
 		_turnEndButton.gameObject.SetActive(true);
 		_turnEndButton.interactable = true;
@@ -55,7 +57,7 @@ public class TurnManager : BattleSystemManager {
 	// 적 턴 표시
 	public override void EndPlayerTurn() {
 		if (_displayTextCoroutine != null) StopCoroutine(_displayTextCoroutine);
-		_displayTextCoroutine = StartCoroutine(CoDisplayText($"적 턴"));
+		_displayTextCoroutine = StartCoroutine(CoDisplayText(StringTableManager.StringTable["EnemyTurn"]));
 		
 		_turnEndButton.gameObject.SetActive(false);
 		_turnEndButton.interactable = false;
