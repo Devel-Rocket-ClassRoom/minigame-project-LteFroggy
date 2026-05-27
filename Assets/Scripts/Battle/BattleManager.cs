@@ -2,7 +2,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BattleManager : BattleSystemManager {
@@ -58,28 +57,16 @@ public class BattleManager : BattleSystemManager {
 	
 	private void GameOver() {
 		IsGameEnd = true;
-		
-		// 전투 결과 패널 활성화
+
 		_battleEndPanel.SetActive(true);
 		_battleEndText.text = "패배하였습니다";
-		_buttonText.text = "다시 시도하기";
-		
-		// 패배 시에는 StartScene으로 돌려보내기.
+		_buttonText.text = "처음으로";
+
 		_button.onClick.AddListener(() => {
-			// 돌려보내기 전에, 현재 씬에 살아있는 GamePlayData, UIBootstrapper 모두 삭제
-			Destroy(GamePlayData.Instance.gameObject);
-			Destroy(UISceneBootstrapper.Instance.gameObject);
-			
-			// StartScene으로 돌려보내기
-			SceneManager.LoadScene(
-				GamePlayData
-					.Instance	
-					.MapGeneratingConfig
-					.GetConfig(MapNodeType.Start)
-					.SceneName
-			);
+			GamePlayData.Instance.Reset();
+			UISceneBootstrapper.Instance.TransitionTo("MainScene");
 		});
-		
+
 		_characterManager.Player.OnDeath.RemoveListener(GameOver);
 		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
 	}
