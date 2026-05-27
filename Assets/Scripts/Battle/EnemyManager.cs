@@ -14,10 +14,10 @@ public class EnemyManager : BattleSystemManager {
 	[Header("=== 적 생성을 위한 Prefab 저장 ===")]
 	[SerializeField] private EnemyInstance _enemyPrefab;
 	
-	[HideInInspector] public UnityEvent OnEnemyTurnEnd;
-	
-	[Header("=== 임시로 스폰 가능한 적 데이터 넣어두기 ===")]
+	[Header("=== 스폰 가능한 적 데이터 넣어두기 ===")]
 	[SerializeField] private EnemySpawnTable[] _tables;
+	
+	[HideInInspector] public UnityEvent OnEnemyTurnEnd;
 	
 	private readonly Vector3 _enemySpawnPoint = new(5.4f, 0f, 0f);
 	private readonly float _enemySpawnSpacing = -3.3f;
