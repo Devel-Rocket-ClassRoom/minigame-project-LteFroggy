@@ -21,7 +21,6 @@ public class NodeInstance : MonoBehaviour {
 	}
 
 	private void DrawSelf() {
-		Debug.Log($"_image : {_image}, _nodeData : {_nodeData}");
 		// 이미지 설정
 		_image.sprite = _nodeData.Config.Icon;
 		// 필요한 위치에 배치
