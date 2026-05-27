@@ -69,6 +69,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - `.github/ISSUE_TEMPLATE/` 내 해당 템플릿을 확인한다.
 - 기존 이슈 목록을 보고 제목 형식(`[FEAT]`, `[BUG]`, `[CHORE]` 등), 섹션 구조, 라벨을 맞춘다.
 - 템플릿에 없는 섹션을 임의로 추가하거나 구조를 바꾸지 않는다.
+- **작업 브랜치명의 이슈 번호**: 이슈를 먼저 생성해 실제 번호를 받은 뒤, 브랜치명을 해당 번호로 즉시 수정한다. `{이슈번호}` 플레이스홀더를 그대로 남기지 않는다.
 
 ### Project / Iteration / Milestone
 
