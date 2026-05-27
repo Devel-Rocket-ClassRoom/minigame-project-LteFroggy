@@ -20,7 +20,6 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private TextMeshProUGUI _buttonText;
 	[SerializeField] private Button _button;
 	
-	
 	// 외부에서 드로우하려고 할 때 사용
 	public DeckManager DeckManager => _deckManager;
 	
@@ -43,9 +42,9 @@ public class BattleManager : BattleSystemManager {
 	public override void StartBattle() {
 		_deckManager.StartBattle();
 		_cardUseManager.StartBattle();
+		_characterManager.StartBattle();
 		_enemyManager.StartBattle();
 		_turnManager.StartBattle();
-		_characterManager.StartBattle();
 		_relicManager.StartBattle();
 		
 		// 캐릭터 사망 시 게임오버되도록 함
@@ -64,7 +63,22 @@ public class BattleManager : BattleSystemManager {
 		_battleEndPanel.SetActive(true);
 		_battleEndText.text = "패배하였습니다";
 		_buttonText.text = "다시 시도하기";
-		_button.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
+		
+		// 패배 시에는 StartScene으로 돌려보내기.
+		_button.onClick.AddListener(() => {
+			// 돌려보내기 전에, 현재 씬에 살아있는 GamePlayData, UIBootstrapper 모두 삭제
+			Destroy(GamePlayData.Instance.gameObject);
+			Destroy(UISceneBootstrapper.Instance.gameObject);
+			
+			// StartScene으로 돌려보내기
+			SceneManager.LoadScene(
+				GamePlayData
+					.Instance	
+					.MapGeneratingConfig
+					.GetConfig(MapNodeType.Start)
+					.SceneName
+			);
+		});
 		
 		_characterManager.Player.OnDeath.RemoveListener(GameOver);
 		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
@@ -79,7 +93,7 @@ public class BattleManager : BattleSystemManager {
 		_battleEndPanel.SetActive(true);
 		_battleEndText.text = "전투 승리";
 		_buttonText.text = "지도로 돌아가기";
-		_button.onClick.AddListener(() => SceneManager.LoadScene("MapSelectScene"));
+		_button.onClick.AddListener(GameEvents.NodeCompleted);
 		
 		_characterManager.Player.OnDeath.RemoveListener(GameOver);
 		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);

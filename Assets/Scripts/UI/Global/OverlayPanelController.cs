@@ -12,5 +12,5 @@ public class OverlayPanelController : MonoBehaviour {
 	public void Toggle() => gameObject.SetActive(!gameObject.activeSelf);
 
 	public void Open() => gameObject.SetActive(true);
-	private void Close() => gameObject.SetActive(false);
+	public void Close() => gameObject.SetActive(false);
 }

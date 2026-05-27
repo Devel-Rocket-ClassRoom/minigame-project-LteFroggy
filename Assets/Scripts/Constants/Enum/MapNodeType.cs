@@ -1,4 +1,5 @@
 ﻿public enum MapNodeType {
+    Start,
     Battle,
     Elite,
     Event,

@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,9 +27,15 @@ public class GlobalHUDController : MonoBehaviour {
 		_gamePlayData.OnHealthChanged += OnHealthChanged;
 		_gamePlayData.OnGoldChanged += OnGoldChanged;
 		_gamePlayData.OnRelicsChanged += OnRelicsChanged;
+		
+		GameEvents.OnNodeCompleted += _mapOverlay.Open;
+		GameEvents.OnNextNodeSelected += _mapOverlay.Close;
 	}
 
 	private void OnDisable() {
+		GameEvents.OnNodeCompleted -= _mapOverlay.Open;
+		GameEvents.OnNextNodeSelected -= _mapOverlay.Close;
+
 		if (_gamePlayData == null) return;
 		_gamePlayData.OnHealthChanged -= OnHealthChanged;
 		_gamePlayData.OnGoldChanged -= OnGoldChanged;

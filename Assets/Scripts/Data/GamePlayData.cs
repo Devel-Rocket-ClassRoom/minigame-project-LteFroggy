@@ -27,6 +27,7 @@ public class GamePlayData : Singleton<GamePlayData> {
 
 	[Header("=== 맵 생성 정보 테이블 ===")]
 	[SerializeField] private MapGeneratingConfig mapGeneratingConfig;
+	public MapGeneratingConfig MapGeneratingConfig => mapGeneratingConfig;
 
 	public int MaxHealth { get => _maxHealth; private set => _maxHealth = value; }
 	public int CurrentHealth { get; private set; }
