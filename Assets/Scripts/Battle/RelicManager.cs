@@ -6,7 +6,7 @@ public class RelicManager : BattleSystemManager {
 	// PlayerData의 RelicList에서 정보 가져오고, 렌더링
 	public override void StartBattle() {
 		base.StartBattle();
-		_relics = PlayData.Instance.Relics;
+		_relics = GamePlayData.Instance.Relics;
 	}
 	
 	public int CalculateAmountWithRelics(CardInstance card, CardAction action, int amount) {

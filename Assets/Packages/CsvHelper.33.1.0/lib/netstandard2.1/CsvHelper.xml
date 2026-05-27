@@ -607,7 +607,7 @@
             <summary>
             Ignore the member when reading and writing.
             If this member has already been mapped as a reference
-            member, either by a class map, or by automapping, calling
+            member, either by a class GameMap, or by automapping, calling
             this method will not ignore all the child members down the
             tree that have already been mapped.
             </summary>
@@ -677,7 +677,7 @@
             <summary>
             Applies configuration to the given <see cref="T:CsvHelper.Configuration.MemberMap"/>.
             </summary>
-            <param name="memberMap">The member map.</param>
+            <param name="memberMap">The member GameMap.</param>
         </member>
         <member name="T:CsvHelper.Configuration.Attributes.IMemberReferenceMapper">
             <summary>
@@ -688,7 +688,7 @@
             <summary>
             Applies configuration to the given <see cref="T:CsvHelper.Configuration.MemberReferenceMap" />.
             </summary>
-            <param name="referenceMap">The reference map.</param>
+            <param name="referenceMap">The reference GameMap.</param>
         </member>
         <member name="T:CsvHelper.Configuration.Attributes.IncludePrivateMembersAttribute">
             <summary>
@@ -809,7 +809,7 @@
             <summary>
             Applies configuration to the given <see cref="T:CsvHelper.Configuration.ParameterMap"/>.
             </summary>
-            <param name="parameterMap">The parameter map.</param>
+            <param name="parameterMap">The parameter GameMap.</param>
         </member>
         <member name="T:CsvHelper.Configuration.Attributes.IParameterReferenceMapper">
             <summary>
@@ -820,7 +820,7 @@
             <summary>
             Applies configuration to the given <see cref="T:CsvHelper.Configuration.ParameterReferenceMap" />.
             </summary>
-            <param name="referenceMap">The reference map.</param>
+            <param name="referenceMap">The reference GameMap.</param>
         </member>
         <member name="T:CsvHelper.Configuration.Attributes.LineBreakInQuotedFieldIsBadDataAttribute">
             <summary>
@@ -1217,7 +1217,7 @@
         </member>
         <member name="P:CsvHelper.Configuration.ClassMap.ClassType">
             <summary>
-            The type of the class this map is for.
+            The type of the class this GameMap is for.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.ClassMap.ParameterMaps">
@@ -1239,20 +1239,20 @@
             <summary>
             Allow only internal creation of CsvClassMap.
             </summary>
-            <param name="classType">The type of the class this map is for.</param>
+            <param name="classType">The type of the class this GameMap is for.</param>
         </member>
-        <member name="M:CsvHelper.Configuration.ClassMap.Map(System.Type,System.Reflection.MemberInfo,System.Boolean)">
+        <member name="M:CsvHelper.Configuration.ClassMap.GameMap(System.Type,System.Reflection.MemberInfo,System.Boolean)">
             <summary>
             Maps a member to a CSV field.
             </summary>
-            <param name="classType">The type of the class this map is for. This may not be the same type
+            <param name="classType">The type of the class this GameMap is for. This may not be the same type
             as the member.DeclaringType or the current ClassType due to nested member mappings.</param>
-            <param name="member">The member to map.</param>
-            <param name="useExistingMap">If true, an existing map will be used if available.
-            If false, a new map is created for the same member.</param>
+            <param name="member">The member to GameMap.</param>
+            <param name="useExistingMap">If true, an existing GameMap will be used if available.
+            If false, a new GameMap is created for the same member.</param>
             <returns>The member mapping.</returns>
         </member>
-        <member name="M:CsvHelper.Configuration.ClassMap.Map">
+        <member name="M:CsvHelper.Configuration.ClassMap.GameMap">
             <summary>
             Maps a non-member to a CSV field. This allows for writing
             data that isn't mapped to a class member.
@@ -1261,11 +1261,11 @@
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.References(System.Type,System.Reflection.MemberInfo,System.Object[])">
             <summary>
-            Maps a member to another class map.
+            Maps a member to another class GameMap.
             </summary>
-            <param name="classMapType">The type of the class map.</param>
+            <param name="classMapType">The type of the class GameMap.</param>
             <param name="member">The member.</param>
-            <param name="constructorArgs">Constructor arguments used to create the reference map.</param>
+            <param name="constructorArgs">Constructor arguments used to create the reference GameMap.</param>
             <returns>The reference mapping for the member.</returns>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.Parameter(System.String)">
@@ -1291,21 +1291,21 @@
         <member name="M:CsvHelper.Configuration.ClassMap.AutoMap(System.Globalization.CultureInfo)">
             <summary>
             Auto maps all members for the given type. If a member
-            is mapped again it will override the existing map.
+            is mapped again it will override the existing GameMap.
             </summary>
             <param name="culture">The culture.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.AutoMap(CsvHelper.Configuration.CsvConfiguration)">
             <summary>
             Auto maps all members for the given type. If a member 
-            is mapped again it will override the existing map.
+            is mapped again it will override the existing GameMap.
             </summary>
             <param name="configuration">The configuration.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.AutoMap(CsvHelper.CsvContext)">
             <summary>
             Auto maps all members for the given type. If a member 
-            is mapped again it will override the existing map.
+            is mapped again it will override the existing GameMap.
             </summary>
             <param name="context">The context.</param>
         </member>
@@ -1325,20 +1325,20 @@
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.AutoMapMembers(CsvHelper.Configuration.ClassMap,CsvHelper.CsvContext,System.Collections.Generic.LinkedList{System.Type},System.Int32)">
             <summary>
-            Auto maps the given map and checks for circular references as it goes.
+            Auto maps the given GameMap and checks for circular references as it goes.
             </summary>
-            <param name="map">The map to auto map.</param>
+            <param name="GameMap">The GameMap to auto GameMap.</param>
             <param name="context">The context.</param>
-            <param name="mapParents">The list of parents for the map.</param>
+            <param name="mapParents">The list of parents for the GameMap.</param>
             <param name="indexStart">The index starting point.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.AutoMapConstructorParameters(CsvHelper.Configuration.ClassMap,CsvHelper.CsvContext,System.Collections.Generic.LinkedList{System.Type},System.Int32)">
             <summary>
-            Auto maps the given map using constructor parameters.
+            Auto maps the given GameMap using constructor parameters.
             </summary>
-            <param name="map">The map.</param>
+            <param name="GameMap">The GameMap.</param>
             <param name="context">The context.</param>
-            <param name="mapParents">The list of parents for the map.</param>
+            <param name="mapParents">The list of parents for the GameMap.</param>
             <param name="indexStart">The index starting point.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.CheckForCircularReference(System.Type,System.Collections.Generic.LinkedList{System.Type})">
@@ -1352,32 +1352,32 @@
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.GetGenericType">
             <summary>
-            Gets the generic type for this class map.
+            Gets the generic type for this class GameMap.
             </summary>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.ApplyAttributes(CsvHelper.Configuration.ParameterMap)">
             <summary>
-            Applies attribute configurations to the map.
+            Applies attribute configurations to the GameMap.
             </summary>
-            <param name="parameterMap">The parameter map.</param>
+            <param name="parameterMap">The parameter GameMap.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.ApplyAttributes(CsvHelper.Configuration.ParameterReferenceMap)">
             <summary>
-            Applies attribute configurations to the map.
+            Applies attribute configurations to the GameMap.
             </summary>
-            <param name="referenceMap">The parameter reference map.</param>
+            <param name="referenceMap">The parameter reference GameMap.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.ApplyAttributes(CsvHelper.Configuration.MemberMap)">
             <summary>
-            Applies attribute configurations to the map.
+            Applies attribute configurations to the GameMap.
             </summary>
-            <param name="memberMap">The member map.</param>
+            <param name="memberMap">The member GameMap.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap.ApplyAttributes(CsvHelper.Configuration.MemberReferenceMap)">
             <summary>
-            Applies attribute configurations to the map.
+            Applies attribute configurations to the GameMap.
             </summary>
-            <param name="referenceMap">The member reference map.</param>
+            <param name="referenceMap">The member reference GameMap.</param>
         </member>
         <member name="T:CsvHelper.Configuration.IHasMap`1">
             <summary>
@@ -1385,13 +1385,13 @@
             </summary>
             <typeparam name="TClass">The class type.</typeparam>
         </member>
-        <member name="M:CsvHelper.Configuration.IHasMap`1.Map``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Boolean)">
+        <member name="M:CsvHelper.Configuration.IHasMap`1.GameMap``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Boolean)">
             <summary>
             Maps a member to a CSV field.
             </summary>
-            <param name="expression">The member to map.</param>
-            <param name="useExistingMap">If true, an existing map will be used if available.
-            If false, a new map is created for the same member.</param>
+            <param name="expression">The member to GameMap.</param>
+            <param name="useExistingMap">If true, an existing GameMap will be used if available.
+            If false, a new GameMap is created for the same member.</param>
             <returns>The member mapping.</returns>
         </member>
         <member name="T:CsvHelper.Configuration.IHasMapOptions`2">
@@ -1644,17 +1644,17 @@
         </member>
         <member name="M:CsvHelper.Configuration.ClassMapCollection.Add(CsvHelper.Configuration.ClassMap)">
             <summary>
-            Adds the specified map for it's record type. If a map
+            Adds the specified GameMap for it's record type. If a GameMap
             already exists for the record type, the specified
-            map will replace it.
+            GameMap will replace it.
             </summary>
-            <param name="map">The map.</param>
+            <param name="GameMap">The GameMap.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMapCollection.Remove(System.Type)">
             <summary>
-            Removes the class map.
+            Removes the class GameMap.
             </summary>
-            <param name="classMapType">The class map type.</param>
+            <param name="classMapType">The class GameMap type.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMapCollection.Clear">
             <summary>
@@ -1675,47 +1675,47 @@
             the TypeConverter to be created from the Configuration's
             TypeConverterFactory.
             </summary>
-            <param name="map">The map to set defaults on.</param>
+            <param name="GameMap">The GameMap to set defaults on.</param>
         </member>
         <member name="T:CsvHelper.Configuration.ClassMap`1">
             <summary>
             Maps class members to CSV fields.
             </summary>
-            <typeparam name="TClass">The <see cref="T:System.Type"/> of class to map.</typeparam>
+            <typeparam name="TClass">The <see cref="T:System.Type"/> of class to GameMap.</typeparam>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap`1.#ctor">
             <summary>
             Creates an instance of <see cref="T:CsvHelper.Configuration.ClassMap`1"/>.
             </summary>
         </member>
-        <member name="M:CsvHelper.Configuration.ClassMap`1.Map``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Boolean)">
+        <member name="M:CsvHelper.Configuration.ClassMap`1.GameMap``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Boolean)">
             <summary>
             Maps a member to a CSV field.
             </summary>
-            <param name="expression">The member to map.</param>
-            <param name="useExistingMap">If true, an existing map will be used if available.
-            If false, a new map is created for the same member.</param>
+            <param name="expression">The member to GameMap.</param>
+            <param name="useExistingMap">If true, an existing GameMap will be used if available.
+            If false, a new GameMap is created for the same member.</param>
             <returns>The member mapping.</returns>
         </member>
-        <member name="M:CsvHelper.Configuration.ClassMap`1.Map``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Boolean)">
+        <member name="M:CsvHelper.Configuration.ClassMap`1.GameMap``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Boolean)">
             <summary>
             Maps a member to a CSV field.
             </summary>
-            <param name="expression">The member to map.</param>
-            <param name="useExistingMap">If true, an existing map will be used if available.
-            If false, a new map is created for the same member.</param>
+            <param name="expression">The member to GameMap.</param>
+            <param name="useExistingMap">If true, an existing GameMap will be used if available.
+            If false, a new GameMap is created for the same member.</param>
             <returns>The member mapping.</returns>
         </member>
         <member name="M:CsvHelper.Configuration.ClassMap`1.References``1(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Object[])">
             <summary>
             Meant for internal use only. 
-            Maps a member to another class map. When this is used, accessing a property through
+            Maps a member to another class GameMap. When this is used, accessing a property through
             sub-property mapping later won't work. You can only use one or the other. When using
             this, ConvertUsing will also not work.
             </summary>
-            <typeparam name="TClassMap">The type of the class map.</typeparam>
+            <typeparam name="TClassMap">The type of the class GameMap.</typeparam>
             <param name="expression">The expression.</param>
-            <param name="constructorArgs">Constructor arguments used to create the reference map.</param>
+            <param name="constructorArgs">Constructor arguments used to create the reference GameMap.</param>
             <returns>The reference mapping for the member.</returns>
         </member>
         <member name="T:CsvHelper.Configuration.ConfigurationException">
@@ -1997,7 +1997,7 @@
             </summary>
             <typeparam name="T">
             The type whose attributes should be used to configure the <see cref="T:CsvHelper.Configuration.CsvConfiguration"/> instance.
-            This is normally the type you are intending to map for reading and writing.
+            This is normally the type you are intending to GameMap for reading and writing.
             </typeparam>
             <returns>A new <see cref="T:CsvHelper.Configuration.CsvConfiguration"/> instance configured with attributes applied to <typeparamref name="T"/>.</returns>
             <remarks>
@@ -2051,7 +2051,7 @@
         <member name="T:CsvHelper.Configuration.DefaultClassMap`1">
             <summary>
             A default <see cref="T:CsvHelper.Configuration.ClassMap`1"/> that can be used
-            to create a class map dynamically.
+            to create a class GameMap dynamically.
             </summary>
             <typeparam name="T"></typeparam>
         </member>
@@ -2504,7 +2504,7 @@
         </member>
         <member name="P:CsvHelper.Configuration.MemberMap.Data">
             <summary>
-            Gets the member map data.
+            Gets the member GameMap data.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.MemberMap.TypeConverterOption">
@@ -2553,7 +2553,7 @@
             <summary>
             Ignore the member when reading and writing.
             If this member has already been mapped as a reference
-            member, either by a class map, or by automapping, calling
+            member, either by a class GameMap, or by automapping, calling
             this method will not ignore all the child members down the
             tree that have already been mapped.
             </summary>
@@ -2562,7 +2562,7 @@
             <summary>
             Ignore the member when reading and writing.
             If this member has already been mapped as a reference
-            member, either by a class map, or by automapping, calling
+            member, either by a class GameMap, or by automapping, calling
             this method will not ignore all the child members down the
             tree that have already been mapped.
             </summary>
@@ -2828,7 +2828,7 @@
         </member>
         <member name="T:CsvHelper.Configuration.MemberMapData">
             <summary>
-            The configured data for the member map.
+            The configured data for the member GameMap.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.MemberMapData.Type">
@@ -2959,14 +2959,14 @@
         </member>
         <member name="T:CsvHelper.Configuration.MemberMapTypeConverterOption">
             <summary>
-            Sets type converter options on a member map.
+            Sets type converter options on a member GameMap.
             </summary>
         </member>
         <member name="M:CsvHelper.Configuration.MemberMapTypeConverterOption.#ctor(CsvHelper.Configuration.MemberMap)">
             <summary>
             Creates a new instance using the given <see cref="T:CsvHelper.Configuration.MemberMap"/>.
             </summary>
-            <param name="memberMap">The member map the options are being applied to.</param>
+            <param name="memberMap">The member GameMap the options are being applied to.</param>
         </member>
         <member name="M:CsvHelper.Configuration.MemberMapTypeConverterOption.CultureInfo(System.Globalization.CultureInfo)">
             <summary>
@@ -3086,7 +3086,7 @@
             <summary>
             Ignore the member when reading and writing.
             If this member has already been mapped as a reference
-            member, either by a class map, or by automapping, calling
+            member, either by a class GameMap, or by automapping, calling
             this method will not ignore all the child members down the
             tree that have already been mapped.
             </summary>
@@ -3095,7 +3095,7 @@
             <summary>
             Ignore the member when reading and writing.
             If this member has already been mapped as a reference
-            member, either by a class map, or by automapping, calling
+            member, either by a class GameMap, or by automapping, calling
             this method will not ignore all the child members down the
             tree that have already been mapped.
             </summary>
@@ -3245,7 +3245,7 @@
         </member>
         <member name="P:CsvHelper.Configuration.MemberReferenceMap.Data">
             <summary>
-            Gets the member reference map data.
+            Gets the member reference GameMap data.
             </summary>
         </member>
         <member name="M:CsvHelper.Configuration.MemberReferenceMap.#ctor(System.Reflection.MemberInfo,CsvHelper.Configuration.ClassMap)">
@@ -3253,7 +3253,7 @@
             Initializes a new instance of the <see cref="T:CsvHelper.Configuration.MemberReferenceMap"/> class.
             </summary>
             <param name="member">The member.</param>
-            <param name="mapping">The <see cref="T:CsvHelper.Configuration.ClassMap"/> to use for the reference map.</param>
+            <param name="mapping">The <see cref="T:CsvHelper.Configuration.ClassMap"/> to use for the reference GameMap.</param>
         </member>
         <member name="M:CsvHelper.Configuration.MemberReferenceMap.Prefix(System.String,System.Boolean)">
             <summary>
@@ -3368,7 +3368,7 @@
         </member>
         <member name="T:CsvHelper.Configuration.MemberReferenceMapData">
             <summary>
-            The configuration data for the reference map.
+            The configuration data for the reference GameMap.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.MemberReferenceMapData.Prefix">
@@ -3425,13 +3425,13 @@
         <member name="T:CsvHelper.Configuration.ParameterMap">
             <summary>
             Mapping for a constructor parameter.
-            This may contain value type data, a constructor type map,
-            or a reference map, depending on the type of the parameter.
+            This may contain value type data, a constructor type GameMap,
+            or a reference GameMap, depending on the type of the parameter.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.ParameterMap.Data">
             <summary>
-            Gets the parameter map data.
+            Gets the parameter GameMap data.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.ParameterMap.TypeConverterOption">
@@ -3441,12 +3441,12 @@
         </member>
         <member name="P:CsvHelper.Configuration.ParameterMap.ConstructorTypeMap">
             <summary>
-            Gets or sets the map for a constructor type.
+            Gets or sets the GameMap for a constructor type.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.ParameterMap.ReferenceMap">
             <summary>
-            Gets or sets the map for a reference type.
+            Gets or sets the GameMap for a reference type.
             </summary>
         </member>
         <member name="M:CsvHelper.Configuration.ParameterMap.#ctor(System.Reflection.ParameterInfo)">
@@ -3533,7 +3533,7 @@
         </member>
         <member name="T:CsvHelper.Configuration.ParameterMapData">
             <summary>
-            The constructor parameter data for the map.
+            The constructor parameter data for the GameMap.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.ParameterMapData.Parameter">
@@ -3623,14 +3623,14 @@
         </member>
         <member name="T:CsvHelper.Configuration.ParameterMapTypeConverterOption">
             <summary>
-            Sets type converter options on a parameter map.
+            Sets type converter options on a parameter GameMap.
             </summary>
         </member>
         <member name="M:CsvHelper.Configuration.ParameterMapTypeConverterOption.#ctor(CsvHelper.Configuration.ParameterMap)">
             <summary>
             Creates a new instance using the given <see cref="T:CsvHelper.Configuration.ParameterMap"/>.
             </summary>
-            <param name="parameterMap">The member map the options are being applied to.</param>
+            <param name="parameterMap">The member GameMap the options are being applied to.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ParameterMapTypeConverterOption.CultureInfo(System.Globalization.CultureInfo)">
             <summary>
@@ -3704,7 +3704,7 @@
         </member>
         <member name="P:CsvHelper.Configuration.ParameterReferenceMap.Data">
             <summary>
-            Gets the parameter reference map data.
+            Gets the parameter reference GameMap data.
             </summary>
         </member>
         <member name="M:CsvHelper.Configuration.ParameterReferenceMap.#ctor(System.Reflection.ParameterInfo,CsvHelper.Configuration.ClassMap)">
@@ -3712,7 +3712,7 @@
             Initializes a new instance of the <see cref="T:CsvHelper.Configuration.ParameterReferenceMap"/> class.
             </summary>
             <param name="parameter">The parameter.</param>
-            <param name="mapping">The <see cref="T:CsvHelper.Configuration.ClassMap"/> to use for the reference map.</param>
+            <param name="mapping">The <see cref="T:CsvHelper.Configuration.ClassMap"/> to use for the reference GameMap.</param>
         </member>
         <member name="M:CsvHelper.Configuration.ParameterReferenceMap.Prefix(System.String,System.Boolean)">
             <summary>
@@ -3731,7 +3731,7 @@
         </member>
         <member name="T:CsvHelper.Configuration.ParameterReferenceMapData">
             <summary>
-            The configuration data for the reference map.
+            The configuration data for the reference GameMap.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.ParameterReferenceMapData.Prefix">
@@ -3850,7 +3850,7 @@
         <member name="M:CsvHelper.CsvContext.RegisterClassMap``1">
             <summary>
             Use a <see cref="T:CsvHelper.Configuration.ClassMap`1" /> to configure mappings.
-            When using a class map, no members are mapped by default.
+            When using a class GameMap, no members are mapped by default.
             Only member specified in the mapping are used.
             </summary>
             <typeparam name="TMap">The type of mapping class to use.</typeparam>
@@ -3858,28 +3858,28 @@
         <member name="M:CsvHelper.CsvContext.RegisterClassMap(System.Type)">
             <summary>
             Use a <see cref="T:CsvHelper.Configuration.ClassMap`1" /> to configure mappings.
-            When using a class map, no members are mapped by default.
+            When using a class GameMap, no members are mapped by default.
             Only members specified in the mapping are used.
             </summary>
             <param name="classMapType">The type of mapping class to use.</param>
         </member>
         <member name="M:CsvHelper.CsvContext.RegisterClassMap(CsvHelper.Configuration.ClassMap)">
             <summary>
-            Registers the class map.
+            Registers the class GameMap.
             </summary>
-            <param name="map">The class map to register.</param>
+            <param name="GameMap">The class GameMap to register.</param>
         </member>
         <member name="M:CsvHelper.CsvContext.UnregisterClassMap``1">
             <summary>
-            Unregisters the class map.
+            Unregisters the class GameMap.
             </summary>
-            <typeparam name="TMap">The map type to unregister.</typeparam>
+            <typeparam name="TMap">The GameMap type to unregister.</typeparam>
         </member>
         <member name="M:CsvHelper.CsvContext.UnregisterClassMap(System.Type)">
             <summary>
-            Unregisters the class map.
+            Unregisters the class GameMap.
             </summary>
-            <param name="classMapType">The map type to unregister.</param>
+            <param name="classMapType">The GameMap type to unregister.</param>
         </member>
         <member name="M:CsvHelper.CsvContext.UnregisterClassMap">
             <summary>
@@ -3890,15 +3890,15 @@
             <summary>
             Generates a <see cref="T:CsvHelper.Configuration.ClassMap"/> for the type.
             </summary>
-            <typeparam name="T">The type to generate the map for.</typeparam>
-            <returns>The generate map.</returns>
+            <typeparam name="T">The type to generate the GameMap for.</typeparam>
+            <returns>The generate GameMap.</returns>
         </member>
         <member name="M:CsvHelper.CsvContext.AutoMap(System.Type)">
             <summary>
             Generates a <see cref="T:CsvHelper.Configuration.ClassMap"/> for the type.
             </summary>
-            <param name="type">The type to generate for the map.</param>
-            <returns>The generate map.</returns>
+            <param name="type">The type to generate for the GameMap.</param>
+            <returns>The generate GameMap.</returns>
         </member>
         <member name="T:CsvHelper.CsvDataReader">
             <summary>
@@ -4295,7 +4295,7 @@
             <summary>
             Validates the header to be of the given type.
             </summary>
-            <param name="map">The mapped classes.</param>
+            <param name="GameMap">The mapped classes.</param>
             <param name="invalidHeaders">The invalid headers.</param>
         </member>
         <member name="M:CsvHelper.CsvReader.Read">
@@ -4468,14 +4468,14 @@
             <summary>
             Indicates if values can be read.
             </summary>
-            <param name="memberMap">The member map.</param>
+            <param name="memberMap">The member GameMap.</param>
             <returns>True if values can be read.</returns>
         </member>
         <member name="M:CsvHelper.CsvReader.CanRead(CsvHelper.Configuration.MemberReferenceMap)">
             <summary>
             Indicates if values can be read.
             </summary>
-            <param name="memberReferenceMap">The member reference map.</param>
+            <param name="memberReferenceMap">The member reference GameMap.</param>
             <returns>True if values can be read.</returns>
         </member>
         <member name="M:CsvHelper.CsvReader.Dispose">
@@ -4613,7 +4613,7 @@
             <summary>
             Indicates if values can be written.
             </summary>
-            <param name="memberMap">The member map.</param>
+            <param name="memberMap">The member GameMap.</param>
             <returns>True if values can be written.</returns>
         </member>
         <member name="M:CsvHelper.CsvWriter.GetTypeInfoForRecord``1(``0)">
@@ -5160,7 +5160,7 @@
             <summary>
             Creates the constructor arguments used to create a type.
             </summary>
-            <param name="map">The mapping to create the arguments for.</param>
+            <param name="GameMap">The mapping to create the arguments for.</param>
             <param name="argumentExpressions">The arguments that will be added to the mapping.</param>
         </member>
         <member name="M:CsvHelper.Expressions.ExpressionManager.CreateMemberAssignmentsForMapping(CsvHelper.Configuration.ClassMap,System.Collections.Generic.List{System.Linq.Expressions.MemberAssignment})">
@@ -5184,8 +5184,8 @@
             and create a safe member accessor for each level as it goes.
             </summary>
             <param name="recordExpression">The current member expression.</param>
-            <param name="mapping">The mapping to look for the member to map on.</param>
-            <param name="memberMap">The member map to look for on the mapping.</param>
+            <param name="mapping">The mapping to look for the member to GameMap on.</param>
+            <param name="memberMap">The member GameMap to look for on the mapping.</param>
             <returns>An Expression to access the given member.</returns>
         </member>
         <member name="M:CsvHelper.Expressions.ExpressionManager.CreateInstanceAndAssignMembers(System.Type,System.Collections.Generic.List{System.Linq.Expressions.MemberAssignment})">
@@ -5562,7 +5562,7 @@
             <summary>
             Access point for fluent interface to dynamically build a <see cref="T:CsvHelper.Configuration.ClassMap`1"/>
             </summary>
-            <typeparam name="T">Type you will be making a class map for</typeparam>
+            <typeparam name="T">Type you will be making a class GameMap for</typeparam>
             <returns>Options to further configure the <see cref="T:CsvHelper.Configuration.ClassMap`1"/></returns>
         </member>
         <member name="T:CsvHelper.FieldCache">
@@ -5716,7 +5716,7 @@
             <summary>
             Provides a fluent interface for dynamically creating <see cref="T:CsvHelper.Configuration.ClassMap`1"/>s 
             </summary>
-            <typeparam name="T">Type of class to map</typeparam>
+            <typeparam name="T">Type of class to GameMap</typeparam>
             <returns>Next available options</returns>
         </member>
         <member name="T:CsvHelper.InvalidHeader">
@@ -7690,7 +7690,7 @@
         </member>
         <member name="P:CsvHelper.TypeConversion.TypeConverterException.MemberMapData">
             <summary>
-            The member map data used in ConvertFromString and ConvertToString.
+            The member GameMap data used in ConvertFromString and ConvertToString.
             </summary>
         </member>
         <member name="M:CsvHelper.TypeConversion.TypeConverterException.#ctor(CsvHelper.TypeConversion.ITypeConverter,CsvHelper.Configuration.MemberMapData,System.String,CsvHelper.CsvContext)">
@@ -7698,7 +7698,7 @@
             Initializes a new instance of the <see cref="T:CsvHelper.TypeConversion.TypeConverterException"/> class.
             </summary>
             <param name="typeConverter">The type converter.</param>
-            <param name="memberMapData">The member map data.</param>
+            <param name="memberMapData">The member GameMap data.</param>
             <param name="text">The text.</param>
             <param name="context">The reading context.</param>
         </member>
@@ -7707,7 +7707,7 @@
             Initializes a new instance of the <see cref="T:CsvHelper.TypeConversion.TypeConverterException"/> class.
             </summary>
             <param name="typeConverter">The type converter.</param>
-            <param name="memberMapData">The member map data.</param>
+            <param name="memberMapData">The member GameMap data.</param>
             <param name="value">The value.</param>
             <param name="context">The writing context.</param>
         </member>
@@ -7717,7 +7717,7 @@
             with a specified error message.
             </summary>
             <param name="typeConverter">The type converter.</param>
-            <param name="memberMapData">The member map data.</param>
+            <param name="memberMapData">The member GameMap data.</param>
             <param name="text">The text.</param>
             <param name="context">The reading context.</param>
             <param name="message">The message that describes the error.</param>
@@ -7728,7 +7728,7 @@
             with a specified error message.
             </summary>
             <param name="typeConverter">The type converter.</param>
-            <param name="memberMapData">The member map data.</param>
+            <param name="memberMapData">The member GameMap data.</param>
             <param name="value">The value.</param>
             <param name="context">The writing context.</param>
             <param name="message">The message that describes the error.</param>
@@ -7740,7 +7740,7 @@
             is the cause of this exception.
             </summary>
             <param name="typeConverter">The type converter.</param>
-            <param name="memberMapData">The member map data.</param>
+            <param name="memberMapData">The member GameMap data.</param>
             <param name="text">The text.</param>
             <param name="context">The reading context.</param>
             <param name="message">The error message that explains the reason for the exception.</param>
@@ -7753,7 +7753,7 @@
             is the cause of this exception.
             </summary>
             <param name="typeConverter">The type converter.</param>
-            <param name="memberMapData">The member map data.</param>
+            <param name="memberMapData">The member GameMap data.</param>
             <param name="value">The value.</param>
             <param name="context">The writing context.</param>
             <param name="message">The error message that explains the reason for the exception.</param>
