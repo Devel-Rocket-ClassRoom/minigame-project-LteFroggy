@@ -47,6 +47,9 @@ public class GamePlayData : Singleton<GamePlayData> {
 		// 맵 노드 초기화
 		MapGenerator.MapConfig = mapGeneratingConfig;
 		InGameMapData = new InGameMapData();
+
+		// 시작 유물
+		_relics.Add(new Greatsword());
 	}
 
 	public void SetHealth(int current) {
