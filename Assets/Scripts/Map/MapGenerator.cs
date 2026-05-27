@@ -22,13 +22,14 @@ public static class MapGenerator {
 	}
 	
 	public static NodeData[,] GenerateMap() {
-		NodeData[,] nodes = new NodeData[MapConfig.NodesPerLayer, MapConfig.NodesPerLayer];
+		NodeData[,] nodes = new NodeData[MapConfig.LayerCount, MapConfig.NodesPerLayer];
 		List<EdgeData> edges = new();
+		int centerNodeIndex = MapConfig.NodesPerLayer / 2;
 		
 		// 첫 열은 노드가 중간에 하나만
-		nodes[0, MapConfig.NodesPerLayer / 2] = new NodeData() {
+		nodes[0, centerNodeIndex] = new NodeData() {
 			Config = Pick(),
-			Position = MapConfig.GetPosition(0, MapConfig.NodesPerLayer / 2),
+			Position = MapConfig.GetPosition(0, centerNodeIndex),
 			Visited = false,
 		};
 		
@@ -44,16 +45,16 @@ public static class MapGenerator {
 		}
 		
 		// 마지막 열은 노드가 중간에 하나만, 보스노드
-		nodes[MapConfig.LayerCount - 1, MapConfig.NodesPerLayer / 2] = new NodeData() {
+		nodes[MapConfig.LayerCount - 1, centerNodeIndex] = new NodeData() {
 			Config = MapConfig.GetConfig(MapNodeType.Boss),
-			Position = MapConfig.GetPosition(MapConfig.LayerCount - 1,  MapConfig.NodesPerLayer / 2),
+			Position = MapConfig.GetPosition(MapConfig.LayerCount - 1, centerNodeIndex),
 			Visited = false
 		};
 		
 		// 노드 이어주기
 		// 첫 Layer는 다음 레이어의 모든 값으로 갈 수 있음
 		for (int i = 0; i < MapConfig.NodesPerLayer; i++) {
-			nodes[0, 2].NextNodeIndices.Add(new EdgeData() {
+			nodes[0, centerNodeIndex].NextNodeIndices.Add(new EdgeData() {
 				end = nodes[1, i],
 				used = false
 			});
@@ -72,7 +73,7 @@ public static class MapGenerator {
 		// 마지막에서 두 번째 레이어는, 마지막 값이랑 모두 이어진다
 		for (int i = 0; i < MapConfig.NodesPerLayer; i++) {
 			nodes[MapConfig.LayerCount - 2, i].NextNodeIndices.Add(new EdgeData() {
-				end = nodes[MapConfig.LayerCount - 1, 2],
+				end = nodes[MapConfig.LayerCount - 1, centerNodeIndex],
 				used = false
 			});
 		}

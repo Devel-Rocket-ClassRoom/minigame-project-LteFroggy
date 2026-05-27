@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapGeneratingConfig
   NodePool:
   - {fileID: 11400000, guid: 931c66ef8c514054e919273c663bd4bb, type: 2}
+  - {fileID: 11400000, guid: 8095cfd81c891f7439e93a89a21e8e19, type: 2}
   LayerCount: 8
   NodesPerLayer: 5
-  yStart: -443
+  yStart: -250
   yDist: 150
   xStart: -844
-  xDist: -1416
+  xDist: 400
   NodeExistChance: 0.6
   EdgeConnectChange: 0.6

@@ -8,7 +8,9 @@ public class OverlayPanelController : MonoBehaviour {
 	private void Awake() {
 		_closeButton.onClick.AddListener(Close);
 	}
+	
+	public void Toggle() => gameObject.SetActive(!gameObject.activeSelf);
 
 	public void Open() => gameObject.SetActive(true);
-	public void Close() => gameObject.SetActive(false);
+	private void Close() => gameObject.SetActive(false);
 }

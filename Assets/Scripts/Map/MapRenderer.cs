@@ -17,14 +17,20 @@ public class MapRenderer : MonoBehaviour {
         // 맵 그리기
         BuildMap();
     }
-
+    
     // 맵 데이터를 참조해서 맵을 그리고, 저장한다.
     private void BuildMap() {
+        // NodeParent, EdgeParent 모두 청소
+        ClearChildren(_nodeParent);
+        ClearChildren(_edgeParent);
+        
         // 노드 그리기
         _nodeMappingTable.Clear();
         foreach (var nodeData in GamePlayData.Instance.InGameMapData.Nodes) {
+            if (nodeData == null) continue;
+            
             var nodeInstance = Instantiate(_nodeInstance, _nodeParent);
-            nodeInstance.Init();
+            nodeInstance.Init(nodeData);
             _nodeMappingTable.Add(nodeData, nodeInstance);
             
             // 각 노드별로 Edge 그리기
@@ -34,6 +40,14 @@ public class MapRenderer : MonoBehaviour {
                 edgeInstance.Init(nodeData, edgeData);
                 _edgeMappingTable[nodeData].Add(edgeInstance);
             }
+        }
+    }
+    
+    private void ClearChildren(Transform parent)
+    {
+        for (int i = parent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(parent.GetChild(i).gameObject);
         }
     }
 }

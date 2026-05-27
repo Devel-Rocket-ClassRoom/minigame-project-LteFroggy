@@ -36,8 +36,8 @@ public class GlobalHUDController : MonoBehaviour {
 	}
 
 	private void Start() {
-		_mapButton.onClick.AddListener(_mapOverlay.Open);
-		_deckButton.onClick.AddListener(_deckOverlay.Open);
+		_mapButton.onClick.AddListener(_mapOverlay.Toggle);
+		_deckButton.onClick.AddListener(_deckOverlay.Toggle);
 		RefreshAll();
 	}
 
