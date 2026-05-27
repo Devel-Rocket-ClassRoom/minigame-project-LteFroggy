@@ -1,9 +1,14 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "GameMap/MapNodeConfig")]
 public class MapNodeConfig : ScriptableObject {
 	public MapNodeType Type;
-	public string DisplayName;
 	public Sprite Icon;
 	public int Weight;
+	public string SceneName => Type switch {
+		MapNodeType.Battle => "BattleScene",
+		MapNodeType.Start => "StartScene",
+		_ => throw new NotImplementedException()
+	};
 }

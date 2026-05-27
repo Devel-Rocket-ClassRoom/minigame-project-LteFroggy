@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 public static class MapGenerator {
-	
 	public static MapGeneratingConfig MapConfig { get; set; }
 	
 	/// <summary>
@@ -26,11 +25,11 @@ public static class MapGenerator {
 		List<EdgeData> edges = new();
 		int centerNodeIndex = MapConfig.NodesPerLayer / 2;
 		
-		// 첫 열은 노드가 중간에 하나만
+		// 첫 열은 노드가 중간에 하나만, 첫 열 노드는 방문하고 시작한걸로.
 		nodes[0, centerNodeIndex] = new NodeData() {
-			Config = Pick(),
+			Config = MapConfig.GetConfig(MapNodeType.Start),
 			Position = MapConfig.GetPosition(0, centerNodeIndex),
-			Visited = false,
+			Visited = true,
 		};
 		
 		// 중간 열들은 모두 생성

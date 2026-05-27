@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc36699438b33dc49bec57380c12bc48, type: 3}
-  m_Name: Boss
+  m_Name: Start
   m_EditorClassIdentifier: Assembly-CSharp::MapNodeConfig
-  Type: 6
-  Icon: {fileID: 21300000, guid: 61f5b258dd51aa443b9cee792fd6d82a, type: 3}
+  Type: 0
+  Icon: {fileID: 21300000, guid: fa122315e509ed141aea9d94852d69c1, type: 3}
   Weight: 0
