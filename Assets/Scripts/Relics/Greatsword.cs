@@ -1,5 +1,8 @@
 ﻿public class Greatsword : RelicBase {
 	public override string relicId => "0";
+	public override int cost => 2;
+	public override int effectAmount => 2;
+	public override CardTag? affectedTag => CardTag.Attack;
 	public override RelicRarity rarity => RelicRarity.Common;
 
 	public override int CalculateAmount(CardAction action, CardInstance instance, int amount) {
