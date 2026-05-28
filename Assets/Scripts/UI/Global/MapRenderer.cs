@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,12 +10,13 @@ public class MapRenderer : MonoBehaviour {
     [Header("=== 생성할 노드의 Instance ===")]
     [SerializeField] private NodeInstance _nodeInstance;
     [SerializeField] private EdgeInstance _edgeInstance;
+    
     private readonly Dictionary<NodeData, NodeInstance> _nodeMappingTable = new();
     private readonly Dictionary<NodeData, List<EdgeInstance>> _edgeMappingTable = new();
     
     private readonly List<NodeInstance> _selectableInstances = new();
-    
-    private void Start() {
+
+    public void Init() {
         // 맵 그리기
         BuildMap();
         

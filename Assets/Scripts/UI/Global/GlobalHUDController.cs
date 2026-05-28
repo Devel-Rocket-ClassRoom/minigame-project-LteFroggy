@@ -47,6 +47,7 @@ public class GlobalHUDController : MonoBehaviour {
 	private void Start() {
 		_mapButton.onClick.AddListener(_mapOverlay.Toggle);
 		_deckButton.onClick.AddListener(ToggleDeckList);
+		_mapOverlay.GetComponent<MapRenderer>().Init();
 		RefreshAll();
 	}
 

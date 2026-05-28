@@ -87,7 +87,7 @@ public class BattleMouseController : MonoBehaviour {
 	private void OnDisable() {
 		_clickAction.performed -= OnClickStarted;
 		_clickAction.canceled -= OnClickReleased;
-		
+
 		_clickAction.Disable();
 		_mousePositionAction.Disable();
 	}
