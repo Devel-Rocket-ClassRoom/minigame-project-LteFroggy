@@ -1,4 +1,4 @@
-﻿id,value
+id,value
 Attack,공격
 Defense,방어
 MultiHit,연타
@@ -17,3 +17,9 @@ WeaknessCardText,취약을 @ 부여합니다.
 RepeatAttackCardText,피해를 @씩 #번 줍니다.
 MapButton,지도
 DeckButton,덱
+GreatswordName,대검
+GreatswordDesc,카드 피해 +@
+DaggerName,단검
+DaggerDesc,카드 공격 횟수 +@
+ThickShieldName,두꺼운 방패
+ThickShieldDesc,카드 방어도 +@
