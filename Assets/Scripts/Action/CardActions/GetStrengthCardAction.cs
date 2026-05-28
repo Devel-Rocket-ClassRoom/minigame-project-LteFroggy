@@ -1,4 +1,7 @@
-﻿public class GetStrengthCardAction : CardAction {
+﻿using UnityEngine;
+
+[CreateAssetMenu(menuName = "Card/Card Actions/Get Strength")]
+public class GetStrengthCardAction : CardAction {
 	public int amount;
 	protected override int Amount => amount;
 	

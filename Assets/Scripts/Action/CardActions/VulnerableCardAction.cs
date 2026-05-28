@@ -1,4 +1,7 @@
-﻿public class VulnerableCardAction : CardAction {
+﻿using UnityEngine;
+
+[CreateAssetMenu(menuName = "Card/Card Actions/Give Vulnerable")]
+public class VulnerableCardAction : CardAction {
 	public int amount;
 	protected override int Amount => amount;
 

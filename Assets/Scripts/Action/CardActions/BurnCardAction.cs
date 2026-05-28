@@ -1,4 +1,7 @@
-﻿public class BurnCardAction : CardAction {
+﻿using UnityEngine;
+
+[CreateAssetMenu(menuName = "Card/Card Actions/Give Burn")]
+public class BurnCardAction : CardAction {
 	public int amount;
 	protected override int Amount => amount;
 	protected override int CalculateAmountWithContext(CardUseContext context) {
