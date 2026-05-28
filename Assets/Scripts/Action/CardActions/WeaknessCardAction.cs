@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Card/Card Actions/Give Weakness")]
-public class WeaknessAction : CardAction {
+public class WeaknessCardAction : CardAction {
 	public int amount;
 	protected override int Amount => amount; 
 	public override string CardDescriptionKey => "WeaknessCardText";

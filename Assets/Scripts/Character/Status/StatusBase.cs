@@ -26,9 +26,7 @@ public abstract class StatusBase {
 	// 턴 시작 시 생길 일
 	public virtual void OnTurnStart() { }
 	// 턴 종료 시 생길 일
-	public virtual void OnTurnEnd() {
-		Duration--;
-	}
+	public virtual void OnTurnEnd() { Duration--; }
 	
 	public virtual int ModifyAttackingDamage(int damage) {
 		return damage;
@@ -40,6 +38,10 @@ public abstract class StatusBase {
 	
 	public virtual int ModifyGainingArmor(int armor) {
 		return armor;
+	}
+	
+	public virtual int ModifyGivingBurn(int burn) {
+		return burn;
 	}
 	
 	// 같은 종류의 상태이상과 합쳐질 때 합쳐지는 방법
