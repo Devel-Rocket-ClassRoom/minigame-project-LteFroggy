@@ -1,4 +1,4 @@
-﻿public class VulnerableAction : CardAction {
+﻿public class VulnerableCardAction : CardAction {
 	public int amount;
 	protected override int Amount => amount;
 
@@ -7,9 +7,9 @@
 	}
 	
 	public override void Execute(CardUseContext context) {
-		Vulnerable vul = new Vulnerable();
-		vul.Init(context.target, 0, amount);
-		context.target.AddStatus(new Vulnerable());
+		Vulnerable vulnerable = new Vulnerable();
+		vulnerable.Init(context.target, 0, amount);
+		context.target.AddStatus(vulnerable);
 	}
 	
 	public override string CardDescriptionKey => "VulnerableCardText";

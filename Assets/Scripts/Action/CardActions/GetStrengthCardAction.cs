@@ -1,10 +1,19 @@
-﻿public class GetStrengthAction : CardAction {
-	protected override int Amount { get; }
+﻿public class GetStrengthCardAction : CardAction {
+	public int amount;
+	protected override int Amount => amount;
+	
 	protected override int CalculateAmountWithContext(CardUseContext context) {
-		throw new System.NotImplementedException();
+		return amount;
 	}
+	
 	public override void Execute(CardUseContext context) {
-		throw new System.NotImplementedException();
+		Strength strength = new Strength();
+		strength.Init(context.user, amount, 0);
+		
+		context.user.AddStatus(strength);
 	}
-	public override string CardDescriptionKey { get; }
+	
+	
+	
+	public override string CardDescriptionKey => "GetStrengthCardText";
 }
