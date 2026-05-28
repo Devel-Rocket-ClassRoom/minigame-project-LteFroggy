@@ -96,6 +96,11 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return amount;
 	}
 	
+	public int CalculateGiveBurn(int amount) {
+		foreach (var status in _statuses) { amount = status.Value.Status.ModifyGivingBurn(amount); }
+		return amount;
+	}
+	
 	public virtual void OnTurnStart() {
 		// 매 턴 시작 시 방어도 초기화
 		ClearBlock();
