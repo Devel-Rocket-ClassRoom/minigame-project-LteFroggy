@@ -1,4 +1,6 @@
 using System.Collections;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class UISceneBootstrapper : Singleton<UISceneBootstrapper> {
@@ -16,20 +18,40 @@ public class UISceneBootstrapper : Singleton<UISceneBootstrapper> {
 	}
 
 	private IEnumerator DoTransition(string sceneName) {
-		if (_currentMainScene != null)
-			yield return SceneManager.UnloadSceneAsync(_currentMainScene);
-
-		// 메인 메뉴로 돌아갈 때는 UIScene 언로드, 게임플레이 씬으로 갈 때는 UIScene 로드
 		bool needsUIScene = sceneName != "MainScene";
 		bool uiSceneLoaded = SceneManager.GetSceneByName(k_UISceneName).isLoaded;
 
+		// 새 씬 로드 전 현재 씬의 EventSystem·AudioListener를 비활성화해 로드 중 중복 경고 방지
+		DeactivateSceneAudioAndInput(_currentMainScene);
+
 		if (needsUIScene && !uiSceneLoaded)
 			yield return SceneManager.LoadSceneAsync(k_UISceneName, LoadSceneMode.Additive);
-		else if (!needsUIScene && uiSceneLoaded)
+
+		// 새 씬을 먼저 로드한 뒤 이전 씬을 언로드해야 "마지막 씬 언로드" 오류를 방지할 수 있다
+		yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+
+		if (_currentMainScene != null)
+			yield return SceneManager.UnloadSceneAsync(_currentMainScene);
+
+		if (!needsUIScene && uiSceneLoaded)
 			yield return SceneManager.UnloadSceneAsync(k_UISceneName);
 
-		yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 		_currentMainScene = sceneName;
 		SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+	}
+
+	// 씬 전환 중 EventSystem·AudioListener 중복을 막기 위해 해당 씬의 컴포넌트를 비활성화한다.
+	// 씬 자체가 곧 언로드되므로 원복은 불필요하다.
+	private static void DeactivateSceneAudioAndInput(string sceneName) {
+		if (sceneName == null) return;
+		var scene = SceneManager.GetSceneByName(sceneName);
+		if (!scene.IsValid() || !scene.isLoaded) return;
+
+		foreach (var root in scene.GetRootGameObjects()) {
+			foreach (var es in root.GetComponentsInChildren<EventSystem>(true))
+				es.gameObject.SetActive(false);
+			foreach (var al in root.GetComponentsInChildren<AudioListener>(true))
+				al.enabled = false;
+		}
 	}
 }

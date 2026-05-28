@@ -18,7 +18,6 @@ public class GlobalHUDController : MonoBehaviour {
 
 	[Header("=== 오버레이 패널 ===")]
 	[SerializeField] private OverlayPanelController _mapOverlay;
-	[SerializeField] private OverlayPanelController _deckOverlay;
 
 	private const float RelicRowHeight = 88f;
 	private const float RelicLabelWidth = 50f;
@@ -30,7 +29,7 @@ public class GlobalHUDController : MonoBehaviour {
 		_gamePlayData.OnHealthChanged += OnHealthChanged;
 		_gamePlayData.OnGoldChanged += OnGoldChanged;
 		_gamePlayData.OnRelicsChanged += OnRelicsChanged;
-		
+
 		GameEvents.OnNodeCompleted += _mapOverlay.Open;
 		GameEvents.OnNextNodeSelected += _mapOverlay.Close;
 	}
@@ -47,8 +46,12 @@ public class GlobalHUDController : MonoBehaviour {
 
 	private void Start() {
 		_mapButton.onClick.AddListener(_mapOverlay.Toggle);
-		_deckButton.onClick.AddListener(_deckOverlay.Toggle);
+		_deckButton.onClick.AddListener(ToggleDeckList);
 		RefreshAll();
+	}
+
+	private void ToggleDeckList() {
+		CardListOverlayController.Instance?.Toggle(GamePlayData.Instance.Deck, "덱 내의 카드 목록");
 	}
 
 	private void RefreshAll() {
