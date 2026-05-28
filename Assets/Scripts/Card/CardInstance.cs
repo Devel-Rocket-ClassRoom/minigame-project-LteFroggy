@@ -15,14 +15,25 @@ public class CardInstance {
 		_cardDefinition = cardDefinition;
 	}
 	
-	public string GetCardDescriptionWithContext(CardUseContext context) {
+	/// <summary>
+	/// BattleContext 없이 순수 카드 설명 가져오기
+	/// </summary>
+	/// <returns></returns>
+	public string GetCardDescription() {
 		StringBuilder sb = new StringBuilder();
 		sb.Append($"[{_cardDefinition.TagText}] \n");
-		foreach (var effect in _cardDefinition.actions) {
-			sb.AppendLine(effect.GetCardDescriptionWithContext(context));
+		foreach (var action in _cardDefinition.actions) {
+			sb.AppendLine(action.GetCardDescription());
 		}
 		return sb.ToString();
 	}
 	
-	
+	public string GetCardDescriptionWithContext(CardUseContext context) {
+		StringBuilder sb = new StringBuilder();
+		sb.Append($"[{_cardDefinition.TagText}] \n");
+		foreach (var action in _cardDefinition.actions) {
+			sb.AppendLine(action.GetCardDescriptionWithContext(context));
+		}
+		return sb.ToString();
+	}
 }
