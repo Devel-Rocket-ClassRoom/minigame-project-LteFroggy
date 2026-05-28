@@ -16,6 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 931c66ef8c514054e919273c663bd4bb, type: 2}
   - {fileID: 11400000, guid: 8095cfd81c891f7439e93a89a21e8e19, type: 2}
   - {fileID: 11400000, guid: 2c844ca939496d946b303a7dd99e5a72, type: 2}
+  - {fileID: 11400000, guid: 3864d1086ea1f424ba033aa2e6e49fac, type: 2}
   LayerCount: 8
   NodesPerLayer: 5
   yStart: -250
