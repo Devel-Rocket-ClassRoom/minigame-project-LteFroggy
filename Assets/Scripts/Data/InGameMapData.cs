@@ -7,11 +7,12 @@ public class InGameMapData {
 	
 	public InGameMapData() {
 		Init();
-		// 처음에 만들었을 때, 시작 지점은 항상 StartNode로
-		NodeNow = Nodes[0, 2];
 	}
 
 	private void Init() {
 		Nodes = MapGenerator.GenerateMap();
+		
+		// 처음에 만들었을 때, 시작 지점은 항상 StartNode로
+		NodeNow = Nodes[0, GamePlayData.Instance.MapGeneratingConfig.NodesPerLayer / 2];
 	}
 }

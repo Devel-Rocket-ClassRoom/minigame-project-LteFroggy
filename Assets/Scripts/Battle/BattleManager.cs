@@ -13,11 +13,15 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private BattleMouseController _mouseController;
 	[SerializeField] private RelicManager _relicManager;
 
-	[Header("=== 전투 종료 이후 상태 보여주는 임시 정보판 ===")] 
+	[Header("=== 패배 패널 ===")]
 	[SerializeField] private GameObject _battleEndPanel;
 	[SerializeField] private TextMeshProUGUI _battleEndText;
 	[SerializeField] private TextMeshProUGUI _buttonText;
 	[SerializeField] private Button _button;
+
+	[Header("=== 카드 보상 패널 ===")]
+	[SerializeField] private CardRewardController _cardRewardController;
+	[SerializeField] private int _goldReward = 20;
 	
 	// 외부에서 드로우하려고 할 때 사용
 	public DeckManager DeckManager => _deckManager;
@@ -73,15 +77,13 @@ public class BattleManager : BattleSystemManager {
 	
 	private void BattleEnd() {
 		IsGameEnd = true;
-		
-		// 전투 종료되면, 현재 내 체력 저장
+
 		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
-		
-		_battleEndPanel.SetActive(true);
-		_battleEndText.text = "전투 승리";
-		_buttonText.text = "지도로 돌아가기";
-		_button.onClick.AddListener(GameEvents.NodeCompleted);
-		
+		GamePlayData.Instance.AddGold(_goldReward);
+
+		var rewardCards = GamePlayData.Instance.GetRandomRewardCards(3);
+		_cardRewardController.Show(rewardCards, _goldReward, GameEvents.NodeCompleted);
+
 		_characterManager.Player.OnDeath.RemoveListener(GameOver);
 		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
 	}

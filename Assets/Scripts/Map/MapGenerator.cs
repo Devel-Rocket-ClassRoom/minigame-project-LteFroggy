@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 public static class MapGenerator {
-	public static MapGeneratingConfig MapConfig { get; set; }
-	
 	/// <summary>
-	/// 가중치 기반으로 일반 노드 선택
+	/// 가중치 기반으로 생성될 노드 선택
 	/// </summary>
-	private static MapNodeConfig Pick() {
+	private static MapNodeConfig Pick(MapGeneratingConfig mapConfig) {
 		int total = 0;
-		foreach (var nodeConfig in MapConfig.NodePool) { total += nodeConfig.Weight; }
+		foreach (var nodeConfig in mapConfig.NodePool) { total += nodeConfig.Weight; }
 		int roll = Random.Range(0, total);
 		int cumulative = 0;
-		foreach (var nodeConfig in MapConfig.NodePool) {
+		foreach (var nodeConfig in mapConfig.NodePool) {
 			cumulative += nodeConfig.Weight;
 			if (roll < cumulative) return nodeConfig;
 		}
@@ -21,38 +19,40 @@ public static class MapGenerator {
 	}
 	
 	public static NodeData[,] GenerateMap() {
-		NodeData[,] nodes = new NodeData[MapConfig.LayerCount, MapConfig.NodesPerLayer];
+		MapGeneratingConfig mapConfig = GamePlayData.Instance.MapGeneratingConfig;
+		
+		NodeData[,] nodes = new NodeData[mapConfig.LayerCount, mapConfig.NodesPerLayer];
 		List<EdgeData> edges = new();
-		int centerNodeIndex = MapConfig.NodesPerLayer / 2;
+		int centerNodeIndex = mapConfig.NodesPerLayer / 2;
 		
 		// 첫 열은 노드가 중간에 하나만, 첫 열 노드는 방문하고 시작한걸로.
-		nodes[0, centerNodeIndex] = new NodeData() {
-			Config = MapConfig.GetConfig(MapNodeType.Start),
-			Position = MapConfig.GetPosition(0, centerNodeIndex),
+		nodes[0, centerNodeIndex] = new NodeData {
+			Config = mapConfig.GetConfig(MapNodeType.Start),
+			Position = mapConfig.GetPosition(0, centerNodeIndex),
 			Visited = true,
 		};
 		
 		// 중간 열들은 모두 생성
-		for (int i = 1; i < MapConfig.LayerCount - 1; i++) {
-			for (int j = 0; j < MapConfig.NodesPerLayer; j++) {
+		for (int i = 1; i < mapConfig.LayerCount - 1; i++) {
+			for (int j = 0; j < mapConfig.NodesPerLayer; j++) {
 				nodes[i, j] = new NodeData() {
-					Config = Pick(),
-					Position = MapConfig.GetPosition(i, j),
+					Config = Pick(mapConfig),
+					Position = mapConfig.GetPosition(i, j),
 					Visited = false	
 				};
 			}
 		}
 		
 		// 마지막 열은 노드가 중간에 하나만, 보스노드
-		nodes[MapConfig.LayerCount - 1, centerNodeIndex] = new NodeData() {
-			Config = MapConfig.GetConfig(MapNodeType.Boss),
-			Position = MapConfig.GetPosition(MapConfig.LayerCount - 1, centerNodeIndex),
+		nodes[mapConfig.LayerCount - 1, centerNodeIndex] = new NodeData() {
+			Config = mapConfig.GetConfig(MapNodeType.Boss),
+			Position = mapConfig.GetPosition(mapConfig.LayerCount - 1, centerNodeIndex),
 			Visited = false
 		};
 		
 		// 노드 이어주기
 		// 첫 Layer는 다음 레이어의 모든 값으로 갈 수 있음
-		for (int i = 0; i < MapConfig.NodesPerLayer; i++) {
+		for (int i = 0; i < mapConfig.NodesPerLayer; i++) {
 			nodes[0, centerNodeIndex].NextNodeIndices.Add(new EdgeData() {
 				end = nodes[1, i],
 				used = false
@@ -60,8 +60,8 @@ public static class MapGenerator {
 		}
 		
 		// 중간 레이어들은 자기 바로 앞 값이랑만 이어지게
-		for (int i = 1; i < MapConfig.LayerCount - 2; i++) {
-			for (int j = 0; j < MapConfig.NodesPerLayer; j++) {
+		for (int i = 1; i < mapConfig.LayerCount - 2; i++) {
+			for (int j = 0; j < mapConfig.NodesPerLayer; j++) {
 				nodes[i, j].NextNodeIndices.Add(new EdgeData() {
 					end = nodes[i + 1, j],
 					used = false
@@ -70,9 +70,9 @@ public static class MapGenerator {
 		}
 		
 		// 마지막에서 두 번째 레이어는, 마지막 값이랑 모두 이어진다
-		for (int i = 0; i < MapConfig.NodesPerLayer; i++) {
-			nodes[MapConfig.LayerCount - 2, i].NextNodeIndices.Add(new EdgeData() {
-				end = nodes[MapConfig.LayerCount - 1, centerNodeIndex],
+		for (int i = 0; i < mapConfig.NodesPerLayer; i++) {
+			nodes[mapConfig.LayerCount - 2, i].NextNodeIndices.Add(new EdgeData() {
+				end = nodes[mapConfig.LayerCount - 1, centerNodeIndex],
 				used = false
 			});
 		}

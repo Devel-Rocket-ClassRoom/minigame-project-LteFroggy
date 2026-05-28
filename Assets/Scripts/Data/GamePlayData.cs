@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class GamePlayData : Singleton<GamePlayData> {
 	// 덱에 들어간 카드 목록
@@ -18,6 +20,9 @@ public class GamePlayData : Singleton<GamePlayData> {
 
 	[Header("=== 시작 카드들 등록 ===")]
 	[SerializeField] private CardDefinition[] _startCards;
+
+	[Header("=== 카드 보상 풀 (보상으로 등장 가능한 전체 카드 목록) ===")]
+	[SerializeField] private CardDefinition[] _rewardCardPool;
 
 	[Header("=== 플레이어의 최대 체력 ===")]
 	[SerializeField] private int _maxHealth = 50;
@@ -63,8 +68,7 @@ public class GamePlayData : Singleton<GamePlayData> {
 		_relics.Clear();
 		OnRelicsChanged?.Invoke();
 		OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
-
-		MapGenerator.MapConfig = mapGeneratingConfig;
+		
 		InGameMapData = new InGameMapData();
 	}
 
@@ -93,5 +97,25 @@ public class GamePlayData : Singleton<GamePlayData> {
 	public void RemoveRelic(RelicBase relic) {
 		_relics.Remove(relic);
 		OnRelicsChanged?.Invoke();
+	}
+
+	public CardInstance[] GetRandomRewardCards(int count) {
+		if (_rewardCardPool == null || _rewardCardPool.Length == 0) return Array.Empty<CardInstance>();
+
+		var indices = new int[_rewardCardPool.Length];
+		for (int i = 0; i < indices.Length; i++) indices[i] = i;
+		for (int i = indices.Length - 1; i > 0; i--) {
+			int j = Random.Range(0, i + 1);
+			(indices[i], indices[j]) = (indices[j], indices[i]);
+		}
+
+		int take = Mathf.Min(count, _rewardCardPool.Length);
+		var result = new CardInstance[take];
+		for (int i = 0; i < take; i++) result[i] = new CardInstance(_rewardCardPool[indices[i]]);
+		return result;
+	}
+
+	public void AddCardToDeck(CardDefinition definition) {
+		Deck.Add(new CardInstance(definition));
 	}
 }

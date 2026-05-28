@@ -535,6 +535,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4008269e10a841c44948afb6d59c711c, type: 2}
   - {fileID: 11400000, guid: ab04a398b90751741a444cdd7514e11e, type: 2}
   - {fileID: 11400000, guid: c94f911a4534eb24fb2422f263f4a8bc, type: 2}
+  _rewardCardPool:
+  - {fileID: 11400000, guid: 7fc71c46d148c304b950b8f976f3fa78, type: 2}
+  - {fileID: 11400000, guid: 4008269e10a841c44948afb6d59c711c, type: 2}
+  - {fileID: 11400000, guid: 9f8f69f4e61930a43a0bdd5492242743, type: 2}
+  - {fileID: 11400000, guid: ab04a398b90751741a444cdd7514e11e, type: 2}
+  - {fileID: 11400000, guid: c94f911a4534eb24fb2422f263f4a8bc, type: 2}
   _maxHealth: 50
   _startGold: 0
   mapGeneratingConfig: {fileID: 11400000, guid: d7419c4f5a7a7bf4c93b25c841f8ae0e, type: 2}
@@ -1088,6 +1094,7 @@ GameObject:
   - component: {fileID: 653418193}
   - component: {fileID: 653418192}
   - component: {fileID: 653418191}
+  - component: {fileID: 653418194}
   m_Layer: 0
   m_Name: LoadoutPanel
   m_TagString: Untagged
@@ -1170,6 +1177,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653418189}
   m_CullTransparentMesh: 1
+--- !u!114 &653418194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653418189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 867b365d5bd54b8459e1d4a9959f3314, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OverlayPanelController
+  _closeButton: {fileID: 1809567508}
 --- !u!1 &687526704
 GameObject:
   m_ObjectHideFlags: 0
