@@ -21,17 +21,21 @@ public class UISceneBootstrapper : Singleton<UISceneBootstrapper> {
 		bool needsUIScene = sceneName != "MainScene";
 		bool uiSceneLoaded = SceneManager.GetSceneByName(k_UISceneName).isLoaded;
 
-		// 새 씬 로드 전 현재 씬의 EventSystem·AudioListener를 비활성화해 로드 중 중복 경고 방지
 		DeactivateSceneAudioAndInput(_currentMainScene);
 
 		if (needsUIScene && !uiSceneLoaded)
 			yield return SceneManager.LoadSceneAsync(k_UISceneName, LoadSceneMode.Additive);
 
-		// 새 씬을 먼저 로드한 뒤 이전 씬을 언로드해야 "마지막 씬 언로드" 오류를 방지할 수 있다
-		yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-
-		if (_currentMainScene != null)
+		if (uiSceneLoaded && _currentMainScene != null) {
+			// UIScene이 이미 로드된 상태라면 씬이 0개가 될 걱정 없이 이전 씬 먼저 언로드
 			yield return SceneManager.UnloadSceneAsync(_currentMainScene);
+			yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+		} else {
+			// UIScene이 없을 때(MainScene에서 첫 전환)는 새 씬 먼저 로드해야 마지막 씬 언로드 오류 방지
+			yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+			if (_currentMainScene != null)
+				yield return SceneManager.UnloadSceneAsync(_currentMainScene);
+		}
 
 		if (!needsUIScene && uiSceneLoaded)
 			yield return SceneManager.UnloadSceneAsync(k_UISceneName);
