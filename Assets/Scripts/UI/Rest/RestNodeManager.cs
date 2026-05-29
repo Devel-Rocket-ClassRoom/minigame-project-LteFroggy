@@ -95,6 +95,9 @@ public class RestNodeManager : MonoBehaviour {
 	}
 
 	private void Complete() {
+		_mainPanel.SetActive(false);
+		_cardSelectPanel.SetActive(false);
+		_confirmPopup.SetActive(false);
 		GameEvents.NodeCompleted();
 	}
 }
