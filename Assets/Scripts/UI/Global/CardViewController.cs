@@ -13,10 +13,6 @@ public class CardViewController : MonoBehaviour {
 	private Button _button;
 	private CardInstance _cardInstance;
 
-	private void Awake() {
-		_button = GetComponent<Button>();
-	}
-
 	/// <summary>
 	/// CardView 초기화할 때 사용
 	/// </summary>
@@ -24,7 +20,8 @@ public class CardViewController : MonoBehaviour {
 	/// <param name="action">카드가 클릭될 때 수행될 액션</param>
 	public void Init(CardInstance instance, UnityAction<CardInstance> action = null) {
 		_cardInstance = instance;
-
+		
+		_button = GetComponent<Button>();
 		_button.onClick.RemoveAllListeners();
 		if (action != null) _button.onClick.AddListener(() => action(_cardInstance));
 

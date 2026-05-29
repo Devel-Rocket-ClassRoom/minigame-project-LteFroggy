@@ -21,8 +21,10 @@ public class RestNodeManager : MonoBehaviour {
 	[SerializeField] private Button _confirmCancelButton;
 
 	private CardInstance _pendingCard;
+	private bool _completed;
 
 	private void OnEnable() {
+		_completed = false;
 		var d = GamePlayData.Instance;
 		int healAmount = Mathf.CeilToInt(d.MaxHealth * 0.30f);
 		_healPreviewText.text = $"HP + {healAmount} 회복 (현재 {d.CurrentHealth} / {d.MaxHealth})";
@@ -46,6 +48,8 @@ public class RestNodeManager : MonoBehaviour {
 	}
 
 	private void OnHealSelected() {
+		if (_completed) return;
+		LockButtons();
 		var d = GamePlayData.Instance;
 		d.SetHealth(d.CurrentHealth + Mathf.CeilToInt(d.MaxHealth * 0.30f));
 		Complete();
@@ -54,6 +58,7 @@ public class RestNodeManager : MonoBehaviour {
 	private void OnBurnSelected() {
 		_mainPanel.SetActive(false);
 		_cardSelectPanel.SetActive(true);
+		_deckRenderer.gameObject.SetActive(true);
 		_deckRenderer.Init(GamePlayData.Instance.Deck, "제거할 카드를 선택하세요", OnCardPicked);
 	}
 
@@ -65,9 +70,17 @@ public class RestNodeManager : MonoBehaviour {
 	}
 
 	private void OnConfirmed() {
+		if (_completed) return;
+		LockButtons();
 		GamePlayData.Instance.RemoveCardFromDeck(_pendingCard);
 		_pendingCard = null;
 		Complete();
+	}
+
+	private void LockButtons() {
+		_completed = true;
+		_healButton.interactable = false;
+		_burnButton.interactable = false;
 	}
 
 	private void OnConfirmCancelled() {
