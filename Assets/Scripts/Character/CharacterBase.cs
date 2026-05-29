@@ -133,7 +133,10 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		
 		// 상태이상이 더해졌다면, 정보 한번 갱신
 		RefreshStatusesInfo();
+		OnStatusChanged();
 	}
+
+	protected virtual void OnStatusChanged() { }
 	
 	/// <summary>
 	/// 상태이상 정보를 한번 싹 갱신한다.
