@@ -1,5 +1,4 @@
-﻿public class PlayerCharacter : CharacterBase {
-	// MaxHealth, CurrentHealth는 PlayerData에서 받아오기
+public class PlayerCharacter : CharacterBase {
 	public override void SetHealth() {
 		MaxHealth = GamePlayData.Instance.MaxHealth;
 		CurrentHealth = GamePlayData.Instance.CurrentHealth;
@@ -9,8 +8,28 @@
 		GamePlayData.Instance.SetHealth(CurrentHealth);
 	}
 
-	// 아직 애니메이션 없음
-	public override void PlaySkillAnimation() { }
-	public override void PlayAttackAnimation() { }
-	public override void PlayHitAnimation() { }
+	public override void PlayIdleAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Idle");
+	}
+
+	public override void PlayAttackAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Attack");
+	}
+
+	public override void PlayHitAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Hit");
+	}
+
+	public override void PlaySkillAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Skill");
+	}
+
+	public override void PlayDeathAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Death");
+	}
 }

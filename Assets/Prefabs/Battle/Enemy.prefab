@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 8249577401243052171}
   - component: {fileID: 6557896690119479702}
   - component: {fileID: 8192774008414474432}
+  - component: {fileID: 8471313455470435884}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -469,6 +470,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5cf589050b4df4b0b90555291b3e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyInstance
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
   _healthText: {fileID: 6112994682392427242}
   _blockText: {fileID: 5049156876986644577}
   _healthBarImage: {fileID: 7321137041079617130}
@@ -484,7 +488,6 @@ MonoBehaviour:
   _intentRendererPrefab: {fileID: 982698950700779723, guid: ce5f4e0bc67e18b4883b733eb286f7e5, type: 3}
   _enemyRenderer: {fileID: 8249577401243052171}
   _intentParent: {fileID: 3587125253142364679}
-  _enemyData: {fileID: 0}
 --- !u!61 &8192774008414474432
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -531,6 +534,28 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3.4133334, y: 3.4133334}
   m_EdgeRadius: 0
+--- !u!95 &8471313455470435884
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2423004931810390244}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1709f7363134ec44e9efcec972d2ac6b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2899738829240160546
 GameObject:
   m_ObjectHideFlags: 0

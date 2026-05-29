@@ -16,6 +16,7 @@ MonoBehaviour:
   health: 30
   name: "\uC2AC\uB77C\uC784 \uAD34\uBB3C"
   sprite: {fileID: 21300000, guid: aedb2acf7ab4b9f43b23ebd4517c3ed7, type: 3}
+  animatorController: {fileID: 22100000, guid: fb55c4152248e8640ab2937c6b9fa905, type: 2}
   actions:
   - {fileID: 11400000, guid: 394c9ffe7c05ceb4186984c7a784852a, type: 2}
   - {fileID: 11400000, guid: 23e19100396dbda4688c2589ff597f87, type: 2}

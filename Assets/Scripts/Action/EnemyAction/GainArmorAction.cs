@@ -13,6 +13,7 @@ public class GainArmorAction : EnemyAction {
 	
 	public override void Execute(EnemyActionContext context) {
 		context.user.AddBlock(CalculateAmountWithContext(context));
+		context.user.PlaySkillAnimation();
 	}
 	
 	// 얼마 얻을지 알려주지 않음

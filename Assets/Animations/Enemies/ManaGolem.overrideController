@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ManaGolem
+  m_Controller: {fileID: 9100000, guid: 1709f7363134ec44e9efcec972d2ac6b, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 9dd73202a0bd801468118ed323dd88a0, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 260d1f998989c3546941b1d33cc70b55, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 633680ee9fbd0954b889e23d3be096e3, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 60c4f32551055e94f90253f33dcca84e, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 6809a433d292cf246bf97ba5e77c4d43, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 499a15d0d6f57864c86efb2608a149d4, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 96f2ee29bfae84d4c8194a44ff4463a5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 7fc3fe7737e3d014ea1136c3b2da2ae9, type: 2}

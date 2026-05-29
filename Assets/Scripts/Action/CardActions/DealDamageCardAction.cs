@@ -15,8 +15,6 @@ public class DealDamageCardAction : CardAction {
 		
 		// 공격 애니메이션 재생
 		context.user.PlayAttackAnimation();
-		// 상대 피격 애니메이션 재생
-		context.target.PlayHitAnimation();
 	}
 
 	protected override int CalculateAmountWithContext(CardUseContext context) {

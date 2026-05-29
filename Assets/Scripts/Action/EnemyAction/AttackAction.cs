@@ -33,5 +33,6 @@ public class AttackAction : EnemyAction {
 	public override void Execute(EnemyActionContext context) {
 		if (context.target.IsDead) return;
 		context.target.GetDamage(CalculateAmountWithContext(context));
+		context.user.PlayAttackAnimation();
 	}
 }

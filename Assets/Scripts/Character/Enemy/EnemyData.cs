@@ -7,5 +7,6 @@ public class EnemyData : ScriptableObject {
 	public int health;
 	public string name;
 	public Sprite sprite;
+	public RuntimeAnimatorController animatorController;
 	public List<EnemyActionPattern> actions = new();
 }

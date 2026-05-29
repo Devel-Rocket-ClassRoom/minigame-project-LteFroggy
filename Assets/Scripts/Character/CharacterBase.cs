@@ -38,11 +38,16 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		SetHealth();
 		
 		_animator = GetComponent<Animator>();
+		
+		// 시작 시에 Idle로 시작
+		PlayIdleAnimation();
 	}
 	
+	public abstract void PlayIdleAnimation();
 	public abstract void PlayAttackAnimation();
 	public abstract void PlayHitAnimation();
 	public abstract void PlaySkillAnimation();
+	public abstract void PlayDeathAnimation();
 	
 	public abstract void SetHealth();
 
@@ -56,9 +61,14 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 
 		// 체력 0 이하로 내려가지 않게
 		CurrentHealth = Mathf.Max(CurrentHealth, 0);
+		
+		// 맞으면 맞는 애니메이션
+		PlayHitAnimation();
 
-		// 사망했으면, 사망 애니메이션
-		if (IsDead) OnDeath?.Invoke();
+		if (IsDead) {
+			PlayDeathAnimation();
+			OnDeath?.Invoke();
+		}
 		OnHealthChanged();
 	}
 
