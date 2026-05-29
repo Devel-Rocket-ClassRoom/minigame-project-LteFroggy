@@ -22,35 +22,35 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 105457644, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.083333336
+    - time: 0.0625
       value: {fileID: 1010284991, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.16666667
+    - time: 0.125
       value: {fileID: 10066712, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.25
+    - time: 0.1875
       value: {fileID: -312123818, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.33333334
+    - time: 0.25
       value: {fileID: 416168486, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.41666666
+    - time: 0.3125
       value: {fileID: 864369312, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.5
+    - time: 0.375
       value: {fileID: 815253273, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.5833333
+    - time: 0.43749998
       value: {fileID: 706558518, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.6666667
+    - time: 0.50000002
       value: {fileID: 1627016703, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.75
+    - time: 0.5625
       value: {fileID: 644189659, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.8333333
+    - time: 0.62499998
       value: {fileID: 845812132, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 0.9166667
+    - time: 0.68750002
       value: {fileID: 900115428, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 1
+    - time: 0.75
       value: {fileID: 372767071, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 1.0833334
+    - time: 0.81250005
       value: {fileID: -1579300271, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 1.1666666
+    - time: 0.87499995
       value: {fileID: 1207346569, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
-    - time: 1.25
+    - time: 0.9375
       value: {fileID: -945047019, guid: 94f7879361983a041bc68c6d358fb3ba, type: 3}
     attribute: m_Sprite
     path: 

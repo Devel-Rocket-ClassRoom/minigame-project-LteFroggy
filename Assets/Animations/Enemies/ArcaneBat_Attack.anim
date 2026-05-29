@@ -22,35 +22,35 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: -1036994091, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.083333336
+    - time: 0.0625
       value: {fileID: -859825169, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.16666667
+    - time: 0.125
       value: {fileID: 1439945755, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.25
+    - time: 0.1875
       value: {fileID: 461763711, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.33333334
+    - time: 0.25
       value: {fileID: 388281751, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.41666666
+    - time: 0.3125
       value: {fileID: -534181439, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.5
+    - time: 0.375
       value: {fileID: 842583560, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.5833333
+    - time: 0.43749998
       value: {fileID: 1234384050, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.6666667
+    - time: 0.50000002
       value: {fileID: 407692774, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.75
+    - time: 0.5625
       value: {fileID: 1984367054, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.8333333
+    - time: 0.62499998
       value: {fileID: -1053952099, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 0.9166667
+    - time: 0.68750002
       value: {fileID: 1602093324, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 1
+    - time: 0.75
       value: {fileID: -561536839, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 1.0833334
+    - time: 0.81250005
       value: {fileID: -953055385, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 1.1666666
+    - time: 0.87499995
       value: {fileID: 1262868350, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
-    - time: 1.25
+    - time: 0.9375
       value: {fileID: 1726689156, guid: 0cdec3868c32a6c4799ce1b58440d291, type: 3}
     attribute: m_Sprite
     path: 
