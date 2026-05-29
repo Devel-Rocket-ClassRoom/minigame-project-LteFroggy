@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c4c59f37654fa28289f162c5f5dfc4, type: 3}
+  m_Name: Fortify
+  m_EditorClassIdentifier: Assembly-CSharp::CardDefinition
+  cardId: 14
+  rarity: 0
+  icon: {fileID: 21300000, guid: 05917205219c2804b947f3a4b33181f2, type: 3}
+  cost: 1
+  tag: 1
+  needsTarget: 0
+  actions:
+  - {fileID: 11400000, guid: 6484901e28b717d42971dbc67b2706e9, type: 2}

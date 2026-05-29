@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c4c59f37654fa28289f162c5f5dfc4, type: 3}
+  m_Name: WeakPointFind
+  m_EditorClassIdentifier: Assembly-CSharp::CardDefinition
+  cardId: 17
+  rarity: 0
+  icon: {fileID: 21300000, guid: babcb643fccccfa4dbc39ee3053dedff, type: 3}
+  cost: 1
+  tag: 3
+  needsTarget: 1
+  actions:
+  - {fileID: 11400000, guid: 138f2749a0847a54996a0aa8c5f10fb5, type: 2}
+  - {fileID: 11400000, guid: 408deb8f059b38643b63f2fbcc9fd52b, type: 2}
