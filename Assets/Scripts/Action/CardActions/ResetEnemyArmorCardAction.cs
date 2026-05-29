@@ -12,6 +12,7 @@ public class ResetEnemyArmorCardAction : CardAction {
 		StringTableManager.StringTable[CardDescriptionKey];
 
 	public override void Execute(CardUseContext context) {
+		if (context.target == null) return;
 		context.target.ClearBlock();
 	}
 

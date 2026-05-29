@@ -6,10 +6,7 @@ public class ArmorDamageCardAction : CardAction {
 	public override string CardDescriptionKey => "ArmorDamageCardText";
 
 	public override string GetCardDescription() =>
-		StringTableManager.StringTable[CardDescriptionKey];
-
-	public override string GetCardDescriptionWithContext(CardUseContext context) =>
-		StringTableManager.StringTable[CardDescriptionKey];
+		StringTableManager.StringTable[CardDescriptionKey].Replace("@", "-");
 
 	public override void Execute(CardUseContext context) {
 		if (context.target.IsDead) return;
@@ -20,7 +17,7 @@ public class ArmorDamageCardAction : CardAction {
 	protected override int CalculateAmountWithContext(CardUseContext context) {
 		int result = context.user.Block;
 		result = context.user.CalculateAttackingDamage(result);
-		result = context.target.CalculateGainingDamage(result);
+		if (context.target != null) { result = context.target.CalculateGainingDamage(result); }
 		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
 		return result;
 	}

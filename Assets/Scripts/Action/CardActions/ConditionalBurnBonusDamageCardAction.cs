@@ -35,7 +35,7 @@ public class ConditionalBurnBonusDamageCardAction : CardAction {
 	protected override int CalculateAmountWithContext(CardUseContext context) {
 		int result = amount;
 		result = context.user.CalculateAttackingDamage(result);
-		result = context.target.CalculateGainingDamage(result);
+		if (context.target != null) { result = context.target.CalculateGainingDamage(result); }
 		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
 		return result;
 	}

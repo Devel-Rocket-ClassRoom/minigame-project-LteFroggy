@@ -8,6 +8,7 @@ public class AddBurnStacksCardAction : CardAction {
 	public override string CardDescriptionKey => "AddBurnStacksCardText";
 
 	public override void Execute(CardUseContext context) {
+		if (context.target == null) return;
 		if (!context.target.HasStatus<Burn>()) return;
 		var burn = new Burn();
 		burn.Init(context.target, CalculateAmountWithContext(context), 0);

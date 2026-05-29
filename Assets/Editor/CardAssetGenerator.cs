@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class CardAssetGenerator {
@@ -14,7 +15,48 @@ public class CardAssetGenerator {
 		CreateCardDefinitionAssets(actions);
 		AssetDatabase.SaveAssets();
 		AssetDatabase.Refresh();
+		RegisterCardsToRewardPool();
 		Debug.Log("카드 에셋 생성 완료");
+	}
+
+	[MenuItem("Tools/Card/Register Cards to Reward Pool")]
+	public static void RegisterCardsToRewardPool() {
+		var gamePlayData = UnityEngine.Object.FindObjectOfType<GamePlayData>();
+		if (gamePlayData == null) {
+			Debug.LogError("[CardAssetGenerator] GamePlayData를 찾을 수 없습니다. GamePlayData가 포함된 씬을 열고 다시 시도하세요.");
+			return;
+		}
+
+		// cardId >= 5 인 카드만 보상 풀에 등록 (0~4는 시작 덱)
+		var guids = AssetDatabase.FindAssets("t:CardDefinition", new[] { CardPath });
+		var rewardCards = new List<CardDefinition>();
+		foreach (var guid in guids) {
+			var card = AssetDatabase.LoadAssetAtPath<CardDefinition>(AssetDatabase.GUIDToAssetPath(guid));
+			if (card != null && card.cardId >= 5) rewardCards.Add(card);
+		}
+
+		var so = new SerializedObject(gamePlayData);
+		var prop = so.FindProperty("_rewardCardPool");
+
+		// 기존 풀에 없는 카드만 추가 (중복 방지)
+		var existingPaths = new HashSet<string>();
+		for (int i = 0; i < prop.arraySize; i++) {
+			var existing = prop.GetArrayElementAtIndex(i).objectReferenceValue;
+			if (existing != null) existingPaths.Add(AssetDatabase.GetAssetPath(existing));
+		}
+
+		int added = 0;
+		foreach (var card in rewardCards) {
+			string path = AssetDatabase.GetAssetPath(card);
+			if (existingPaths.Contains(path)) continue;
+			prop.InsertArrayElementAtIndex(prop.arraySize);
+			prop.GetArrayElementAtIndex(prop.arraySize - 1).objectReferenceValue = card;
+			added++;
+		}
+
+		so.ApplyModifiedProperties();
+		EditorSceneManager.MarkAllScenesDirty();
+		Debug.Log($"[CardAssetGenerator] 보상 풀에 카드 {added}장 추가됨 (총 {prop.arraySize}장)");
 	}
 
 	private static Dictionary<string, CardAction> CreateCardActionAssets() {
