@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Card Name", menuName = "Card/Card Definition")]
 public class CardDefinition : ScriptableObject {
 	[Header("=== 기본 카드 정보 ===")]
-	public string cardId;
+	public int cardId;
 	public CardRarity rarity;
 	public Sprite icon;
 	public int cost;
