@@ -118,4 +118,8 @@ public class GamePlayData : Singleton<GamePlayData> {
 	public void AddCardToDeck(CardDefinition definition) {
 		Deck.Add(new CardInstance(definition));
 	}
+
+	public void RemoveCardFromDeck(CardInstance card) {
+		Deck.Remove(card);
+	}
 }

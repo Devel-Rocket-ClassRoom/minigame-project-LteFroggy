@@ -11,7 +11,7 @@ public class BurnCardAction : CardAction {
 		
 		return result;
 	}
-	
+	 
 	public override void Execute(CardUseContext context) {
 		var burn = new Burn();
 		burn.Init(context.target, CalculateAmountWithContext(context), 0);

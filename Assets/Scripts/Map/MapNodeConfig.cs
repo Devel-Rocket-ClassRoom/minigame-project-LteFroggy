@@ -8,7 +8,8 @@ public class MapNodeConfig : ScriptableObject {
 	public int Weight;
 	public string SceneName => Type switch {
 		MapNodeType.Battle => "BattleScene",
-		MapNodeType.Start => "StartScene",
+		MapNodeType.Start  => "StartScene",
+		MapNodeType.Rest   => "RestScene",
 		_ => throw new NotImplementedException()
 	};
 }
