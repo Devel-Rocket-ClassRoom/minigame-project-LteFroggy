@@ -35,6 +35,10 @@ public class EnemyInstance : CharacterBase {
 		_turnCount = 0;
 		
 		_collider = GetComponent<BoxCollider2D>();
+
+		// base.Init()이 PlayIdleAnimation()을 호출하기 전에 컨트롤러를 할당
+		if (_enemyData.animatorController != null)
+			GetComponent<Animator>().runtimeAnimatorController = _enemyData.animatorController;
 		
 		// 시작 시에는 타겟박스 해제 상태로 시작
 		SetTargetHighlight(false);
@@ -49,10 +53,7 @@ public class EnemyInstance : CharacterBase {
 	}
 	
 	private void OnDead() {
-		// EnemyManager에 삭제 요청
 		_enemyManager.DeleteEnemy(this);
-		
-		// 코루틴 실행 (애니메이션 등 재생할 듯)
 		StartCoroutine(CoOnDead());
 	}
 	
@@ -112,10 +113,30 @@ public class EnemyInstance : CharacterBase {
 		}
 	}
 
-	// 아직 공격, 피격, 스킬 애니메이션 없음
-	public override void PlayAttackAnimation() { }
-	public override void PlayHitAnimation() { }
-	public override void PlaySkillAnimation() { }
+	public override void PlayIdleAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Idle");
+	}
+
+	public override void PlayAttackAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Attack");
+	}
+
+	public override void PlayHitAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Hit");
+	}
+
+	public override void PlaySkillAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Skill");
+	}
+
+	public override void PlayDeathAnimation() {
+		if (_animator == null || _animator.runtimeAnimatorController == null) return;
+		_animator.SetTrigger("Death");
+	}
 
 	public override void SetHealth() {
 		// Data에서 가져와서 체력 세팅
