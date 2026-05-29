@@ -1,5 +1,3 @@
-﻿namespace Data.SaveData {
-	public class SaveDataV1 {
-		
-	}
+﻿public class SaveDataV1 {
+	
 }

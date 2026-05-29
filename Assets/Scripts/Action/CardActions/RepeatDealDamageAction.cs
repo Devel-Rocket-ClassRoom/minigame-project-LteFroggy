@@ -18,8 +18,7 @@ public class RepeatDealDamageAction : RepeatCardAction {
 			// 데미지를 반복 횟수만큼 준다
 			context.target.GetDamage(CalculateAmountWithContext(context));
 			context.user.PlayAttackAnimation();
-			context.target.PlayHitAnimation();
-			yield return new WaitForSeconds(0.1f);
+			yield return new WaitForSeconds(0.5f);
 		}
 	}
 	

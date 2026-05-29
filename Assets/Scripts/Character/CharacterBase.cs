@@ -61,6 +61,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 
 		// 체력 0 이하로 내려가지 않게
 		CurrentHealth = Mathf.Max(CurrentHealth, 0);
+		
+		// 맞으면 맞는 애니메이션
+		PlayHitAnimation();
 
 		if (IsDead) {
 			PlayDeathAnimation();

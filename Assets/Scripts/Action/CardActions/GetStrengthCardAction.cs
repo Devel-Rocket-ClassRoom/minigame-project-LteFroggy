@@ -12,8 +12,9 @@ public class GetStrengthCardAction : CardAction {
 	public override void Execute(CardUseContext context) {
 		Strength strength = new Strength();
 		strength.Init(context.user, amount, 0);
-		
 		context.user.AddStatus(strength);
+		
+		context.user.PlaySkillAnimation();
 	}
 	
 	

@@ -1,5 +1,5 @@
-﻿namespace Data.SaveData {
-	public class SaveDataManager {
-		
-	}
+﻿using SaveDataVC = SaveDataV1;
+
+public static class SaveDataManager {
+	public static SaveDataVC SaveData;
 }
