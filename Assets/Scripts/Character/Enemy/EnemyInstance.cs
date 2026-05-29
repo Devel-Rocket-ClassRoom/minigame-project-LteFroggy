@@ -87,6 +87,11 @@ public class EnemyInstance : CharacterBase {
 		}
 	}
 	
+	protected override void OnStatusChanged() {
+		if (_enemyManager == null) return;
+		UpdateIntentIcon(_enemyManager.GetEnemyActionContext(this));
+	}
+
 	public void UpdateIntentIcon(EnemyActionContext context) {
 		// 허수아비 방어용 코드
 		if (_enemyData == null) return;
