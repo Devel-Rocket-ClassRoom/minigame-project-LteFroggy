@@ -12,6 +12,7 @@ public class ApplyWeakPointCardAction : CardAction {
 		StringTableManager.StringTable[CardDescriptionKey];
 
 	public override void Execute(CardUseContext context) {
+		if (context.target == null) return;
 		var weakPoint = new WeakPoint();
 		weakPoint.Init(context.target, 1, 0);
 		context.target.AddStatus(weakPoint);
