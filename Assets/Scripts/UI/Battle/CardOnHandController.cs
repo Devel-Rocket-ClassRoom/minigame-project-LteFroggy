@@ -112,6 +112,10 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		// 지금 선택된 카드는 Hover상태여도 HoverPosition으로 가지 않음
 		if (_isSelected) { return; }
 		ToHoverPosition();
+
+		// 키워드 강조 텍스트 적용 + 키워드 설명 패널 표시
+		string rawDesc = _cardInstance.GetCardDescriptionWithContext(GetBattleContext());
+		_cardDescriptionText.text = DescriptionSystem.ProcessCardText(rawDesc, _rectTransform);
 	}
 
 	public void OnPointerExit(PointerEventData eventData) {
@@ -121,8 +125,11 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 			if (_cardInstance.NeedsTarget) { ToSelectedPosition(); }
 			return;
 		}
-		
+
 		ToOriginalPosition();
+		// 키워드 패널 반납 + 설명 텍스트 원상 복구
+		DescriptionSystem.Hide();
+		RefreshCardDescription();
 	}
 	
 	/// <summary>
@@ -186,7 +193,7 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// <returns></returns>
 	public IEnumerator CoCardRemove() {
 		yield return CoCardMove(_discardPileLocation.position, Quaternion.identity);
-		_cardPool.ReturnCard(this);
+		_cardPool.Release(this);
 	}
 	
 	/// <summary>
