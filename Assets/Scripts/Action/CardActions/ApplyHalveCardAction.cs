@@ -13,9 +13,9 @@ public class ApplyWeakPointCardAction : CardAction {
 
 	public override void Execute(CardUseContext context) {
 		if (context.target == null) return;
-		var weakPoint = new WeakPoint();
-		weakPoint.Init(context.target, 1, 0);
-		context.target.AddStatus(weakPoint);
+		var halve = new Halve();
+		halve.Init(context.target, 1, 0);
+		context.target.AddStatus(halve);
 	}
 
 	protected override int CalculateAmountWithContext(CardUseContext context) => 0;
