@@ -78,7 +78,7 @@ public class CardAssetGenerator {
 		map["AddBurnStacks3"]        = GetOrCreate<AddBurnStacksCardAction>("AddBurnStacks3",     a => a.amount = 3);
 		map["HandDefenseCount5"]     = GetOrCreate<HandDefenseCountArmorAction>("HandDefenseCount5", a => a.amount = 5);
 		map["BlockAdditionalDraw"]   = GetOrCreate<BlockAdditionalDrawCardAction>("BlockAdditionalDraw", a => { });
-		map["ApplyWeakPoint"]        = GetOrCreate<ApplyHalveCardAction>("ApplyWeakPoint",    a => { });
+		map["ApplyHalve"]            = GetOrCreate<ApplyHalveCardAction>("ApplyHalve",        a => { });
 
 		return map;
 	}
@@ -122,7 +122,7 @@ public class CardAssetGenerator {
 		// 연소 촉진 (16)
 		CreateCard("BurnAccelerate", 16, 1, CardTag.Fire, true, new[] { a["AddBurnStacks3"] }, usedIds);
 		// 약점 간파 (17)
-		CreateCard("WeakPointFind", 17, 1, CardTag.Util, true, new CardAction[] { a["ApplyWeakPoint"], a["Draw1Card"] }, usedIds);
+		CreateCard("HalveFind", 17, 1, CardTag.Util, true, new CardAction[] { a["ApplyHalve"], a["Draw1Card"] }, usedIds);
 	}
 
 	private static void CollectExistingIds(HashSet<int> usedIds) {
