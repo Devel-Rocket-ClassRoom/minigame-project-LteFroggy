@@ -1,5 +1,6 @@
 public class Halve : StatusBase {
 	public override string IconName => "WeakPointIcon";
+	public override string DescriptionKeyword => "반감";
 	public override string TextToShow => Stack.ToString();
 	public override bool IsActive => Stack > 0;
 

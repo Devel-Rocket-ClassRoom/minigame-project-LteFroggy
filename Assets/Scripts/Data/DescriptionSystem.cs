@@ -71,6 +71,13 @@ public static class DescriptionSystem {
 		Show(CollectKeywords(relic.effectDescription));
 	}
 
+	// 캐릭터에 걸린 상태이상 키워드들의 설명 패널 표시 (중첩 키워드 포함)
+	public static void ProcessStatusPanels(IEnumerable<string> keywords, RectTransform source) {
+		SetContainerPosition(source);
+		// 키워드들을 합쳐 한 번에 수집하면 중복은 자동으로 제거됨
+		Show(CollectKeywords(string.Join(" ", keywords)));
+	}
+
 	// 현재 표시 중인 패널을 전부 Pool에 반납
 	public static void Hide() {
 		foreach (var panel in _activePanels)
