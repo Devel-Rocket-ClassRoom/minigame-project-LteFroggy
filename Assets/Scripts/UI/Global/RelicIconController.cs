@@ -1,10 +1,15 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RelicIconController : MonoBehaviour {
+public class RelicIconController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 	[Header("=== 유물 아이콘 ===")]
 	[SerializeField] private Image _icon;
+
+	[Header("=== 설명 패널들 위치할 곳 ===")]	
+	[SerializeField] private Transform _panelParent;
 
 	private const float CardWidth = 74f;
 	private const float CardHeight = 82f;
@@ -12,12 +17,10 @@ public class RelicIconController : MonoBehaviour {
 
 	private Image _background;
 	private TextMeshProUGUI _nameText;
-
-	public void Set(RelicBase relic) {
-		Set(relic, null);
-	}
+	private RelicBase _relic;
 
 	public void Set(RelicBase relic, TMP_FontAsset fontAsset) {
+		_relic = relic;
 		EnsureVisuals();
 
 		_icon.sprite = relic.icon;
@@ -98,5 +101,14 @@ public class RelicIconController : MonoBehaviour {
 		text.raycastTarget = false;
 
 		return text;
+	}
+
+	// 마우스 커서가 들어오면, 팝업 띄우기
+	public void OnPointerEnter(PointerEventData eventData) {
+		DescriptionSystem.ProcessRelicPanel(_relic, GetComponent<RectTransform>());
+	}
+	
+	public void OnPointerExit(PointerEventData eventData) {
+		DescriptionSystem.Hide();	
 	}
 }
