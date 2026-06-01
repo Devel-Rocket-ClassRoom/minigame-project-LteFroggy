@@ -104,8 +104,6 @@ public class EnemyInstance : CharacterBase {
 	}
 	
 	public IEnumerator CoExecutePattern() {
-		// 죽었으면, 패턴 없음
-		if (IsDead) yield break;
 		foreach (EnemyAction action in PatternInThisTurn.actions) {
 			action.Execute(_enemyManager.GetEnemyActionContext(this));
 			// 패턴 하나 수행하고 대기시간 (애니메이션 재생 등을 위해)

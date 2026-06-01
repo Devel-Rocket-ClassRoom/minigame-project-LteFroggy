@@ -130,6 +130,8 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		RefreshStatusesInfo();
 	}
 	
+	public bool HasStatus<T>() where T : StatusBase => _statuses.ContainsKey(typeof(T));
+
 	// 특정 효과 추가하기
 	public void AddStatus(StatusBase status) {
 		// 이미 있는 상태이상이면, 합친다.

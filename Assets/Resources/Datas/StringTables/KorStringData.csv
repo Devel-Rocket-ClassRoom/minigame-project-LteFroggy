@@ -18,6 +18,15 @@ VulnerableCardText,취약을 @ 부여합니다.
 BurnCardText,화상을 @ 부여합니다.
 GetStrengthCardText,힘을 @ 얻습니다.
 RepeatAttackCardText,피해를 @씩 #번 줍니다.
+ArmorDamageCardText,현재 방어도(@)만큼 피해를 가합니다.
+ResetEnemyArmorCardText,적의 방어도를 0으로 만듭니다.
+ConditionalBurnBonusDamageCardText,피해를 @ 가합니다. 적이 화상 상태라면 추가로 # 피해를 가합니다.
+LastHitDoubleRepeatDamageCardText,피해를 @씩 #번 가합니다. 마지막 타격은 피해가 2배입니다.
+RepeatDamageApplyBurnCardText,피해를 @씩 #번 가합니다. 타격마다 화상 1을 부여합니다.
+AddBurnStacksCardText,적의 화상 중첩을 @ 증가시킵니다.
+HandDefenseCountArmorCardText,손패의 [방어] 카드 수 × @ 방어도를 얻습니다.
+BlockAdditionalDrawCardText,이번 턴 카드를 드로우할 수 없습니다.
+WeakPointCardText,적의 다음 공격력을 반감합니다.
 MapButton,지도
 DeckButton,덱
 GreatswordName,대검

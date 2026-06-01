@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c4c59f37654fa28289f162c5f5dfc4, type: 3}
+  m_Name: Ignite
+  m_EditorClassIdentifier: Assembly-CSharp::CardDefinition
+  cardId: 7
+  rarity: 0
+  icon: {fileID: 21300000, guid: a4f6f653cc7a2df43a3e96923df13de5, type: 3}
+  cost: 1
+  tag: 0
+  needsTarget: 1
+  actions:
+  - {fileID: 11400000, guid: 0534df7a43990094e91e0315f6c7b45d, type: 2}

@@ -23,14 +23,11 @@ public class RepeatDealDamageAction : RepeatCardAction {
 	}
 	
 	protected override int CalculateAmountWithContext(CardUseContext context) {
-		// 공격자 스탯 적용
-		amount = context.user.CalculateAttackingDamage(amount);
-		// 방어자 스탯 적용
-		amount = context.target.CalculateGainingDamage(amount);
-		// 유물 적용
-		amount = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, amount);
-		
-		return amount;
+		int result = amount;
+		result = context.user.CalculateAttackingDamage(result);
+		result = context.target.CalculateGainingDamage(result);
+		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
+		return result;
 	}
 	
 	protected override int CalculateRepeatWithContext(CardUseContext context) {

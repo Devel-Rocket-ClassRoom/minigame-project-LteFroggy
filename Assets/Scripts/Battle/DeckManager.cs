@@ -20,6 +20,8 @@ public class DeckManager : BattleSystemManager {
 	private readonly UnityEvent OnCardStateChanged = new();
 
 	public int DrawCountOnNextTurn { get; set; } = 5;
+	public bool BlockAdditionalDrawThisTurn { get; set; }
+	public IReadOnlyList<CardInstance> HandPile => _handPile;
 
 	// 전투 시작 시, PlayerData에서 덱 목록 가져오기
 	public override void StartBattle() {
@@ -35,6 +37,7 @@ public class DeckManager : BattleSystemManager {
 
 	// 턴 시작되면, 카드 설정된 만큼 드로우 (기본 5장)
 	public override void StartPlayerTurn() {
+		BlockAdditionalDrawThisTurn = false;
 		for (int i = 0; i < DrawCountOnNextTurn; i++) {
 			DrawCard();
 		}
@@ -68,6 +71,7 @@ public class DeckManager : BattleSystemManager {
 	/// 카드 한 장 드로우
 	/// </summary>
 	public void DrawCard() {
+		if (BlockAdditionalDrawThisTurn) return;
 		if (_drawPile.Count == 0) { Shuffle(); }
 		_handPile.Add(_drawPile[_drawPile.Count - 1]);
 		_drawPile.RemoveAt(_drawPile.Count - 1);
