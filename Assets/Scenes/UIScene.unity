@@ -993,7 +993,7 @@ MonoBehaviour:
   _deckButton: {fileID: 1690892938}
   _relicRow: {fileID: 2005369362}
   _relicIconPrefab: {fileID: 899244138718299657, guid: 8a41f4e4f41845141a93216a01d5840c, type: 3}
-  _relicFont: {fileID: 11400000, guid: 9fb777b4084f3cc419da3d50032644b8, type: 2}
+  _relicFont: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   _mapOverlay: {fileID: 467567238}
 --- !u!114 &754840200
 MonoBehaviour:
