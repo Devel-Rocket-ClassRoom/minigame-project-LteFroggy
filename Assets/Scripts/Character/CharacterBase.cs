@@ -3,10 +3,11 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using Image = UnityEngine.UI.Image;
 
 [RequireComponent(typeof(Animator))]
-public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
+public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock, IPointerEnterHandler, IPointerExitHandler {
 	public int MaxHealth { get; set; } = 100;
 	public int CurrentHealth { get; protected set; }
 	public int Block { get; protected set; }
@@ -131,6 +132,18 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	}
 	
 	public bool HasStatus<T>() where T : StatusBase => _statuses.ContainsKey(typeof(T));
+
+	// 마우스 호버 시, 걸린 상태이상들의 설명 패널을 띄운다
+	public void OnPointerEnter(PointerEventData eventData) {
+		if (_statuses.Count == 0) return;
+		var keywords = new List<string>();
+		foreach (var pair in _statuses) keywords.Add(pair.Value.Status.DescriptionKeyword);
+		DescriptionSystem.ProcessStatusPanels(keywords, (RectTransform)transform);
+	}
+
+	public void OnPointerExit(PointerEventData eventData) {
+		DescriptionSystem.Hide();
+	}
 
 	// 특정 효과 추가하기
 	public void AddStatus(StatusBase status) {

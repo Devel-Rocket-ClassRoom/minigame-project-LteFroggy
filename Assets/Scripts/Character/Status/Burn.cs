@@ -1,6 +1,7 @@
 ﻿public class Burn : StatusBase {
 	public override string IconName => "BurnIcon";
-	
+	public override string DescriptionKeyword => "화상";
+
 	public override string TextToShow => Stack.ToString();
 	
 	public override bool IsActive => Stack != 0;

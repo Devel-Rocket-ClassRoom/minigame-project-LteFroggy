@@ -1,5 +1,6 @@
 ﻿public class Strength : StatusBase {
 	public override string IconName => "StrengthIcon";
+	public override string DescriptionKeyword => "힘";
 	public override string TextToShow => Stack.ToString(); 
 	public override bool IsActive => Stack != 0;
 	public override void Merge(StatusBase status) {
