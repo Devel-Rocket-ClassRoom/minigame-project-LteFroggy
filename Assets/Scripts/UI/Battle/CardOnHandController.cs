@@ -14,6 +14,7 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	// 카드 위치 이동시킬 때 소요될 시간
 	private readonly float _cardMoveDuration= 0.2f;
 	private Coroutine _cardMoveCoroutine;
+	private Coroutine _hoverTooltipCoroutine;
 
 	// 마우스 올렸을 때 사용할 값
 	private const float k_HoverY = 215f;
@@ -109,16 +110,16 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
-		// 지금 선택된 카드는 Hover상태여도 HoverPosition으로 가지 않음
 		if (_isSelected) { return; }
 		ToHoverPosition();
-
-		// 키워드 강조 텍스트 적용 + 키워드 설명 패널 표시
-		string rawDesc = _cardInstance.GetCardDescriptionWithContext(GetBattleContext());
-		_cardDescriptionText.text = DescriptionSystem.ProcessCardText(rawDesc, _rectTransform);
 	}
 
 	public void OnPointerExit(PointerEventData eventData) {
+		if (_hoverTooltipCoroutine != null) {
+			StopCoroutine(_hoverTooltipCoroutine);
+			_hoverTooltipCoroutine = null;
+		}
+
 		// 지금 선택된 카드는 커서 벗어나도 제자리로 돌아가지 않음
 		if (_isSelected) {
 			// 타겟이 필요한 카드는 선택 위치로 이동
@@ -138,6 +139,14 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	private void ToHoverPosition() {
 		_rectTransform.SetAsLastSibling();
 		SetCardPosition(new Vector3(_fanPosition.x, k_HoverY, 0), Quaternion.identity);
+		if (_hoverTooltipCoroutine != null) StopCoroutine(_hoverTooltipCoroutine);
+		_hoverTooltipCoroutine = StartCoroutine(CoShowTooltipAfterHover());
+	}
+
+	private IEnumerator CoShowTooltipAfterHover() {
+		yield return new WaitForSeconds(_cardMoveDuration);
+		string rawDesc = _cardInstance.GetCardDescriptionWithContext(GetBattleContext());
+		_cardDescriptionText.text = DescriptionSystem.ProcessCardText(rawDesc, _rectTransform);
 	}
 	
 	/// <summary>

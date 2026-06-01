@@ -148,10 +148,12 @@ public class BattleMouseController : MonoBehaviour {
 		NeedsTarget = false;
 		_selectedCard = null;
 		_lineStartPoint = null;
-		
+
 		// 대상이 선택되었었다면, 대상 지정 UI 없애기
 		if (TargetInstance != null) { TargetInstance.SetTargetHighlight(false); }
 		TargetInstance = null;
+
+		DescriptionSystem.Hide();
 	}
 
 	// 마우스 아래 캐릭터를 감지해 상태이상 툴팁을 띄우거나 닫는다

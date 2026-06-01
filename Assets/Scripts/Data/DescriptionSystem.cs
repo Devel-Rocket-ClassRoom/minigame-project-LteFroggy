@@ -33,7 +33,11 @@ public static class DescriptionSystem {
 		var canvas = canvasObj.AddComponent<Canvas>();
 		canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 		canvas.sortingOrder = 100;
-		canvasObj.AddComponent<CanvasScaler>();
+		var scaler = canvasObj.AddComponent<CanvasScaler>();
+		scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+		scaler.referenceResolution = new Vector2(1920f, 1020f);
+		scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+		scaler.matchWidthOrHeight = 0f;
 
 		_tooltipCanvas = canvasObj.GetComponent<RectTransform>();
 
@@ -86,9 +90,14 @@ public static class DescriptionSystem {
 		_activePanels.Clear();
 	}
 
-	// source RectTransform의 화면 위치를 기준으로 패널 컨테이너 위치 설정
+	// source RectTransform의 화면 기준 bounding box 우상단을 기준으로 패널 컨테이너 위치 설정
+	// 카드가 회전된 상태에서도 올바른 위치를 잡기 위해 4개 꼭짓점의 최대 XY를 사용
 	private static void SetContainerPosition(RectTransform source) {
-		SetContainerPosition((Vector2)source.position);
+		Vector3[] corners = new Vector3[4];
+		source.GetWorldCorners(corners);
+		float maxX = Mathf.Max(corners[0].x, corners[1].x, corners[2].x, corners[3].x);
+		float maxY = Mathf.Max(corners[0].y, corners[1].y, corners[2].y, corners[3].y);
+		SetContainerPosition(new Vector2(maxX, maxY));
 	}
 
 	// 스크린 좌표를 기준으로 패널 컨테이너 위치 설정
