@@ -72,8 +72,9 @@ public static class DescriptionSystem {
 	}
 
 	// 캐릭터에 걸린 상태이상 키워드들의 설명 패널 표시 (중첩 키워드 포함)
-	public static void ProcessStatusPanels(IEnumerable<string> keywords, RectTransform source) {
-		SetContainerPosition(source);
+	// 캐릭터는 월드 오브젝트이므로 RectTransform이 아닌 스크린 좌표를 받는다
+	public static void ProcessStatusPanels(IEnumerable<string> keywords, Vector2 screenPos) {
+		SetContainerPosition(screenPos);
 		// 키워드들을 합쳐 한 번에 수집하면 중복은 자동으로 제거됨
 		Show(CollectKeywords(string.Join(" ", keywords)));
 	}
@@ -87,9 +88,14 @@ public static class DescriptionSystem {
 
 	// source RectTransform의 화면 위치를 기준으로 패널 컨테이너 위치 설정
 	private static void SetContainerPosition(RectTransform source) {
+		SetContainerPosition((Vector2)source.position);
+	}
+
+	// 스크린 좌표를 기준으로 패널 컨테이너 위치 설정
+	private static void SetContainerPosition(Vector2 screenPos) {
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(
 			TooltipCanvas,
-			source.position,
+			screenPos,
 			null,
 			out Vector2 localPos
 		);
