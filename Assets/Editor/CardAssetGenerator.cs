@@ -78,7 +78,7 @@ public class CardAssetGenerator {
 		map["AddBurnStacks3"]        = GetOrCreate<AddBurnStacksCardAction>("AddBurnStacks3",     a => a.amount = 3);
 		map["HandDefenseCount5"]     = GetOrCreate<HandDefenseCountArmorAction>("HandDefenseCount5", a => a.amount = 5);
 		map["BlockAdditionalDraw"]   = GetOrCreate<BlockAdditionalDrawCardAction>("BlockAdditionalDraw", a => { });
-		map["ApplyWeakPoint"]        = GetOrCreate<ApplyWeakPointCardAction>("ApplyWeakPoint",    a => { });
+		map["ApplyWeakPoint"]        = GetOrCreate<ApplyHalveCardAction>("ApplyWeakPoint",    a => { });
 
 		return map;
 	}

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Card/Card Actions/Apply Weak Point")]
-public class ApplyWeakPointCardAction : CardAction {
+public class ApplyHalveCardAction : CardAction {
 	protected override int Amount => 0;
 	public override string CardDescriptionKey => "WeakPointCardText";
 

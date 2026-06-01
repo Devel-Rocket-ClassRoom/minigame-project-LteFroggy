@@ -35,7 +35,7 @@ public class HandLayoutController : MonoBehaviour {
 	/// </summary>
 	/// <param name="cardInstance"></param>
 	public void AddCard(CardInstance cardInstance) {
-		CardOnHandController cardController = _cardPool.GetCard(transform);
+		CardOnHandController cardController = _cardPool.Get(transform);
 		_cards.Add(cardController);
 		cardController.Init(cardInstance, _drawPileLocation, _discardPileLocation, _cardPool, _battleManager); 
 		cardController.transform.SetAsLastSibling();
