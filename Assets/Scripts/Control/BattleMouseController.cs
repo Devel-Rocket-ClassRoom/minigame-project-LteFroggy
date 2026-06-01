@@ -31,6 +31,9 @@ public class BattleMouseController : MonoBehaviour {
 	
 	// 선택된 카드
 	private CardOnHandController _selectedCard;
+
+	// 현재 마우스가 올라가 있는 캐릭터 (상태이상 툴팁 표시용)
+	private CharacterBase _hoveredCharacter;
 	
 	// 대상 선택해야 할 상황이라면, 라인 만들어주기
 	private RectTransform _lineStartPoint;
@@ -151,7 +154,39 @@ public class BattleMouseController : MonoBehaviour {
 		TargetInstance = null;
 	}
 
+	// 마우스 아래 캐릭터를 감지해 상태이상 툴팁을 띄우거나 닫는다
+	private void HandleCharacterHover() {
+		// 카드 사용 중에는 타게팅이 우선이므로 호버 툴팁을 끈다
+		if (_selectedCard != null) {
+			SetHoveredCharacter(null);
+			return;
+		}
+
+		Vector2 mousePos = _mainCamera.ScreenToWorldPoint(_mousePositionAction.ReadValue<Vector2>());
+		RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, 0f);
+		CharacterBase character = hit.collider != null ? hit.collider.GetComponentInParent<CharacterBase>() : null;
+		SetHoveredCharacter(character);
+	}
+
+	private void SetHoveredCharacter(CharacterBase character) {
+		// 대상이 그대로면 아무것도 하지 않음
+		if (character == _hoveredCharacter) { return; }
+
+		// 이전 대상 툴팁 닫기
+		DescriptionSystem.Hide();
+		_hoveredCharacter = character;
+
+		// 새 대상이 상태이상을 가지고 있으면 캐릭터 위치 기준으로 툴팁 표시
+		if (character != null && character.HasAnyStatus) {
+			Vector2 screenPos = _mainCamera.WorldToScreenPoint(character.transform.position);
+			DescriptionSystem.ProcessStatusPanels(character.GetStatusKeywords(), screenPos);
+		}
+	}
+
 	private void Update() {
+		// 카드를 들고 있지 않을 때만 캐릭터 호버 상태이상 툴팁 처리
+		HandleCharacterHover();
+
 		if (_selectedCard != null) {
 			// 선택된 카드가 대상이 필요 없으면, 그냥 끌고 다닐 수 있어야 함
 			if (!NeedsTarget) {
