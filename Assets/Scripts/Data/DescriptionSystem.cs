@@ -57,7 +57,7 @@ public static class DescriptionSystem {
 		_panelContainer.anchorMin = new Vector2(0.5f, 0.5f);
 		_panelContainer.anchorMax = new Vector2(0.5f, 0.5f);
 		_panelContainer.pivot = new Vector2(0f, 1f);
-		_panelContainer.sizeDelta = new Vector2(200f, 0f);
+		_panelContainer.sizeDelta = new Vector2(300f, 0f);
 	}
 
 	// 카드 설명 텍스트의 키워드를 노란색으로 강조하고, 키워드 설명 패널을 source 옆에 표시
@@ -77,10 +77,12 @@ public static class DescriptionSystem {
 
 	// 캐릭터에 걸린 상태이상 키워드들의 설명 패널 표시 (중첩 키워드 포함)
 	// 캐릭터는 월드 오브젝트이므로 RectTransform이 아닌 스크린 좌표를 받는다
-	public static void ProcessStatusPanels(IEnumerable<string> keywords, Vector2 screenPos) {
+	public static void ProcessStatusPanels(IEnumerable<StatusBase> statuses, Vector2 screenPos) {
 		SetContainerPosition(screenPos);
-		// 키워드들을 합쳐 한 번에 수집하면 중복은 자동으로 제거됨
-		Show(CollectKeywords(string.Join(" ", keywords)));
+		// 상태이상들은 아이콘까지 써 줘야 함.
+		foreach (var status in statuses) {
+			ShowWithIcon(status.DescriptionTitle, status.DescriptionContent, status.Icon);	
+		}
 	}
 
 	// 현재 표시 중인 패널을 전부 Pool에 반납
@@ -119,6 +121,11 @@ public static class DescriptionSystem {
 	// Pool에서 패널을 꺼내 컨테이너 아래에 붙이고 활성 목록에 추가
 	private static void Show(string title, string description) {
 		var controller = DescriptionPanelPool.Instance.Get(title, ProcessText(description), PanelContainer);
+		_activePanels.Add(controller);
+	}
+	
+	private static void ShowWithIcon(string title, string description, Sprite sprite) {
+		var controller = DescriptionPanelPool.Instance.Get(title, ProcessText(description), PanelContainer, sprite);
 		_activePanels.Add(controller);
 	}
 

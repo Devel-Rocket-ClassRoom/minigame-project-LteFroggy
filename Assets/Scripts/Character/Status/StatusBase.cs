@@ -1,17 +1,23 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class StatusBase {
 	public CharacterBase Owner { get; private set; }
+	
 	public int Stack { get; protected set;  }
+	
 	public int Duration { get; protected set; }
 	
 	public abstract string IconName { get; }
+	
 	public Sprite Icon => Resources.Load<Sprite>($"Sprites/Statuses/{IconName}");
-	// 설명 패널 조회에 사용할 키워드 (DescriptionTable의 키와 일치)
-	public abstract string DescriptionKeyword { get; }
+	
+	// 화면에 표시할 키워드 (StringTable 키와 일치)
+	public virtual string DescriptionTitle => StringTableManager.StringTable[GetType().Name];
+	public virtual string DescriptionContent => StringTableManager.DescriptionTable[DescriptionTitle];
+	
 	// 상태이상 창 아래에 보일 텍스트
 	public abstract string TextToShow { get; }
+	
 	// 해당 상태이상이 아직 적용되는건지
 	public abstract bool IsActive { get;}
 	

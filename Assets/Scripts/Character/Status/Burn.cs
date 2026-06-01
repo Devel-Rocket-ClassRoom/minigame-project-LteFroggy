@@ -1,6 +1,8 @@
 ﻿public class Burn : StatusBase {
 	public override string IconName => "BurnIcon";
-	public override string DescriptionKeyword => "화상";
+	
+	// 화상은 화상 설명 텍스트를 가져오고, 값 자리에 현재 자신의 스택 값을 넣음.
+	public override string DescriptionContent => base.DescriptionContent.Replace("-", Stack.ToString());
 
 	public override string TextToShow => Stack.ToString();
 	

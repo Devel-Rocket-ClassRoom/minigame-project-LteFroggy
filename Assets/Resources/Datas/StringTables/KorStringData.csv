@@ -35,3 +35,8 @@ DaggerName,단검
 DaggerDesc,카드 공격 횟수 +@
 ThickShieldName,두꺼운 방패
 ThickShieldDesc,카드 방어도 +@
+Burn,화상
+Halve,반감
+Strength,힘
+Vulnerable,취약
+Weakness,약화
