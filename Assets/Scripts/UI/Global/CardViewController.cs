@@ -25,7 +25,11 @@ public class CardViewController : MonoBehaviour, IPointerEnterHandler, IPointerE
 
 		_button = GetComponent<Button>();
 		_button.onClick.RemoveAllListeners();
-		if (action != null) _button.onClick.AddListener(() => action(_cardInstance));
+		_button.onClick.AddListener(() => {
+			DescriptionSystem.Hide();
+			_isHovering = false;
+			action?.Invoke(_cardInstance);
+		});
 
 		_cardIcon.sprite = _cardInstance.Icon;
 		_cardNameText.text = _cardInstance.CardName;
