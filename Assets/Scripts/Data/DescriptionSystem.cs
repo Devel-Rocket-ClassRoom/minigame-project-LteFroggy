@@ -123,7 +123,7 @@ public static class DescriptionSystem {
 	}
 
 	// 텍스트 내 DescriptionTable 키워드를 노란색(#FFED53) 태그로 래핑
-	private static string ProcessText(string text) {
+	public static string ProcessText(string text) {
 		foreach (var keyword in StringTableManager.DescriptionTable.Keys)
 			text = text.Replace(keyword, $"<color=#FFED53>{keyword}</color>");
 		return text;
