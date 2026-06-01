@@ -4617,7 +4617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a0b0fd2b7964ae381289dce6ea23032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardPool
-  _cardPrefab: {fileID: 5739213078583797811, guid: f498e654973e02a448f046b978fa822f, type: 3}
+  _prefab: {fileID: 5739213078583797811, guid: f498e654973e02a448f046b978fa822f, type: 3}
 --- !u!1 &1943534956
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b313441fe340d1a4bbdb0253619712, type: 3}
   m_Name: Gain 8 Armor
   m_EditorClassIdentifier: Assembly-CSharp::GainArmorAction
-  amount: 0
+  amount: 8
