@@ -51,7 +51,12 @@ public abstract class StatusBase {
 	public virtual int ModifyGivingBurn(int burn) {
 		return burn;
 	}
-	
+
+	// 이 상태이상이 카드 사용을 허용하는지 (기본값: 허용)
+	public virtual bool CanUseCard() => true;
+	// 카드를 사용했을 때 호출 (사용 횟수 추적 등)
+	public virtual void OnCardUsed() { }
+
 	// 같은 종류의 상태이상과 합쳐질 때 합쳐지는 방법
 	public abstract void Merge(StatusBase status);
 }

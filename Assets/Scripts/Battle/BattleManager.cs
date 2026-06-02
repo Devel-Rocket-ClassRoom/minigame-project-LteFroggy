@@ -126,16 +126,24 @@ public class BattleManager : BattleSystemManager {
 			Debug.Log($"에너지가 부족합니다.");
 			return false;
 		}
-		
-		// 2. 대상이 필요한 카드인데, 대상이 없다면 사용 불가.
+
+		// 2. 상태이상(공명 등)이 카드 사용을 막고 있는지 확인
+		if (!_characterManager.Player.CanUseCard()) {
+			Debug.Log($"이번 턴에는 더 이상 카드를 사용할 수 없습니다.");
+			return false;
+		}
+
+		// 3. 대상이 필요한 카드인데, 대상이 없다면 사용 불가.
 		if (cardInstance.NeedsTarget && enemyInstance == null) {
 			Debug.Log($"대상이 필요합니다.");
 			return false;
 		}
-		
+
 		// 위의 사항에 해당 없다면, 카드 사용 처리
 		// 사용에 필요한 맥락 만들어서 주기
 		_cardUseManager.UseCard(cardInstance, GetCardUseContext(cardInstance));
+		// 카드 사용을 상태이상에 알림 (공명 등 사용 횟수 추적)
+		_characterManager.Player.NotifyCardUsed();
 		// 사용한 카드는 핸드에서 제거
 		_deckManager.RemoveUsedCardFromHand(cardInstance);
 		// 카드 사용했음 이벤트 발생

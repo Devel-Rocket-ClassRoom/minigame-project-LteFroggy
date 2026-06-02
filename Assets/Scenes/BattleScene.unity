@@ -179,7 +179,7 @@ MonoBehaviour:
   m_text: 20
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
-  m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
+  m_sharedMaterial: {fileID: 3860429735652810780, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -750,7 +750,7 @@ MonoBehaviour:
   m_text: "\uC804\uD22C \uC2DC\uC791"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
-  m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
+  m_sharedMaterial: {fileID: 3860429735652810780, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -874,12 +874,14 @@ MonoBehaviour:
   _characterManager: {fileID: 1943534958}
   _battleManager: {fileID: 689757849}
   _enemyPrefab: {fileID: 6557896690119479702, guid: 8da1e9319c814e34da9d2bec846ca254, type: 3}
-  _tables:
+  _normalTables:
   - {fileID: 11400000, guid: 3515043267df9234792b4c5f59a0bf7a, type: 2}
   - {fileID: 11400000, guid: 7ae55b962f4b741479bff9d6897af131, type: 2}
   - {fileID: 11400000, guid: 2c92a5b9c5945ee45a4fd1be6b813705, type: 2}
   - {fileID: 11400000, guid: 828c0bbbac2361a439487bfaf7e297f0, type: 2}
   - {fileID: 11400000, guid: f5e588167d682704e93345cba01b934b, type: 2}
+  _bossTables:
+  - {fileID: 11400000, guid: 8a1657451bbcc6c4f87c43d91f449d31, type: 2}
   OnEnemyTurnEnd:
     m_PersistentCalls:
       m_Calls: []
@@ -2042,7 +2044,7 @@ MonoBehaviour:
   m_text: 20
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
-  m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
+  m_sharedMaterial: {fileID: 3860429735652810780, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2271,7 +2273,7 @@ MonoBehaviour:
   m_text: 10/10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
-  m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
+  m_sharedMaterial: {fileID: 3860429735652810780, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
