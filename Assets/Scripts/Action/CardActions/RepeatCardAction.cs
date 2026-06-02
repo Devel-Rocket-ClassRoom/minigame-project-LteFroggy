@@ -7,7 +7,7 @@ public abstract class RepeatCardAction : CardAction {
 	protected abstract IEnumerator ExecuteRepeat(CardUseContext context);
 	
 	public override string GetCardDescription() {
-		return StringTableManager.StringTable[CardDescriptionKey].Replace("@", Amount.ToString()).Replace("#", Repeat.ToString());
+		return StringTableManager.StringTable[CardDescriptionKey].Replace("-", Amount.ToString()).Replace("#", Repeat.ToString());
 	}
 	
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
@@ -33,7 +33,7 @@ public abstract class RepeatCardAction : CardAction {
 		
 		// Amount와 Repeat를 모두 가지게 한다.
 		return StringTableManager.StringTable[CardDescriptionKey]
-			.Replace("@", replaceAmount)
+			.Replace("-", replaceAmount)
 			.Replace("#", replaceRepeat);	
 	}
 }

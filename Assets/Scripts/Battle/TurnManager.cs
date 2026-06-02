@@ -48,7 +48,7 @@ public class TurnManager : BattleSystemManager {
 		if (_displayTextCoroutine != null) StopCoroutine(_displayTextCoroutine);
 		_displayTextCoroutine = StartCoroutine(CoDisplayText(
 			StringTableManager.StringTable["TurnText"].
-			Replace("@", _turnCount.ToString())));
+			Replace("-", _turnCount.ToString())));
 		
 		_turnEndButton.gameObject.SetActive(true);
 		_turnEndButton.interactable = true;

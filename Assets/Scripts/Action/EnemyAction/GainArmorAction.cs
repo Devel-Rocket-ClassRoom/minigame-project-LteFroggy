@@ -5,6 +5,8 @@ public class GainArmorAction : EnemyAction {
 	public int amount;
 	protected override int Amount => amount;
 	public override string IntentIconName => $"Defend";
+	public override string IntentDescriptionTitle => "방어";
+	public override string IntentDescriptionKey => "EnemyGainArmorIntentText";
 	
 	protected override int CalculateAmountWithContext(EnemyActionContext context) {
 		// 본인 강화값에 기반한 강화도 보기
@@ -18,4 +20,5 @@ public class GainArmorAction : EnemyAction {
 	
 	// 얼마 얻을지 알려주지 않음
 	public override string GetIntentTextWithContext(EnemyActionContext context) { return ""; }
+
 }

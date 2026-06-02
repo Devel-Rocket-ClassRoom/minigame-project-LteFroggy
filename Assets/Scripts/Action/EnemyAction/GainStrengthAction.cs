@@ -6,6 +6,8 @@ public class GainStrengthAction : EnemyAction {
 
 	// 자기 강화는 버프 의도 아이콘 재사용
 	public override string IntentIconName => "Buff";
+	public override string IntentDescriptionTitle => "자기 버프";
+	public override string IntentDescriptionKey => "EnemySelfBuffIntentText";
 
 	protected override int Amount => amount;
 

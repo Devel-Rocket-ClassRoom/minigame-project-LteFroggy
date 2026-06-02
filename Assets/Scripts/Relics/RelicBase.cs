@@ -5,7 +5,7 @@ using UnityEngine;
 //
 // [텍스트 표시 방식]
 //   displayName      : KorStringData.csv의 "{클래스명}Name" 키로 조회
-//   effectDescription: KorStringData.csv의 "{클래스명}Desc" 키에서 @를 effectAmount로 치환,
+//   effectDescription: KorStringData.csv의 "{클래스명}Desc" 키에서 -를 effectAmount로 치환,
 //                      affectedTag가 있으면 앞에 "[태그명]" 추가
 //   예) Greatsword → "[공격] 카드 피해 +2"
 public abstract class RelicBase {
@@ -14,7 +14,7 @@ public abstract class RelicBase {
 	// 로드아웃 코스트 (전체 합계가 costLimit 이하여야 선택 가능)
 	public abstract int cost { get; }
 
-	// 효과 수치 (CSV 설명의 @ 플레이스홀더를 이 값으로 치환)
+	// 효과 수치 (CSV 설명의 - 플레이스홀더를 이 값으로 치환)
 	public abstract int effectAmount { get; }
 
 	// 이 유물이 효과를 발동하는 카드 태그 (없으면 null)
@@ -27,7 +27,7 @@ public abstract class RelicBase {
 	public string effectDescription {
 		get {
 			string template = StringTableManager.StringTable[$"{GetType().Name}Desc"]
-				.Replace("@", effectAmount.ToString());
+				.Replace("-", effectAmount.ToString());
 			if (!affectedTag.HasValue) return template;
 			string tag = StringTableManager.StringTable[affectedTag.Value.ToString()];
 			return $"[{tag}] {template}";
