@@ -6,7 +6,7 @@ public class ArmorDamageCardAction : CardAction {
 	public override string CardDescriptionKey => "ArmorDamageCardText";
 
 	public override string GetCardDescription() =>
-		StringTableManager.StringTable[CardDescriptionKey].Replace("@", "-");
+		StringTableManager.StringTable[CardDescriptionKey].Replace("-", "-");
 
 	public override void Execute(CardUseContext context) {
 		if (context.target.IsDead) return;

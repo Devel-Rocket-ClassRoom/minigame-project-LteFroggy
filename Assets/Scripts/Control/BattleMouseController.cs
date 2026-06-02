@@ -158,6 +158,11 @@ public class BattleMouseController : MonoBehaviour {
 
 	// 마우스 아래 캐릭터를 감지해 상태이상 툴팁을 띄우거나 닫는다
 	private void HandleCharacterHover() {
+		if (DescriptionSystem.IsEnemyIntentPanelActive) {
+			_hoveredCharacter = null;
+			return;
+		}
+
 		// 카드 사용 중에는 타게팅이 우선이므로 호버 툴팁을 끈다
 		if (_selectedCard != null) {
 			SetHoveredCharacter(null);

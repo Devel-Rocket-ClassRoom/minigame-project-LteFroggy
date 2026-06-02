@@ -7,37 +7,41 @@ Fire,화염
 Common,일반
 Uncommon,고급
 Rare,희귀
-TurnText,@번째 턴
+TurnText,-번째 턴
 EnemyTurn,적 턴
 EndTurn,턴 종료
-AttackCardText,피해를 @ 줍니다.
-GainArmorCardText,방어도를 @ 얻습니다.
-DrawCardText,카드를 @장 뽑습니다.
-WeaknessCardText,약화를 @ 부여합니다.
-VulnerableCardText,취약을 @ 부여합니다.
-BurnCardText,화상을 @ 부여합니다.
-GetStrengthCardText,힘을 @ 얻습니다.
-RepeatAttackCardText,피해를 @씩 #번 줍니다.
-ArmorDamageCardText,현재 방어도(@)만큼 피해를 가합니다.
+AttackCardText,피해를 - 줍니다.
+GainArmorCardText,방어도를 - 얻습니다.
+DrawCardText,카드를 -장 뽑습니다.
+WeaknessCardText,약화를 - 부여합니다.
+VulnerableCardText,취약을 - 부여합니다.
+BurnCardText,화상을 - 부여합니다.
+GetStrengthCardText,힘을 - 얻습니다.
+RepeatAttackCardText,피해를 -씩 #번 줍니다.
+ArmorDamageCardText,현재 방어도(-)만큼 피해를 가합니다.
 ResetEnemyArmorCardText,적의 방어도를 0으로 만듭니다.
-ConditionalBurnBonusDamageCardText,피해를 @ 가합니다. 적이 화상 상태라면 추가로 # 피해를 가합니다.
-LastHitDoubleRepeatDamageCardText,피해를 @씩 #번 가합니다. 마지막 타격은 피해가 2배입니다.
-RepeatDamageApplyBurnCardText,피해를 @씩 #번 가합니다. 타격마다 화상 1을 부여합니다.
-AddBurnStacksCardText,적의 화상을 @ 증가시킵니다.
-HandDefenseCountArmorCardText,손패의 [방어] 카드 수 × @ 방어도를 얻습니다.
+ConditionalBurnBonusDamageCardText,피해를 - 가합니다. 적이 화상 상태라면 추가로 # 피해를 가합니다.
+LastHitDoubleRepeatDamageCardText,피해를 -씩 #번 가합니다. 마지막 타격은 피해가 2배입니다.
+RepeatDamageApplyBurnCardText,피해를 -씩 #번 가합니다. 타격마다 화상 1을 부여합니다.
+AddBurnStacksCardText,적의 화상을 - 증가시킵니다.
+HandDefenseCountArmorCardText,손패의 [방어] 카드 수 × - 방어도를 얻습니다.
 BlockAdditionalDrawCardText,이번 턴 카드를 드로우할 수 없습니다.
 HalveCardText,반감을 1 부여합니다.
 MapButton,지도
 DeckButton,덱
 GreatswordName,대검
-GreatswordDesc,카드 피해 +@
+GreatswordDesc,카드 피해 +-
 DaggerName,단검
-DaggerDesc,카드 공격 횟수 +@
+DaggerDesc,카드 공격 횟수 +-
 ThickShieldName,두꺼운 방패
-ThickShieldDesc,카드 방어도 +@
+ThickShieldDesc,카드 방어도 +-
 Burn,화상
 Halve,반감
 Strength,힘
 Vulnerable,취약
 Weakness,약화
 Ringing,공명
+EnemyAttackIntentText,피해를 - 줍니다.
+EnemyGainArmorIntentText,자신의 방어도를 - 얻습니다.
+EnemySelfBuffIntentText,자신을 강화합니다.
+EnemyTargetDebuffIntentText,약화 효과를 시전합니다.

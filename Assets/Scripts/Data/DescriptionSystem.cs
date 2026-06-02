@@ -8,6 +8,7 @@ public static class DescriptionSystem {
 	private static RectTransform _tooltipCanvas;
 	private static RectTransform _panelContainer;
 	private static readonly List<DescriptionPanelController> _activePanels = new();
+	public static bool IsEnemyIntentPanelActive { get; private set; }
 
 	// 최초 접근 시 Canvas 자동 생성 (Lazy Initialization)
 	private static RectTransform PanelContainer {
@@ -85,8 +86,21 @@ public static class DescriptionSystem {
 		}
 	}
 
+	public static void ProcessEnemyIntentPanel(EnemyAction action, EnemyActionContext context, RectTransform source) {
+		if (action == null || context == null || source == null) return;
+
+		Hide();
+		IsEnemyIntentPanelActive = true;
+		SetContainerPosition(source);
+
+		string description = action.GetIntentDescriptionWithContext(context);
+		ShowWithIcon(action.IntentDescriptionTitle, description, action.IntentIcon);
+		Show(CollectKeywords(description));
+	}
+
 	// 현재 표시 중인 패널을 전부 Pool에 반납
 	public static void Hide() {
+		IsEnemyIntentPanelActive = false;
 		foreach (var panel in _activePanels)
 			DescriptionPanelPool.Instance.Release(panel);
 		_activePanels.Clear();

@@ -5,6 +5,8 @@ public class AttackAction : EnemyAction {
 	public int amount;
 
 	public override string IntentIconName => "Attack";
+	public override string IntentDescriptionTitle => "공격";
+	public override string IntentDescriptionKey => "EnemyAttackIntentText";
 	
 	// 공격량은 실제 Amount와 동일하게 작성
 	public override string GetIntentTextWithContext(EnemyActionContext context) {

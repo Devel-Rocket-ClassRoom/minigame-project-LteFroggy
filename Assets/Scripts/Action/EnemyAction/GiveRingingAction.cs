@@ -6,6 +6,8 @@ public class GiveRingingAction : EnemyAction {
 
 	// 상대에게 거는 디버프는 약화 의도 아이콘 재사용
 	public override string IntentIconName => "Debuff";
+	public override string IntentDescriptionTitle => "상대 디버프";
+	public override string IntentDescriptionKey => "EnemyTargetDebuffIntentText";
 
 	protected override int Amount => amount;
 

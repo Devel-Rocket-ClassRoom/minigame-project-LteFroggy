@@ -5,7 +5,7 @@
 	/// 카드 기본 텍스트 반환. 카드 설명에서 사용한다.
 	/// </summary>
 	public virtual string GetCardDescription() {
-		return StringTableManager.StringTable[CardDescriptionKey].Replace("@", Amount.ToString());
+		return StringTableManager.StringTable[CardDescriptionKey].Replace("-", Amount.ToString());
 	}
 	
 	/// <summary>
@@ -23,6 +23,6 @@
 		// 별 일 없으면 그냥 초록색
 		else { replaceText = calculatedAmount.ToString(); }
 		
-		return StringTableManager.StringTable[CardDescriptionKey].Replace("@", replaceText);
+		return StringTableManager.StringTable[CardDescriptionKey].Replace("-", replaceText);
 	}
 }
