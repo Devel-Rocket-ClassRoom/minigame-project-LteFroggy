@@ -12,6 +12,7 @@ public class MapNodeConfig : ScriptableObject {
 		MapNodeType.Start  => "StartScene",
 		MapNodeType.Rest   => "RestScene",
 		MapNodeType.Event  => "EventScene",
+		MapNodeType.Treasure => "EventScene",
 		_ => throw new NotImplementedException()
 	};
 }
