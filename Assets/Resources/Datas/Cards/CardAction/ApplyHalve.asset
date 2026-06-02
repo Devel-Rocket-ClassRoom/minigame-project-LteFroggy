@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e405462e188be7478c675abaa7f03d7, type: 3}
-  m_Name: ApplyWeakPoint
-  m_EditorClassIdentifier: Assembly-CSharp::ApplyWeakPointCardAction
+  m_Name: ApplyHalve
+  m_EditorClassIdentifier: Assembly-CSharp::ApplyHalveCardAction

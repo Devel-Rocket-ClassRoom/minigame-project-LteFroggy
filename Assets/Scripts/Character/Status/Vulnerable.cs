@@ -1,6 +1,5 @@
 ﻿public class Vulnerable : StatusBase {
 	public override string IconName => "VulnerableIcon";
-	public override string DescriptionKeyword => "취약";
 	public override string TextToShow => Duration.ToString();
 	public override bool IsActive => Duration > 0;
 	

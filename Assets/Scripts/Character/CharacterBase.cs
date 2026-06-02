@@ -30,7 +30,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	[SerializeField] private StatusRenderer _statusPrefab; 
 	
 	// 현재 캐릭터에게 걸린 상태 효과 저장용
-	private readonly Dictionary<Type, StatusRenderer> _statuses = new();
+	private readonly Dictionary<Type, StatusRenderer> _statusRenderers = new();
 	protected Animator _animator;
 	
 	public virtual void Init() {
@@ -86,28 +86,28 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	public void ClearBlock() { Block = 0; }
 	
 	public int CalculateAttackingDamage(int amount) {
-		foreach (var status in _statuses) {
+		foreach (var status in _statusRenderers) {
 			amount = status.Value.Status.ModifyAttackingDamage(amount);
 		}
 		return amount;
 	}
 	
 	public int CalculateGainingDamage(int amount) {
-		foreach (var status in _statuses) {
+		foreach (var status in _statusRenderers) {
 			amount = status.Value.Status.ModifyGainingDamage(amount);
 		}
 		return amount;
 	}
 	
 	public int CalculateGainingArmor(int amount) {
-		foreach (var status in _statuses) {
+		foreach (var status in _statusRenderers) {
 			amount = status.Value.Status.ModifyGainingArmor(amount);
 		}
 		return amount;
 	}
 	
 	public int CalculateGiveBurn(int amount) {
-		foreach (var status in _statuses) { amount = status.Value.Status.ModifyGivingBurn(amount); }
+		foreach (var status in _statusRenderers) { amount = status.Value.Status.ModifyGivingBurn(amount); }
 		return amount;
 	}
 	
@@ -115,14 +115,14 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		// 매 턴 시작 시 방어도 초기화
 		ClearBlock();
 		// 턴 시작 시 액션 있는 상태효과 적용
-		foreach (var status in _statuses) {
+		foreach (var status in _statusRenderers) {
 			status.Value.Status.OnTurnStart();
 		}
 	}
 	
 	public virtual void OnTurnEnd() {
 		// 턴 종료 시 액션 있는 상태효과 적용
-		foreach (var status in _statuses) {
+		foreach (var status in _statusRenderers) {
 			status.Value.Status.OnTurnEnd();
 		}
 		
@@ -130,27 +130,28 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		RefreshStatusesInfo();
 	}
 	
-	public bool HasStatus<T>() where T : StatusBase => _statuses.ContainsKey(typeof(T));
+	public bool HasStatus<T>() where T : StatusBase => _statusRenderers.ContainsKey(typeof(T));
 
 	// 현재 걸린 상태이상이 하나라도 있는지
-	public bool HasAnyStatus => _statuses.Count > 0;
+	public bool HasAnyStatus => _statusRenderers.Count > 0;
 
-	// 현재 걸린 상태이상들의 설명 키워드 목록을 반환
-	public List<string> GetStatusKeywords() {
-		var keywords = new List<string>();
-		foreach (var pair in _statuses) keywords.Add(pair.Value.Status.DescriptionKeyword);
-		return keywords;
+	// 현재 걸린 상태이상들의 리스트 반환
+	public List<StatusBase> GetStatusKeywords() {
+		List<StatusBase> statuses = new();
+		foreach (var status in _statusRenderers) { statuses.Add(status.Value.Status); }
+		
+		return statuses;
 	}
 
 	// 특정 효과 추가하기
 	public void AddStatus(StatusBase status) {
 		// 이미 있는 상태이상이면, 합친다.
-		if (_statuses.ContainsKey(status.GetType())) { _statuses[status.GetType()].Status.Merge(status); }
+		if (_statusRenderers.ContainsKey(status.GetType())) { _statusRenderers[status.GetType()].Status.Merge(status); }
 		// 없다면, 생성한다
 		else {
 			var newStatus = Instantiate(_statusPrefab, _statusParent);
 			newStatus.Init(status);
-			_statuses.Add(status.GetType(), newStatus);
+			_statusRenderers.Add(status.GetType(), newStatus);
 		}
 		
 		// 상태이상이 더해졌다면, 정보 한번 갱신
@@ -166,7 +167,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	private void RefreshStatusesInfo() {
 		List<Type> pendingDelete = new();
 		
-		foreach (var pair in _statuses) {
+		foreach (var pair in _statusRenderers) {
 			// 효과가 끝난 값들은 삭제 대기열에 더해두기
 			if (!pair.Value.Status.IsActive) { pendingDelete.Add(pair.Key); }
 		}
@@ -174,12 +175,12 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		// 삭제할 상태이상은 삭제
 		foreach (var status in pendingDelete) {
 			// 이미 삭제되었거나 해서 없다면, Destroy 중복으로 호출하지 않도록 continue;
-			if (!_statuses.Remove(status, out var statusInstance)) continue;
+			if (!_statusRenderers.Remove(status, out var statusInstance)) continue;
 			Destroy(statusInstance.gameObject);
 		}
 		
 		// 이후 상태 갱신
-		foreach (var pair in _statuses) {
+		foreach (var pair in _statusRenderers) {
 			pair.Value.UpdateStatus();
 		}
 	}

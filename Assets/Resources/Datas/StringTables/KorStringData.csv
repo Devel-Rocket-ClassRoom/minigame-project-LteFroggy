@@ -26,7 +26,7 @@ RepeatDamageApplyBurnCardText,피해를 @씩 #번 가합니다. 타격마다 화
 AddBurnStacksCardText,적의 화상을 @ 증가시킵니다.
 HandDefenseCountArmorCardText,손패의 [방어] 카드 수 × @ 방어도를 얻습니다.
 BlockAdditionalDrawCardText,이번 턴 카드를 드로우할 수 없습니다.
-WeakPointCardText,반감을 1 부여합니다.
+HalveCardText,반감을 1 부여합니다.
 MapButton,지도
 DeckButton,덱
 GreatswordName,대검
@@ -35,3 +35,8 @@ DaggerName,단검
 DaggerDesc,카드 공격 횟수 +@
 ThickShieldName,두꺼운 방패
 ThickShieldDesc,카드 방어도 +@
+Burn,화상
+Halve,반감
+Strength,힘
+Vulnerable,취약
+Weakness,약화

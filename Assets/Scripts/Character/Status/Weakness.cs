@@ -1,6 +1,5 @@
 ﻿public class Weakness : StatusBase {
 	public override string IconName => "WeaknessIcon";
-	public override string DescriptionKeyword => "약화";
 	public override string TextToShow => Duration.ToString();
 	public override bool IsActive => Duration > 0;
 
