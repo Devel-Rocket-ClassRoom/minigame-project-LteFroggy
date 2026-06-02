@@ -8,6 +8,8 @@ using Random = UnityEngine.Random;
 public class EventNodeManager : MonoBehaviour
 {
     private const string k_EventResourcePath = "Datas/Events";
+    private const string k_TreasureEventResourcePath = "Datas/Events/TreasureChest";
+    private const string k_TreasureEventAssetName = "TreasureChest";
 
     [SerializeField]
     private Image _backgroundImage;
@@ -47,7 +49,7 @@ public class EventNodeManager : MonoBehaviour
             _resultText.gameObject.SetActive(false);
         }
 
-        LoadRandomEvent();
+        LoadEventForCurrentNode();
     }
 
     private void OnDisable()
@@ -57,10 +59,42 @@ public class EventNodeManager : MonoBehaviour
         ClearChoiceButtons();
     }
 
+    private void LoadEventForCurrentNode()
+    {
+        if (GamePlayData.Instance.InGameMapData.NodeNow.Config.Type == MapNodeType.Treasure)
+        {
+            LoadTreasureEvent();
+            return;
+        }
+
+        LoadRandomEvent();
+    }
+
+    private void LoadTreasureEvent()
+    {
+        EventConfig treasureEvent = Resources.Load<EventConfig>(k_TreasureEventResourcePath);
+        if (treasureEvent == null)
+        {
+            ShowResult(
+                "\uBCF4\uBB3C\uC0C1\uC790 \uC774\uBCA4\uD2B8\uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+            );
+            return;
+        }
+
+        ApplyEvent(treasureEvent);
+    }
+
     private void LoadRandomEvent()
     {
-        EventConfig[] events = Resources.LoadAll<EventConfig>(k_EventResourcePath);
-        if (events == null || events.Length == 0)
+        EventConfig[] allEvents = Resources.LoadAll<EventConfig>(k_EventResourcePath);
+        var events = new List<EventConfig>();
+        foreach (EventConfig eventConfig in allEvents)
+        {
+            if (eventConfig != null && eventConfig.name != k_TreasureEventAssetName)
+                events.Add(eventConfig);
+        }
+
+        if (events.Count == 0)
         {
             ShowResult(
                 "\uC9C4\uD589 \uAC00\uB2A5\uD55C \uC774\uBCA4\uD2B8\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4."
@@ -68,7 +102,7 @@ public class EventNodeManager : MonoBehaviour
             return;
         }
 
-        ApplyEvent(events[Random.Range(0, events.Length)]);
+        ApplyEvent(events[Random.Range(0, events.Count)]);
     }
 
     private void ApplyEvent(EventConfig eventConfig)

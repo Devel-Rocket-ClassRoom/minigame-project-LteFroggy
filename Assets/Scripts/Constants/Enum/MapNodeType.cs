@@ -5,5 +5,6 @@
     Event,
     Shop,
     Rest,
-    Boss
+    Boss,
+    Treasure
 }
