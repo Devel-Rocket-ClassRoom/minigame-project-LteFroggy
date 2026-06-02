@@ -130,6 +130,21 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		RefreshStatusesInfo();
 	}
 	
+	// 걸린 상태이상이 모두 카드 사용을 허용하면 true (공명 등 통제 상태이상 처리)
+	public bool CanUseCard() {
+		foreach (var status in _statusRenderers) {
+			if (!status.Value.Status.CanUseCard()) return false;
+		}
+		return true;
+	}
+
+	// 카드 사용 시 모든 상태이상에 알림 (공명 등 사용 횟수 추적)
+	public void NotifyCardUsed() {
+		foreach (var status in _statusRenderers) {
+			status.Value.Status.OnCardUsed();
+		}
+	}
+
 	public bool HasStatus<T>() where T : StatusBase => _statusRenderers.ContainsKey(typeof(T));
 
 	// 현재 걸린 상태이상이 하나라도 있는지

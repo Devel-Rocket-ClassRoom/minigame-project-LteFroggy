@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class EnemyManager : BattleSystemManager {
 	public List<EnemyInstance> EnemyList => _enemyList;
@@ -14,8 +15,12 @@ public class EnemyManager : BattleSystemManager {
 	[Header("=== 적 생성을 위한 Prefab 저장 ===")]
 	[SerializeField] private EnemyInstance _enemyPrefab;
 	
-	[Header("=== 스폰 가능한 적 데이터 넣어두기 ===")]
-	[SerializeField] private EnemySpawnTable[] _tables;
+	[Header("=== 일반 전투 스폰 테이블 ===")]
+	[FormerlySerializedAs("_tables")]
+	[SerializeField] private EnemySpawnTable[] _normalTables;
+
+	[Header("=== 보스 전투 스폰 테이블 ===")]
+	[SerializeField] private EnemySpawnTable[] _bossTables;
 	
 	[HideInInspector] public UnityEvent OnEnemyTurnEnd;
 	
@@ -26,8 +31,12 @@ public class EnemyManager : BattleSystemManager {
 
 	// 전투 시작 시에, 불러와야 할 적 리스트대로 생성
 	public override void StartBattle() {
+		// 현재 노드가 보스 노드면 보스 스폰 테이블, 아니면 일반 스폰 테이블 사용
+		var tables = GamePlayData.Instance.InGameMapData.NodeNow.Config.Type == MapNodeType.Boss
+			? _bossTables
+			: _normalTables;
 		// 테이블에서 랜덤한 인스턴스 고르기
-		var enemySpawnTable = _tables[Random.Range(0, _tables.Length)];
+		var enemySpawnTable = tables[Random.Range(0, tables.Length)];
 		
 		for (int i = 0; i < enemySpawnTable.enemyList.Length; i++) {
 			EnemyInstance enemy = Instantiate(_enemyPrefab);
