@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Event
   m_EditorClassIdentifier: Assembly-CSharp::MapNodeConfig
   Type: 3
-  Icon: {fileID: 21300000, guid: 45296216c12c4c939f1b3a048482da96, type: 3}
+  Icon: {fileID: 21300000, guid: 1d96d7e48688414b9251c10664668eb4, type: 3}
   Weight: 15
