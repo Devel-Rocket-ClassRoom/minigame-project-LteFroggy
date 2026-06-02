@@ -33,6 +33,7 @@ public class BattleManager : BattleSystemManager {
 	[HideInInspector] public UnityEvent OnCardUse;
 	
 	private bool IsGameEnd;
+	private const string k_FinalEndingSceneName = "EndingScene";
 
 	// Start에서 게임 시작
 	private void Start() {
@@ -71,8 +72,7 @@ public class BattleManager : BattleSystemManager {
 			UISceneBootstrapper.Instance.TransitionTo("MainScene");
 		});
 
-		_characterManager.Player.OnDeath.RemoveListener(GameOver);
-		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
+		RemoveBattleEndListeners();
 	}
 	
 	private void BattleEnd() {
@@ -81,9 +81,20 @@ public class BattleManager : BattleSystemManager {
 		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
 		GamePlayData.Instance.AddGold(_goldReward);
 
+		if (GamePlayData.Instance.InGameMapData.NodeNow.Config.Type == MapNodeType.Boss) {
+			GameEvents.RunCleared();
+			UISceneBootstrapper.Instance.TransitionTo(k_FinalEndingSceneName);
+			RemoveBattleEndListeners();
+			return;
+		}
+
 		var rewardCards = GamePlayData.Instance.GetRandomRewardCards(3);
 		_cardRewardController.Show(rewardCards, _goldReward, GameEvents.NodeCompleted);
 
+		RemoveBattleEndListeners();
+	}
+
+	private void RemoveBattleEndListeners() {
 		_characterManager.Player.OnDeath.RemoveListener(GameOver);
 		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
 	}
@@ -165,4 +176,4 @@ public class BattleManager : BattleSystemManager {
 			cardInstance
 		);
 	}
-}	
+}
