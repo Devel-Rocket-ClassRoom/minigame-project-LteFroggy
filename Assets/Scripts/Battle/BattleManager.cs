@@ -144,8 +144,17 @@ public class BattleManager : BattleSystemManager {
 		_cardUseManager.UseCard(cardInstance, GetCardUseContext(cardInstance));
 		// 카드 사용을 상태이상에 알림 (공명 등 사용 횟수 추적)
 		_characterManager.Player.NotifyCardUsed();
-		// 사용한 카드는 핸드에서 제거
-		_deckManager.RemoveUsedCardFromHand(cardInstance);
+		// 사용한 카드는 핸드에서 제거 (소모: 덱에서 격리, 귀환: 다음 턴 복귀, 그 외: 버림)
+		if (cardInstance.Keyword.IsExhaust)
+			_deckManager.ExhaustUsedCardFromHand(cardInstance);
+		else if (cardInstance.Keyword.IsReturn)
+			_deckManager.ReturnUsedCardFromHand(cardInstance);
+		else
+			_deckManager.RemoveUsedCardFromHand(cardInstance);
+
+		// 연쇄: 사용 시 덱 맨 위 카드 즉시 드로우
+		if (cardInstance.Keyword.IsChain)
+			_deckManager.DrawCard();
 		// 카드 사용했음 이벤트 발생
 		OnCardUse?.Invoke();
 		return true;

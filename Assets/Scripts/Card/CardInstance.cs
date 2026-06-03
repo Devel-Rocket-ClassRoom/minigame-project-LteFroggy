@@ -9,10 +9,12 @@ public class CardInstance {
 	public Sprite Icon => _cardDefinition.icon;
 	public int Cost => _cardDefinition.cost;
 	public bool NeedsTarget => _cardDefinition.needsTarget;
-	
-	
+	public CardKeyword Keyword { get; }
+
+
 	public CardInstance(CardDefinition cardDefinition) {
 		_cardDefinition = cardDefinition;
+		Keyword = new CardKeyword(cardDefinition.keywords);
 	}
 	
 	/// <summary>
@@ -22,18 +24,31 @@ public class CardInstance {
 	public string GetCardDescription() {
 		StringBuilder sb = new StringBuilder();
 		sb.Append($"[{_cardDefinition.TagText}] \n");
+		AppendKeywordLine(sb);
 		foreach (var action in _cardDefinition.actions) {
 			sb.AppendLine(action.GetCardDescription());
 		}
 		return sb.ToString();
 	}
-	
+
 	public string GetCardDescriptionWithContext(CardUseContext context) {
 		StringBuilder sb = new StringBuilder();
 		sb.Append($"[{_cardDefinition.TagText}] \n");
+		AppendKeywordLine(sb);
 		foreach (var action in _cardDefinition.actions) {
 			sb.AppendLine(action.GetCardDescriptionWithContext(context));
 		}
 		return sb.ToString();
+	}
+
+	// 태그 줄 아래에 카드가 가진 속성 키워드를 [소모] [선천] 식 한 줄로 추가
+	private void AppendKeywordLine(StringBuilder sb) {
+		bool hasAny = false;
+		foreach (CardKeywordType type in System.Enum.GetValues(typeof(CardKeywordType))) {
+			if (type == CardKeywordType.None || !Keyword.Has(type)) continue;
+			sb.Append($"[{StringTableManager.StringTable[type.ToString()]}] ");
+			hasAny = true;
+		}
+		if (hasAny) sb.Append('\n');
 	}
 }

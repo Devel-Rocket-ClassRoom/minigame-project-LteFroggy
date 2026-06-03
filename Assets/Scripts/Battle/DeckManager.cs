@@ -16,6 +16,9 @@ public class DeckManager : BattleSystemManager {
 	private readonly List<CardInstance> _discardPile = new();
 	private readonly List<CardInstance> _exhaustPile = new();
 	private readonly List<CardInstance> _handPile = new();
+	private readonly List<CardInstance> _returnPile = new();   // 귀환: 다음 턴 손패로 돌아올 카드
+
+	private bool _isFirstTurn;   // 선천 카드 보장용 (전투 첫 턴 여부)
 
 	private readonly UnityEvent OnCardStateChanged = new();
 
@@ -28,6 +31,7 @@ public class DeckManager : BattleSystemManager {
 		foreach (var card in GamePlayData.Instance.Deck) {
 			_discardPile.Add(card);
 		}
+		_isFirstTurn = true;
 
 		_drawPileController.OnButtonPressed(ShowDrawPile);
 		_discardPileController.OnButtonPressed(ShowDiscardPile);
@@ -35,23 +39,54 @@ public class DeckManager : BattleSystemManager {
 		OnCardStateChanged.Invoke();
 	}
 
-	// 턴 시작되면, 카드 설정된 만큼 드로우 (기본 5장)
+	// 턴 시작되면, 귀환 카드 복귀 → 선천 카드 보장 → 나머지 드로우
 	public override void StartPlayerTurn() {
 		BlockAdditionalDrawThisTurn = false;
-		for (int i = 0; i < DrawCountOnNextTurn; i++) {
+
+		// 귀환: 지난 턴 사용한 귀환 카드를 손패로 되돌림
+		foreach (var card in _returnPile) {
+			AddCardToHand(card);
+		}
+		_returnPile.Clear();
+
+		// 선천: 첫 턴에는 선천 카드를 손패에 무조건 포함시킨 뒤, 남은 만큼만 드로우
+		int drawCount = DrawCountOnNextTurn;
+		if (_isFirstTurn) {
+			drawCount -= DrawInnateCards();
+			_isFirstTurn = false;
+		}
+		for (int i = 0; i < drawCount; i++) {
 			DrawCard();
 		}
 
 		OnCardStateChanged.Invoke();
 	}
 
-	// 턴 종료되면, 손에 있는 카드 모두 discardPile로
+	// 턴 종료되면, 유지 카드는 손에 남기고 나머지는 discardPile로
 	public override void EndPlayerTurn() {
-		while (_handPile.Count > 0) {
-			RemoveCardFromHand(_handPile[0]);
+		foreach (var card in new List<CardInstance>(_handPile)) {
+			if (card.Keyword.IsRetain) continue;   // 유지: 손에 남김
+			RemoveCardFromHand(card);
 		}
 
 		OnCardStateChanged.Invoke();
+	}
+
+	/// <summary>
+	/// 선천 카드를 덱에서 찾아 손패에 추가하고, 추가한 장수를 반환한다.
+	/// </summary>
+	private int DrawInnateCards() {
+		if (_drawPile.Count == 0) { Shuffle(); }
+
+		List<CardInstance> innates = new();
+		foreach (var card in _drawPile) {
+			if (card.Keyword.IsInnate) innates.Add(card);
+		}
+		foreach (var card in innates) {
+			_drawPile.Remove(card);
+			AddCardToHand(card);
+		}
+		return innates.Count;
 	}
 
 	private void OnEnable() {
@@ -63,6 +98,7 @@ public class DeckManager : BattleSystemManager {
 		_discardPile.Clear();
 		_exhaustPile.Clear();
 		_handPile.Clear();
+		_returnPile.Clear();
 
 		OnCardStateChanged.RemoveListener(UpdateCardText);
 	}
@@ -100,6 +136,41 @@ public class DeckManager : BattleSystemManager {
 		_discardPile.Add(card);
 		_handPile.Remove(card);
 		_handLayoutController.UseCard(card);
+
+		OnCardStateChanged.Invoke();
+	}
+
+	/// <summary>
+	/// 사용한 소멸(Exhaust) 카드를 손에서 제거 (이번 전투 동안 덱에 돌아오지 않음)
+	/// </summary>
+	/// <param name="card">사용한 소멸 카드</param>
+	public void ExhaustUsedCardFromHand(CardInstance card) {
+		_exhaustPile.Add(card);
+		_handPile.Remove(card);
+		_handLayoutController.UseCard(card);
+
+		OnCardStateChanged.Invoke();
+	}
+
+	/// <summary>
+	/// 사용한 귀환(Return) 카드를 손에서 제거하고 다음 턴 복귀 대기열에 넣는다.
+	/// </summary>
+	/// <param name="card">사용한 귀환 카드</param>
+	public void ReturnUsedCardFromHand(CardInstance card) {
+		_returnPile.Add(card);
+		_handPile.Remove(card);
+		_handLayoutController.UseCard(card);
+
+		OnCardStateChanged.Invoke();
+	}
+
+	/// <summary>
+	/// 이미 존재하는 카드 인스턴스를 손패에 추가한다 (드로우 더미를 거치지 않음).
+	/// </summary>
+	/// <param name="card">손패에 넣을 카드</param>
+	private void AddCardToHand(CardInstance card) {
+		_handPile.Add(card);
+		_handLayoutController.AddCard(card);
 
 		OnCardStateChanged.Invoke();
 	}
