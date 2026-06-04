@@ -92,6 +92,7 @@ public class HitFeedbackView : MonoBehaviour {
 		velocity.space = ParticleSystemSimulationSpace.Local;
 		velocity.x = new ParticleSystem.MinMaxCurve(-0.55f, 0.55f);
 		velocity.y = new ParticleSystem.MinMaxCurve(0.25f, 1.05f);
+		velocity.z = new ParticleSystem.MinMaxCurve(0f, 0f);
 
 		var color = particleSystem.colorOverLifetime;
 		color.enabled = true;
