@@ -18,5 +18,6 @@ MonoBehaviour:
   cost: 1
   tag: 0
   needsTarget: 1
+  keywords: 0
   actions:
-  - {fileID: 11400000, guid: a6eab10fb73d3924885d0608eb6a92d3, type: 2}
+  - {fileID: 11400000, guid: 76e2dfc29824c824795c66b4126fcca1, type: 2}
