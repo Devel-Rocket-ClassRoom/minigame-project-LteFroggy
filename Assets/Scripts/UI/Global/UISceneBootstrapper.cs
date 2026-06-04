@@ -18,7 +18,7 @@ public class UISceneBootstrapper : Singleton<UISceneBootstrapper> {
 	}
 
 	private IEnumerator DoTransition(string sceneName) {
-		bool needsUIScene = sceneName != "MainScene";
+		bool needsUIScene = SceneUsesGameHUD(sceneName);
 		bool uiSceneLoaded = SceneManager.GetSceneByName(k_UISceneName).isLoaded;
 
 		DeactivateSceneAudioAndInput(_currentMainScene);
@@ -42,6 +42,10 @@ public class UISceneBootstrapper : Singleton<UISceneBootstrapper> {
 
 		_currentMainScene = sceneName;
 		SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+	}
+
+	private static bool SceneUsesGameHUD(string sceneName) {
+		return sceneName != "MainScene" && sceneName != "EndingScene";
 	}
 
 	// 씬 전환 중 EventSystem·AudioListener 중복을 막기 위해 해당 씬의 컴포넌트를 비활성화한다.
