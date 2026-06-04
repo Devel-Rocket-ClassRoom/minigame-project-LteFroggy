@@ -23,6 +23,7 @@ public class GlobalHUDController : MonoBehaviour {
 	private const float RelicLabelWidth = 50f;
 
 	private GamePlayData _gamePlayData;
+	private int _openOverlayCount;
 
 	private void OnEnable() {
 		_gamePlayData = GamePlayData.Instance;
@@ -32,11 +33,16 @@ public class GlobalHUDController : MonoBehaviour {
 
 		GameEvents.OnNodeCompleted += _mapOverlay.Open;
 		GameEvents.OnNextNodeSelected += _mapOverlay.Close;
+
+		OverlayPanelController.OnVisibilityChanged += OnOverlayVisibilityChanged;
 	}
 
 	private void OnDisable() {
 		GameEvents.OnNodeCompleted -= _mapOverlay.Open;
 		GameEvents.OnNextNodeSelected -= _mapOverlay.Close;
+
+		OverlayPanelController.OnVisibilityChanged -= OnOverlayVisibilityChanged;
+		_openOverlayCount = 0;
 
 		if (_gamePlayData == null) return;
 		_gamePlayData.OnHealthChanged -= OnHealthChanged;
@@ -67,6 +73,11 @@ public class GlobalHUDController : MonoBehaviour {
 
 	private void OnGoldChanged(int gold) {
 		_goldText.text = $"{gold}G";
+	}
+
+	private void OnOverlayVisibilityChanged(bool isOpen) {
+		_openOverlayCount = Mathf.Max(0, _openOverlayCount + (isOpen ? 1 : -1));
+		_relicRow.gameObject.SetActive(_openOverlayCount == 0);
 	}
 
 	private void OnRelicsChanged() {
