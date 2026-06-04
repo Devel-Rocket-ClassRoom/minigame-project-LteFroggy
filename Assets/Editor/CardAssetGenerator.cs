@@ -5,15 +5,27 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class CardAssetGenerator {
+	// 생성된 CardAction 에셋이 저장되는 위치.
+	// CardDefinition은 이 액션 에셋들을 참조해서 카드 효과 목록을 구성한다.
 	private const string ActionPath = "Assets/Resources/Datas/Cards/CardAction";
+	// 생성된 CardDefinition 에셋이 저장되는 위치.
+	// RegisterCardsToRewardPool도 이 폴더를 기준으로 보상 후보 카드를 찾는다.
 	private const string CardPath = "Assets/Resources/Datas/Cards/CardDescription";
 
 	[MenuItem("Tools/Card/Generate Card Assets")]
 	public static void GenerateCardAssets() {
+		// 전체 생성 메뉴의 진입점.
+		// 순서가 중요하다: 카드 정의(CardDefinition)가 액션(CardAction)을 참조하므로
+		// 액션 에셋을 먼저 만들고, 그 결과를 Dictionary로 받아 카드 정의 생성에 넘긴다.
 		var actions = CreateCardActionAssets();
 		AssetDatabase.SaveAssets();
+
+		// 위에서 만든 CardAction 에셋들을 조합해 실제 카드 데이터 에셋을 만든다.
+		// 각 CardDefinition에는 비용, 태그, 타겟 필요 여부, 실행할 액션 목록이 들어간다.
 		CreateCardDefinitionAssets(actions);
 		AssetDatabase.SaveAssets();
+
+		// Unity 에셋 DB를 갱신한 뒤, 새로 생긴 CardDefinition까지 포함해서 보상 풀을 갱신한다.
 		AssetDatabase.Refresh();
 		RegisterCardsToRewardPool();
 		Debug.Log("카드 에셋 생성 완료");
@@ -21,13 +33,16 @@ public class CardAssetGenerator {
 
 	[MenuItem("Tools/Card/Register Cards to Reward Pool")]
 	public static void RegisterCardsToRewardPool() {
+		// GamePlayData는 프로젝트 에셋이 아니라 씬에 배치된 MonoBehaviour이므로,
+		// 이 메뉴를 실행할 때 GamePlayData가 포함된 씬이 열려 있어야 한다.
 		var gamePlayData = UnityEngine.Object.FindObjectOfType<GamePlayData>();
 		if (gamePlayData == null) {
 			Debug.LogError("[CardAssetGenerator] GamePlayData를 찾을 수 없습니다. GamePlayData가 포함된 씬을 열고 다시 시도하세요.");
 			return;
 		}
 
-		// cardId >= 5 인 카드만 보상 풀에 등록 (0~4는 시작 덱)
+		// cardId >= 5 인 카드만 보상 풀에 등록한다.
+		// 0~4번 카드는 시작 덱 카드로 예약되어 있어서, 보상 카드 후보에 섞지 않는다.
 		var guids = AssetDatabase.FindAssets("t:CardDefinition", new[] { CardPath });
 		var rewardCards = new List<CardDefinition>();
 		foreach (var guid in guids) {
@@ -35,16 +50,21 @@ public class CardAssetGenerator {
 			if (card != null && card.cardId >= 5) rewardCards.Add(card);
 		}
 
+		// _rewardCardPool은 private SerializeField라 직접 접근할 수 없다.
+		// SerializedObject/SerializedProperty를 사용하면 인스펙터 직렬화 필드를 안전하게 수정할 수 있다.
 		var so = new SerializedObject(gamePlayData);
 		var prop = so.FindProperty("_rewardCardPool");
 
-		// 기존 풀에 없는 카드만 추가 (중복 방지)
+		// 기존 풀에 없는 카드만 추가한다.
+		// UnityEngine.Object 참조 자체보다 에셋 경로를 비교하면 같은 에셋을 더 안정적으로 중복 판별할 수 있다.
 		var existingPaths = new HashSet<string>();
 		for (int i = 0; i < prop.arraySize; i++) {
 			var existing = prop.GetArrayElementAtIndex(i).objectReferenceValue;
 			if (existing != null) existingPaths.Add(AssetDatabase.GetAssetPath(existing));
 		}
 
+		// 보상 후보로 모은 CardDefinition 중 아직 풀에 없는 것만 배열 끝에 붙인다.
+		// InsertArrayElementAtIndex 뒤에는 마지막 요소에 실제 카드 참조를 직접 넣어야 한다.
 		int added = 0;
 		foreach (var card in rewardCards) {
 			string path = AssetDatabase.GetAssetPath(card);
@@ -54,14 +74,20 @@ public class CardAssetGenerator {
 			added++;
 		}
 
+		// SerializedObject 변경분을 실제 GamePlayData 컴포넌트에 반영하고,
+		// 씬이 수정되었음을 표시해 사용자가 저장할 수 있게 한다.
 		so.ApplyModifiedProperties();
 		EditorSceneManager.MarkAllScenesDirty();
 		Debug.Log($"[CardAssetGenerator] 보상 풀에 카드 {added}장 추가됨 (총 {prop.arraySize}장)");
 	}
 
 	private static Dictionary<string, CardAction> CreateCardActionAssets() {
+		// 카드 효과 에셋을 이름으로 찾아 쓸 수 있게 모아둔다.
+		// 아래 key들은 CreateCardDefinitionAssets에서 카드별 액션 조합을 만들 때 사용한다.
 		var map = new Dictionary<string, CardAction>();
 
+		// GetOrCreate는 이미 같은 이름의 에셋이 있으면 기존 것을 그대로 반환한다.
+		// 따라서 configure 람다는 "처음 생성될 때의 기본값"만 설정하고, 기존 에셋 값은 덮어쓰지 않는다.
 		map["Deal6Damage"]           = GetOrCreate<DealDamageCardAction>("Deal6Damage",           a => a.amount = 6);
 		map["Deal10Damage"]          = GetOrCreate<DealDamageCardAction>("Deal10Damage",          a => a.amount = 10);
 		map["Get18Armor"]            = GetOrCreate<GainArmorCardAction>("Get18Armor",             a => a.amount = 18);
@@ -85,8 +111,13 @@ public class CardAssetGenerator {
 
 	private static T GetOrCreate<T>(string name, Action<T> configure) where T : ScriptableObject {
 		string path = $"{ActionPath}/{name}.asset";
+
+		// 같은 이름의 액션 에셋이 이미 있으면 재생성하지 않는다.
+		// 이 덕분에 메뉴를 여러 번 실행해도 기존 에셋 참조가 깨지지 않고, 수동 조정한 값도 유지된다.
 		var existing = AssetDatabase.LoadAssetAtPath<T>(path);
 		if (existing != null) return existing;
+
+		// 없을 때만 새 ScriptableObject를 만들고 기본 파라미터를 세팅한 뒤 에셋으로 저장한다.
 		var asset = ScriptableObject.CreateInstance<T>();
 		configure(asset);
 		AssetDatabase.CreateAsset(asset, path);
@@ -94,8 +125,18 @@ public class CardAssetGenerator {
 	}
 
 	private static void CreateCardDefinitionAssets(Dictionary<string, CardAction> a) {
+		// cardId는 저장/문자열 키와 연결되는 식별자라 중복되면 안 된다.
+		// 먼저 폴더 안의 기존 CardDefinition들을 스캔해서 이미 사용 중인 id를 수집한다.
 		var usedIds = new HashSet<int>();
 		CollectExistingIds(usedIds);
+
+		// CreateCard 인자 순서:
+		// fileName: 생성될 .asset 파일명 및 카드 아이콘 파일명
+		// cardId: 카드 이름/텍스트 키(Card{cardId}Name 등)와 연결되는 고유 id
+		// cost: 카드 사용 에너지 비용
+		// tag: 카드 분류
+		// needsTarget: 사용 시 적 타겟 선택이 필요한지 여부
+		// actions: 실제 실행될 CardAction 목록. CardUseManager가 이 순서대로 Execute한다.
 
 		// 역습 (5)
 		CreateCard("Retaliation", 5, 1, CardTag.Attack, true, new[] { a["ArmorDamage"] }, usedIds);
@@ -126,6 +167,7 @@ public class CardAssetGenerator {
 	}
 
 	private static void CollectExistingIds(HashSet<int> usedIds) {
+		// 새로 만들 카드뿐 아니라 이미 폴더에 존재하는 카드까지 포함해 id 충돌을 막는다.
 		var guids = AssetDatabase.FindAssets("t:CardDefinition", new[] { CardPath });
 		foreach (var guid in guids) {
 			var card = AssetDatabase.LoadAssetAtPath<CardDefinition>(AssetDatabase.GUIDToAssetPath(guid));
@@ -135,14 +177,22 @@ public class CardAssetGenerator {
 
 	private static void CreateCard(string fileName, int cardId, int cost, CardTag tag, bool needsTarget, CardAction[] actions, HashSet<int> usedIds) {
 		string path = $"{CardPath}/{fileName}.asset";
+
+		// 파일이 이미 있으면 같은 카드를 다시 만들지 않는다.
+		// 이 스크립트는 반복 실행될 수 있는 에디터 도구라, 생성 작업은 기본적으로 멱등적으로 동작해야 한다.
 		if (AssetDatabase.LoadAssetAtPath<CardDefinition>(path) != null) {
 			Debug.Log($"{fileName}.asset 이미 존재, 건너뜀");
 			return;
 		}
+
+		// 파일명은 달라도 cardId가 같으면 문자열 테이블 키와 저장 데이터가 충돌할 수 있으므로 생성을 막는다.
 		if (!usedIds.Add(cardId)) {
 			Debug.LogError($"[CardAssetGenerator] cardId {cardId} 중복! {fileName}.asset 생성 취소");
 			return;
 		}
+
+		// CardDefinition은 카드의 정적 데이터다.
+		// 런타임에서는 CardInstance가 이 정의를 감싸고, 실제 사용 시 actions가 순서대로 실행된다.
 		var card = ScriptableObject.CreateInstance<CardDefinition>();
 		card.cardId = cardId;
 		card.rarity = CardRarity.Common;
@@ -156,6 +206,8 @@ public class CardAssetGenerator {
 	}
 
 	private static Sprite LoadIcon(string fileName) {
+		// 카드 정의 파일명과 아이콘 파일명을 맞춰 둔 규칙을 사용한다.
+		// 예: FireSword.asset은 Assets/Sprites/Cards/FireSword.png를 아이콘으로 찾는다.
 		string path = $"Assets/Sprites/Cards/{fileName}.png";
 		return AssetDatabase.LoadAssetAtPath<Sprite>(path);
 	}
