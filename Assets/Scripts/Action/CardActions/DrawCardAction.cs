@@ -10,8 +10,9 @@ public class DrawCardAction : CardAction {
 
 	public override void Execute(CardUseContext context) {
 		context.user.PlaySkillAnimation();
-		
-		for (int i = 0; i < amount; i++) {
+
+		int drawAmount = CalculateAmountWithContext(context);
+		for (int i = 0; i < drawAmount; i++) {
 			context.battleManager.DeckManager.DrawCard();
 		}
 	}
@@ -21,6 +22,6 @@ public class DrawCardAction : CardAction {
 		// 유물 기반으로 수정되는 값 있는지 계산
 		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
 		
-		return amount;
+		return result;
 	}
 }
