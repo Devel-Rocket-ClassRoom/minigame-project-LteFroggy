@@ -31,6 +31,83 @@ public class CardAssetGenerator {
 		Debug.Log("카드 에셋 생성 완료");
 	}
 
+	[MenuItem("Tools/Card/Migrate Starter Cards to Canonical Actions")]
+	public static void MigrateStarterCardsToCanonicalActions() {
+		// 사전 검증: 루트 canonical 에셋 6개가 모두 존재해야 한다.
+		// 없으면 Tools/Card/Generate Card Assets를 먼저 실행해야 한다.
+		string[] required = { "Deal6Damage", "Draw1Card", "Get5Armor", "Get3Armor", "Draw2Card", "Weakness2" };
+		foreach (var name in required) {
+			if (AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/{name}.asset") == null) {
+				Debug.LogError($"[CardAssetGenerator] 루트 에셋 '{name}.asset' 없음. Generate Card Assets를 먼저 실행하세요.");
+				return;
+			}
+		}
+
+		// canonical 에셋 로드
+		var deal6Damage = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Deal6Damage.asset");
+		var get5Armor   = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Get5Armor.asset");
+		var get3Armor   = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Get3Armor.asset");
+		var draw1Card   = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Draw1Card.asset");
+		var draw2Card   = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Draw2Card.asset");
+		var weakness2   = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Weakness2.asset");
+
+		// 5개 시작 카드의 actions를 canonical 루트 에셋으로 교체한다.
+		// Evade는 [Get3Armor, Draw1Card] 순서를 유지한다.
+		UpdateStarterCardActions($"{CardPath}/Attack.asset",      new[] { deal6Damage });
+		UpdateStarterCardActions($"{CardPath}/Defence.asset",     new[] { get5Armor });
+		UpdateStarterCardActions($"{CardPath}/Evade.asset",       new[] { get3Armor, draw1Card });
+		UpdateStarterCardActions($"{CardPath}/Concentrate.asset", new[] { draw2Card });
+		UpdateStarterCardActions($"{CardPath}/HuntingSign.asset", new[] { weakness2 });
+
+		// 참조 교체를 디스크에 반영한 뒤 레거시 에셋을 삭제한다.
+		// 순서가 중요하다: SaveAssets 전에 삭제하면 교체된 참조가 누락될 수 있다.
+		AssetDatabase.SaveAssets();
+
+		string[] legacyAssets = {
+			$"{ActionPath}/DealDamage/Deal6Damage.asset",
+			$"{ActionPath}/DrawCard/Draw1Card.asset",
+			$"{ActionPath}/DrawCard/Draw2Card.asset",
+			$"{ActionPath}/GetArmor/Get3Armor.asset",
+			$"{ActionPath}/GetArmor/Get5Armor.asset",
+			$"{ActionPath}/GIveWeakness/Weakness 2.asset",
+		};
+		foreach (var path in legacyAssets) {
+			if (AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path) != null) {
+				AssetDatabase.DeleteAsset(path);
+				Debug.Log($"[CardAssetGenerator] 레거시 에셋 삭제: {path}");
+			}
+		}
+
+		// 레거시 에셋 삭제 후 빈 폴더를 정리한다.
+		string[] legacyFolders = {
+			$"{ActionPath}/DealDamage",
+			$"{ActionPath}/DrawCard",
+			$"{ActionPath}/GetArmor",
+			$"{ActionPath}/GIveWeakness",
+		};
+		foreach (var folder in legacyFolders) {
+			if (AssetDatabase.IsValidFolder(folder)) {
+				AssetDatabase.DeleteAsset(folder);
+				Debug.Log($"[CardAssetGenerator] 빈 폴더 삭제: {folder}");
+			}
+		}
+
+		AssetDatabase.Refresh();
+		Debug.Log("[CardAssetGenerator] 시작 카드 마이그레이션 완료");
+	}
+
+	private static void UpdateStarterCardActions(string cardPath, CardAction[] newActions) {
+		var card = AssetDatabase.LoadAssetAtPath<CardDefinition>(cardPath);
+		if (card == null) {
+			Debug.LogWarning($"[CardAssetGenerator] 카드 에셋 없음, 건너뜀: {cardPath}");
+			return;
+		}
+		// CardDefinition.actions는 public List<CardAction>이므로 직접 할당 후 SetDirty로 변경을 알린다.
+		card.actions = new List<CardAction>(newActions);
+		EditorUtility.SetDirty(card);
+		Debug.Log($"[CardAssetGenerator] {System.IO.Path.GetFileNameWithoutExtension(cardPath)} 액션 교체 완료");
+	}
+
 	[MenuItem("Tools/Card/Register Cards to Reward Pool")]
 	public static void RegisterCardsToRewardPool() {
 		// GamePlayData는 프로젝트 에셋이 아니라 씬에 배치된 MonoBehaviour이므로,
@@ -86,8 +163,13 @@ public class CardAssetGenerator {
 		// 아래 key들은 CreateCardDefinitionAssets에서 카드별 액션 조합을 만들 때 사용한다.
 		var map = new Dictionary<string, CardAction>();
 
-		// GetOrCreate는 이미 같은 이름의 에셋이 있으면 기존 것을 그대로 반환한다.
-		// 따라서 configure 람다는 "처음 생성될 때의 기본값"만 설정하고, 기존 에셋 값은 덮어쓰지 않는다.
+		// GetOrCreate는 기존 에셋이 있어도 configure를 재적용하므로, 생성기 코드가 단일 진실 소스가 된다.
+		// 시작 카드(cardId 0~4) 액션도 생성기 관리 대상으로 통합해 루트 경로를 canonical로 확립한다.
+		map["Get5Armor"]  = GetOrCreate<GainArmorCardAction>("Get5Armor",  a => a.amount = 5);
+		map["Get3Armor"]  = GetOrCreate<GainArmorCardAction>("Get3Armor",  a => a.amount = 3);
+		map["Draw2Card"]  = GetOrCreate<DrawCardAction>("Draw2Card",       a => a.amount = 2);
+		map["Weakness2"]  = GetOrCreate<WeaknessCardAction>("Weakness2",   a => a.amount = 2);
+
 		map["Deal6Damage"]           = GetOrCreate<DealDamageCardAction>("Deal6Damage",           a => a.amount = 6);
 		map["Deal10Damage"]          = GetOrCreate<DealDamageCardAction>("Deal10Damage",          a => a.amount = 10);
 		map["Get18Armor"]            = GetOrCreate<GainArmorCardAction>("Get18Armor",             a => a.amount = 18);
@@ -112,15 +194,16 @@ public class CardAssetGenerator {
 	private static T GetOrCreate<T>(string name, Action<T> configure) where T : ScriptableObject {
 		string path = $"{ActionPath}/{name}.asset";
 
-		// 같은 이름의 액션 에셋이 이미 있으면 재생성하지 않는다.
-		// 이 덕분에 메뉴를 여러 번 실행해도 기존 에셋 참조가 깨지지 않고, 수동 조정한 값도 유지된다.
-		var existing = AssetDatabase.LoadAssetAtPath<T>(path);
-		if (existing != null) return existing;
-
-		// 없을 때만 새 ScriptableObject를 만들고 기본 파라미터를 세팅한 뒤 에셋으로 저장한다.
-		var asset = ScriptableObject.CreateInstance<T>();
+		// 기존 에셋이 있어도 configure를 다시 적용한다.
+		// 이 덕분에 생성기 코드의 수치가 바뀌었을 때 메뉴를 재실행하면 에셋에 동기화된다.
+		// 기존 에셋 참조(GUID)는 유지되므로 카드 정의의 액션 참조가 깨지지 않는다.
+		var asset = AssetDatabase.LoadAssetAtPath<T>(path);
+		if (asset == null) {
+			asset = ScriptableObject.CreateInstance<T>();
+			AssetDatabase.CreateAsset(asset, path);
+		}
 		configure(asset);
-		AssetDatabase.CreateAsset(asset, path);
+		EditorUtility.SetDirty(asset);
 		return asset;
 	}
 
