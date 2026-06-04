@@ -10,6 +10,7 @@ public class CardDefinition : ScriptableObject {
 	public int cost;
 	public CardTag tag;
 	public bool needsTarget;
+	public CardKeywordType keywords;
 	
 	public string cardName => $"Card{cardId}Name";
 	

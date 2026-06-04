@@ -41,6 +41,12 @@ Strength,힘
 Vulnerable,취약
 Weakness,약화
 Ringing,공명
+Exhaust,소모
+Retain,유지
+Overload,과부하
+Return,귀환
+Innate,선천
+Chain,연쇄
 EnemyAttackIntentText,피해를 - 줍니다.
 EnemyGainArmorIntentText,자신의 방어도를 - 얻습니다.
 EnemySelfBuffIntentText,자신을 강화합니다.
