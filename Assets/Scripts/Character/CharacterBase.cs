@@ -71,7 +71,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		// 체력 0 이하로 내려가지 않게
 		CurrentHealth = Mathf.Max(CurrentHealth, 0);
 		int actualDamage = Mathf.Max(healthBefore - CurrentHealth, 0);
-		
+
 		_hitFeedbackView?.Play(actualDamage);
 
 		// 맞으면 맞는 애니메이션
@@ -81,6 +81,29 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 			PlayDeathAnimation();
 			OnDeath?.Invoke();
 		}
+		OnHealthChanged();
+	}
+
+	//  화상 등의 특별한 효과들은 방어도 고려 않고 바로 체력을 깎는다.
+	public void GetDamageWithoutArmor(int amount) {
+		amount = Mathf.Max(0, amount);
+		int healthBefore = CurrentHealth;
+		CurrentHealth -= amount;
+
+		// 체력 0 이하로 내려가지 않게
+		CurrentHealth = Mathf.Max(CurrentHealth, 0);
+		int actualDamage = Mathf.Max(healthBefore - CurrentHealth, 0);
+
+		_hitFeedbackView?.Play(actualDamage);
+
+		// 맞으면 맞는 애니메이션
+		PlayHitAnimation();
+
+		if (IsDead) {
+			PlayDeathAnimation();
+			OnDeath?.Invoke();
+		}
+
 		OnHealthChanged();
 	}
 
