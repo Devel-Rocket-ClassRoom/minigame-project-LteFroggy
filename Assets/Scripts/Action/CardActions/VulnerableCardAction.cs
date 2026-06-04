@@ -6,12 +6,12 @@ public class VulnerableCardAction : CardAction {
 	protected override int Amount => amount;
 
 	protected override int CalculateAmountWithContext(CardUseContext context) {
-		return amount;
+		return context.relicManager.CalculateAmountWithRelics(context, this, amount);
 	}
 	
 	public override void Execute(CardUseContext context) {
 		Vulnerable vulnerable = new Vulnerable();
-		vulnerable.Init(context.target, 0, amount);
+		vulnerable.Init(context.target, 0, CalculateAmountWithContext(context));
 		context.target.AddStatus(vulnerable);
 	}
 	

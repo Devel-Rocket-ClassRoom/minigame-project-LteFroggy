@@ -25,14 +25,22 @@ public class DeckManager : BattleSystemManager {
 	private bool _isFirstTurn;   // 선천 카드 보장용 (전투 첫 턴 여부)
 
 	private readonly UnityEvent OnCardStateChanged = new();
+	private BattleManager _battleManager;
 
 	public int DrawCountOnNextTurn { get; set; } = 5;
 	public bool BlockAdditionalDrawThisTurn { get; set; }
 	public IReadOnlyList<CardInstance> HandPile => _handPile;
 
+	public void SetBattleManager(BattleManager battleManager) {
+		_battleManager = battleManager;
+	}
+
 	// 전투 시작 시, PlayerData에서 덱 목록 가져오기
 	public override void StartBattle() {
+		DrawCountOnNextTurn = 5;
+		BlockAdditionalDrawThisTurn = false;
 		foreach (var card in GamePlayData.Instance.Deck) {
+			card.ResetBattleModifiers();
 			_discardPile.Add(card);
 		}
 		_isFirstTurn = true;
@@ -45,13 +53,15 @@ public class DeckManager : BattleSystemManager {
 		OnCardStateChanged.Invoke();
 	}
 
-	// 턴 시작되면, 귀환 카드 복귀 → 선천 카드 보장 → 나머지 드로우
+	// 턴 시작되면, 귀환 카드 복귀 -> 선천 카드 보장 -> 나머지 드로우
 	public override void StartPlayerTurn() {
 		BlockAdditionalDrawThisTurn = false;
+		ResetTurnModifiers();
 
 		// 귀환: 지난 턴 사용한 귀환 카드를 손패로 되돌림
 		foreach (var card in _returnPile) {
 			AddCardToHand(card);
+			_battleManager?.RelicManager.OnReturnedCardToHand(_battleManager, card);
 		}
 		_returnPile.Clear();
 
@@ -62,7 +72,7 @@ public class DeckManager : BattleSystemManager {
 			_isFirstTurn = false;
 		}
 		for (int i = 0; i < drawCount; i++) {
-			DrawCard();
+			DrawCard(CardDrawSource.TurnStart);
 		}
 
 		OnCardStateChanged.Invoke();
@@ -112,16 +122,26 @@ public class DeckManager : BattleSystemManager {
 	/// <summary>
 	/// 카드 한 장 드로우
 	/// </summary>
-	public void DrawCard() {
+	public void DrawCard(CardDrawSource source = CardDrawSource.CardEffect) {
 		if (BlockAdditionalDrawThisTurn) return;
 		if (_drawPile.Count == 0 && _discardPile.Count > 0) { Shuffle(); }
 		if (_drawPile.Count == 0) return;
 
-		_handPile.Add(_drawPile[_drawPile.Count - 1]);
+		CardInstance drawn = _drawPile[_drawPile.Count - 1];
+		_handPile.Add(drawn);
 		_drawPile.RemoveAt(_drawPile.Count - 1);
-		_handLayoutController.AddCard(_handPile[_handPile.Count - 1]);
+		_handLayoutController.AddCard(drawn);
+		_battleManager?.RelicManager.OnCardDrawn(_battleManager, drawn, source);
 
 		OnCardStateChanged.Invoke();
+	}
+
+	public void AddNextTurnDrawBonus(int amount) {
+		DrawCountOnNextTurn += amount;
+	}
+
+	public void AddPlayerBlock(int amount) {
+		_battleManager?.Player?.AddBlock(amount);
 	}
 
 	/// <summary>
@@ -181,6 +201,14 @@ public class DeckManager : BattleSystemManager {
 		_handLayoutController.AddCard(card);
 
 		OnCardStateChanged.Invoke();
+	}
+
+	private void ResetTurnModifiers() {
+		foreach (var card in _drawPile) card.ResetTurnModifiers();
+		foreach (var card in _discardPile) card.ResetTurnModifiers();
+		foreach (var card in _exhaustPile) card.ResetTurnModifiers();
+		foreach (var card in _handPile) card.ResetTurnModifiers();
+		foreach (var card in _returnPile) card.ResetTurnModifiers();
 	}
 
 	/// <summary>

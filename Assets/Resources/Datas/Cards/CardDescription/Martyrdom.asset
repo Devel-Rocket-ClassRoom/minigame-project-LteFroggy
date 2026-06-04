@@ -1,0 +1,24 @@
+﻿%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c4c59f37654fa28289f162c5f5dfc4, type: 3}
+  m_Name: Martyrdom
+  m_EditorClassIdentifier: Assembly-CSharp::CardDefinition
+  cardId: 23
+  rarity: 2
+  icon: {fileID: 21300000, guid: 6dba6c9168a542d49a207b6733e1619a, type: 3}
+  cost: 0
+  tag: 1
+  needsTarget: 0
+  keywords: 1
+  actions:
+  - {fileID: 11400000, guid: 98279aa913bb42b2961cb05112369410, type: 2}
+  - {fileID: 11400000, guid: 17c4cdc3b50c4fdaaa74bba4b6058b9f, type: 2}

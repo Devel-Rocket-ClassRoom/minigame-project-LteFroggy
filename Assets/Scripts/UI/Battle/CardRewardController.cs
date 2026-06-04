@@ -9,17 +9,19 @@ public class CardRewardController : MonoBehaviour {
 	[SerializeField] private Button _skipButton;
 
 	private UnityAction _onComplete;
+	private CardViewController[] _runtimeSlots;
 
 	public void Show(CardInstance[] rewardCards, int goldAmount, UnityAction onComplete) {
 		_onComplete = onComplete;
 		_goldAmountText.text = $"+ {goldAmount} 골드";
 		gameObject.SetActive(true);
+		EnsureSlotCount(rewardCards.Length);
 
-		for (int i = 0; i < _cardSlots.Length; i++) {
+		for (int i = 0; i < _runtimeSlots.Length; i++) {
 			bool hasCard = i < rewardCards.Length;
-			_cardSlots[i].gameObject.SetActive(hasCard);
+			_runtimeSlots[i].gameObject.SetActive(hasCard);
 			if (hasCard)
-				_cardSlots[i].Init(rewardCards[i], OnCardSelected);
+				_runtimeSlots[i].Init(rewardCards[i], OnCardSelected);
 		}
 
 		_skipButton.onClick.RemoveAllListeners();
@@ -34,5 +36,21 @@ public class CardRewardController : MonoBehaviour {
 	private void Complete() {
 		gameObject.SetActive(false);
 		_onComplete?.Invoke();
+	}
+
+	private void EnsureSlotCount(int count) {
+		if (_runtimeSlots != null && _runtimeSlots.Length >= count) return;
+		if (_cardSlots == null || _cardSlots.Length == 0) return;
+
+		var slots = new CardViewController[count];
+		for (int i = 0; i < count; i++) {
+			if (i < _cardSlots.Length) {
+				slots[i] = _cardSlots[i];
+				continue;
+			}
+
+			slots[i] = Instantiate(_cardSlots[_cardSlots.Length - 1], _cardSlots[_cardSlots.Length - 1].transform.parent);
+		}
+		_runtimeSlots = slots;
 	}
 }

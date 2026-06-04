@@ -6,12 +6,12 @@ public class GetStrengthCardAction : CardAction {
 	protected override int Amount => amount;
 	
 	protected override int CalculateAmountWithContext(CardUseContext context) {
-		return amount;
+		return context.relicManager.CalculateAmountWithRelics(context, this, amount);
 	}
 	
 	public override void Execute(CardUseContext context) {
 		Strength strength = new Strength();
-		strength.Init(context.user, amount, 0);
+		strength.Init(context.user, CalculateAmountWithContext(context), 0);
 		context.user.AddStatus(strength);
 		
 		context.user.PlaySkillAnimation();

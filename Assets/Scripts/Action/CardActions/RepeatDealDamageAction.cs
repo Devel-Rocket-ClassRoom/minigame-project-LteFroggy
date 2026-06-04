@@ -2,6 +2,7 @@
 using UnityEngine;
 
 public class RepeatDealDamageAction : RepeatCardAction {
+	public override bool IsDamageAction => true;
 	public override string CardDescriptionKey => "RepeatAttackCardText";
 	
 	public int amount;
@@ -16,7 +17,7 @@ public class RepeatDealDamageAction : RepeatCardAction {
 	protected override IEnumerator ExecuteRepeat(CardUseContext context) {
 		for (int i = 0; i < CalculateRepeatWithContext(context); i++) {
 			// 데미지를 반복 횟수만큼 준다
-			context.target.GetDamage(CalculateAmountWithContext(context));
+			context.DealDamage(context.target, this, CalculateAmountWithContext(context));
 			context.user.PlayAttackAnimation();
 			yield return new WaitForSeconds(0.5f);
 		}
@@ -26,12 +27,12 @@ public class RepeatDealDamageAction : RepeatCardAction {
 		int result = amount;
 		result = context.user.CalculateAttackingDamage(result);
 		if (context.target != null) result = context.target.CalculateGainingDamage(result);
-		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
+		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		return result;
 	}
 	
 	protected override int CalculateRepeatWithContext(CardUseContext context) {
 		// 유물 적용
-		return context.relicManager.CalculateRepeatWithRelics(context.cardInfo, this, repeat);
+		return context.relicManager.CalculateRepeatWithRelics(context, this, repeat);
 	}
 }

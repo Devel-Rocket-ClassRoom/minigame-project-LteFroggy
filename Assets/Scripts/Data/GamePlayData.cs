@@ -45,6 +45,36 @@ public class GamePlayData : Singleton<GamePlayData> {
 		new Greatsword(),
 		new Dagger(),
 		new ThickShield(),
+		new SageGlasses(),
+		new RuneOfReturn(),
+		new OathOfIncineration(),
+		new CrownShardOfDesire(),
+		new OathOfRebel(),
+		new RustedThornArmor(),
+		new FrozenChains(),
+		new PromiseOfRing(),
+		new HungrySword(),
+		new AshGuide(),
+		new ForgottenBook(),
+		new CrownKiss(),
+		new ExecutionChain(),
+		new GraveBreath(),
+		new SandsOfTime(),
+		new SmallBrazier(),
+		new AshCache(),
+		new WarDrum(),
+		new LeadDice(),
+		new OldMap(),
+		new BloodstainedBandage(),
+		new Whetstone(),
+		new HeavyBoots(),
+		new DryGunpowder(),
+		new ColdHeart(),
+		new WatchmanBell(),
+		new QuickHand(),
+		new RoyalEmblem(),
+		new BrokenChalice(),
+		new BlackCandlestick(),
 	};
 
 	protected override void Awake() {
@@ -92,7 +122,7 @@ public class GamePlayData : Singleton<GamePlayData> {
 	}
 
 	public void AddRelic(RelicBase relic) {
-		_relics.Add(relic);
+		_relics.Add(relic.CreateRuntimeCopy());
 		OnRelicsChanged?.Invoke();
 	}
 
@@ -115,6 +145,20 @@ public class GamePlayData : Singleton<GamePlayData> {
 		var result = new CardInstance[take];
 		for (int i = 0; i < take; i++) result[i] = new CardInstance(_rewardCardPool[indices[i]]);
 		return result;
+	}
+
+	public CardInstance GetRandomRewardCard(CardRarity rarity, IEnumerable<int> excludedCardIds) {
+		if (_rewardCardPool == null || _rewardCardPool.Length == 0) return null;
+
+		var excluded = new HashSet<int>(excludedCardIds);
+		var candidates = new List<CardDefinition>();
+		foreach (var card in _rewardCardPool) {
+			if (card == null || card.rarity != rarity || excluded.Contains(card.cardId)) continue;
+			candidates.Add(card);
+		}
+
+		if (candidates.Count == 0) return null;
+		return new CardInstance(candidates[Random.Range(0, candidates.Count)]);
 	}
 
 	public void AddCardToDeck(CardDefinition definition) {

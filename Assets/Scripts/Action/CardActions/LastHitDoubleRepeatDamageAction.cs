@@ -11,7 +11,7 @@ public class LastHitDoubleRepeatDamageAction : RepeatDealDamageAction {
 			if (context.target.IsDead) yield break;
 			int damage = CalculateAmountWithContext(context);
 			if (i == totalRepeat - 1) damage *= 2;
-			context.target.GetDamage(damage);
+			context.DealDamage(context.target, this, damage);
 			context.user.PlayAttackAnimation();
 			yield return new WaitForSeconds(0.5f);
 		}

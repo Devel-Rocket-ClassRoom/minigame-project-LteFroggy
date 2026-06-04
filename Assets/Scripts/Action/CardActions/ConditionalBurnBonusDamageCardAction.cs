@@ -4,6 +4,7 @@ using UnityEngine;
 public class ConditionalBurnBonusDamageCardAction : CardAction {
 	public int amount;
 	public int bonusAmount;
+	public override bool IsDamageAction => true;
 
 	protected override int Amount => amount;
 	public override string CardDescriptionKey => "ConditionalBurnBonusDamageCardText";
@@ -28,7 +29,7 @@ public class ConditionalBurnBonusDamageCardAction : CardAction {
 		if (context.target.IsDead) return;
 		int damage = CalculateAmountWithContext(context);
 		if (context.target.HasStatus<Burn>()) damage += bonusAmount;
-		context.target.GetDamage(damage);
+		context.DealDamage(context.target, this, damage);
 		context.user.PlayAttackAnimation();
 	}
 
@@ -36,7 +37,7 @@ public class ConditionalBurnBonusDamageCardAction : CardAction {
 		int result = amount;
 		result = context.user.CalculateAttackingDamage(result);
 		if (context.target != null) { result = context.target.CalculateGainingDamage(result); }
-		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
+		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		return result;
 	}
 }

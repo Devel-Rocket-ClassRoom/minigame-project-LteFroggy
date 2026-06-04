@@ -3,11 +3,12 @@
 [CreateAssetMenu(menuName = "Card/Card Actions/Give Burn")]
 public class BurnCardAction : CardAction {
 	public int amount;
+	public override bool IsBurnAction => true;
 	protected override int Amount => amount;
 	protected override int CalculateAmountWithContext(CardUseContext context) {
 		int result = amount;
 		result = context.user.CalculateGiveBurn(result);
-		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
+		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		
 		return result;
 	}

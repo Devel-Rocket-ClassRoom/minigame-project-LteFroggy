@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -15,44 +16,44 @@ public class BattleManager : BattleSystemManager {
 	[Header("=== 카드 보상 패널 ===")]
 	[SerializeField] private CardRewardController _cardRewardController;
 	[SerializeField] private int _goldReward = 20;
-	
-	// 외부에서 드로우하려고 할 때 사용
+
 	public DeckManager DeckManager => _deckManager;
-	
+	public RelicManager RelicManager => _relicManager;
+	public CardUseManager CardUseManager => _cardUseManager;
+	public PlayerCharacter Player => _characterManager.Player;
+
 	[Header("=== 턴 종료 버튼 ===")]
 	[SerializeField] private Button _turnEndButton;
 
 	[Header("=== 임시 테스트 버튼 ===")]
 	[SerializeField] private Button _cleareNodeButton;
-	
-	// 카드 사용했을 때 발생시킬 이벤트
+
 	[HideInInspector] public UnityEvent OnCardUse;
-	
+
 	private bool IsGameEnd;
 	private const string k_FinalEndingSceneName = "EndingScene";
 
-	// Start에서 게임 시작
 	private void Start() {
 		StartBattle();
 	}
 
 	public override void StartBattle() {
+		_deckManager.SetBattleManager(this);
 		_deckManager.StartBattle();
 		_cardUseManager.StartBattle();
 		_characterManager.StartBattle();
+		_characterManager.Player.SetBattleManager(this);
 		_enemyManager.StartBattle();
 		_turnManager.StartBattle();
 		_relicManager.StartBattle();
-		
-		// 캐릭터 사망 시 게임오버되도록 함
+		_relicManager.OnBattleStart(this);
+
 		_characterManager.Player.OnDeath.AddListener(GameOver);
-		
-		// 적 모두 사망 시 스테이지 클리어
 		_enemyManager.OnEnemyAllDead.AddListener(BattleEnd);
-		
+
 		StartPlayerTurn();
 	}
-	
+
 	private void GameOver() {
 		if (IsGameEnd) return;
 
@@ -60,25 +61,29 @@ public class BattleManager : BattleSystemManager {
 		RemoveBattleEndListeners();
 		DefeatResultPanel.Show();
 	}
-	
+
 	private void BattleEnd() {
 		if (IsGameEnd) return;
 
 		IsGameEnd = true;
 		SetCleareNodeButtonInteractable(false);
 
+		MapNodeType nodeType = GamePlayData.Instance.InGameMapData.NodeNow.Config.Type;
 		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
-		GamePlayData.Instance.AddGold(_goldReward);
+		int goldReward = _relicManager.ModifyGoldReward(nodeType, _goldReward);
+		GamePlayData.Instance.AddGold(goldReward);
 
-		if (GamePlayData.Instance.InGameMapData.NodeNow.Config.Type == MapNodeType.Boss) {
+		if (nodeType == MapNodeType.Boss) {
 			GameEvents.RunCleared();
 			UISceneBootstrapper.Instance.TransitionTo(k_FinalEndingSceneName);
 			RemoveBattleEndListeners();
 			return;
 		}
 
-		var rewardCards = GamePlayData.Instance.GetRandomRewardCards(3);
-		_cardRewardController.Show(rewardCards, _goldReward, GameEvents.NodeCompleted);
+		int rewardCardCount = _relicManager.ModifyRewardCardCount(nodeType, 3);
+		var rewardCards = new List<CardInstance>(GamePlayData.Instance.GetRandomRewardCards(rewardCardCount));
+		_relicManager.ModifyRewardCards(nodeType, rewardCards);
+		_cardRewardController.Show(rewardCards.ToArray(), goldReward, GameEvents.NodeCompleted);
 
 		RemoveBattleEndListeners();
 	}
@@ -117,80 +122,70 @@ public class BattleManager : BattleSystemManager {
 
 	public override void StartPlayerTurn() {
 		if (IsGameEnd) return;
-		
+
 		_turnManager.StartPlayerTurn();
 		_cardUseManager.StartPlayerTurn();
 		_enemyManager.StartPlayerTurn();
-		_deckManager.StartPlayerTurn();
 		_characterManager.StartPlayerTurn();
+		_relicManager.OnPlayerTurnStart(this, _turnManager.TurnCount);
+		_deckManager.StartPlayerTurn();
 	}
-	
+
 	public override void EndPlayerTurn() {
 		_turnManager.EndPlayerTurn();
-		_enemyManager.EndPlayerTurn();
 		_cardUseManager.EndPlayerTurn();
-		_deckManager.EndPlayerTurn();
 		_characterManager.EndPlayerTurn();
+		_relicManager.OnPlayerTurnEnd(this, _turnManager.TurnCount);
+		_deckManager.EndPlayerTurn();
+
+		if (_relicManager.ConsumeSkipEnemyTurn()) {
+			StartPlayerTurn();
+			return;
+		}
+
+		_enemyManager.EndPlayerTurn();
 	}
-	
-	/// <summary>
-	/// 카드 사용하고, 사용 성공/실패 여부를 Bool로 반환
-	/// </summary>
-	/// <param name="cardInstance">사용할 카드 instace</param>
-	/// <param name="enemyInstance">대상 enemy</param>
-	/// <returns></returns>
+
 	public bool UseCard(CardInstance cardInstance, EnemyInstance enemyInstance) {
-		// 1. 에너지 보고 카드 사용 가능한지 확인
 		if (!_cardUseManager.isUsable(cardInstance)) {
-			Debug.Log($"에너지가 부족합니다.");
+			Debug.Log("에너지가 부족합니다.");
 			return false;
 		}
 
-		// 2. 상태이상(공명 등)이 카드 사용을 막고 있는지 확인
 		if (!_characterManager.Player.CanUseCard()) {
-			Debug.Log($"이번 턴에는 더 이상 카드를 사용할 수 없습니다.");
+			Debug.Log("이번 턴에는 더 이상 카드를 사용할 수 없습니다.");
 			return false;
 		}
 
-		// 3. 대상이 필요한 카드인데, 대상이 없다면 사용 불가.
 		if (cardInstance.NeedsTarget && enemyInstance == null) {
-			Debug.Log($"대상이 필요합니다.");
+			Debug.Log("대상이 필요합니다.");
 			return false;
 		}
 
-		// 위의 사항에 해당 없다면, 카드 사용 처리
-		// 사용에 필요한 맥락 만들어서 주기
-		_cardUseManager.UseCard(cardInstance, GetCardUseContext(cardInstance, enemyInstance));
-		// 카드 사용을 상태이상에 알림 (공명 등 사용 횟수 추적)
+		CardUseContext context = GetCardUseContext(cardInstance, enemyInstance);
+		_relicManager.OnBeforeCardUse(context);
+		_cardUseManager.UseCard(cardInstance, context);
 		_characterManager.Player.NotifyCardUsed();
-		// 사용한 카드는 핸드에서 제거 (소모: 덱에서 격리, 귀환: 다음 턴 복귀, 그 외: 버림)
-		if (cardInstance.Keyword.IsExhaust)
+		_relicManager.OnAfterCardUse(context);
+
+		if (context.ForceExhaustAfterUse || cardInstance.Keyword.IsExhaust)
 			_deckManager.ExhaustUsedCardFromHand(cardInstance);
 		else if (cardInstance.Keyword.IsReturn)
 			_deckManager.ReturnUsedCardFromHand(cardInstance);
 		else
 			_deckManager.RemoveUsedCardFromHand(cardInstance);
 
-		// 연쇄: 사용 시 덱 맨 위 카드 즉시 드로우
 		if (cardInstance.Keyword.IsChain)
-			_deckManager.DrawCard();
-		// 카드 사용했음 이벤트 발생
+			_deckManager.DrawCard(CardDrawSource.Keyword);
+
 		OnCardUse?.Invoke();
 		return true;
 	}
-	
-	/// <summary>
-	/// BattleContext 만들 때에는, _mouseController가 지정한 타겟 정보를 참조한다.
-	/// </summary>
-	/// <returns>만들어진 전투 맥락</returns>
+
 	public CardUseContext GetCardUseContext(CardInstance cardInstance) {
 		return GetCardUseContext(cardInstance, _mouseController.TargetInstance);
 	}
 
-	/// <summary>
-	/// 전달받은 타겟 정보를 기준으로 BattleContext를 만든다.
-	/// </summary>
-	/// <returns>만들어진 전투 맥락</returns>
 	public CardUseContext GetCardUseContext(CardInstance cardInstance, EnemyInstance enemyInstance) {
 		return new CardUseContext(
 			this,

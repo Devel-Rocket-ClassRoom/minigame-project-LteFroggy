@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Card/Card Actions/Deal Damage")]
 public class DealDamageCardAction : CardAction {
 	public int amount;
+	public override bool IsDamageAction => true;
 	
 	// 특정 적 하나에게 데미지를 준다
 	protected override int Amount => amount;
@@ -11,7 +12,7 @@ public class DealDamageCardAction : CardAction {
 
 	public override void Execute(CardUseContext context) {
 		if (context.target.IsDead) return;
-		context.target.GetDamage(CalculateAmountWithContext(context));
+		context.DealDamage(context.target, this, CalculateAmountWithContext(context));
 		
 		// 공격 애니메이션 재생
 		context.user.PlayAttackAnimation();
@@ -24,7 +25,7 @@ public class DealDamageCardAction : CardAction {
 		// 타겟이 있다면, 주는 데미지도 계산
 		if (context.target != null) { result = context.target.CalculateGainingDamage(result); }
 		// 유물 기반으로 수정되는 데미지 있는지 계산
-		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
+		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		
 		return result;
 	}

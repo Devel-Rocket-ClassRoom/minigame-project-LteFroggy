@@ -12,15 +12,13 @@ public class DrawCardAction : CardAction {
 		context.user.PlaySkillAnimation();
 
 		int drawAmount = CalculateAmountWithContext(context);
-		for (int i = 0; i < drawAmount; i++) {
-			context.battleManager.DeckManager.DrawCard();
-		}
+		context.DrawCards(drawAmount);
 	}
 	
 	protected override int CalculateAmountWithContext(CardUseContext context) {
 		int result = amount;
 		// 유물 기반으로 수정되는 값 있는지 계산
-		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
+		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		
 		return result;
 	}

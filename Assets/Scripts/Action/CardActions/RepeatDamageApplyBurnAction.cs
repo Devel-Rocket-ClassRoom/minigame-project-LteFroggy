@@ -9,7 +9,7 @@ public class RepeatDamageApplyBurnAction : RepeatDealDamageAction {
 		int totalRepeat = CalculateRepeatWithContext(context);
 		for (int i = 0; i < totalRepeat; i++) {
 			if (context.target.IsDead) yield break;
-			context.target.GetDamage(CalculateAmountWithContext(context));
+			context.DealDamage(context.target, this, CalculateAmountWithContext(context));
 			var burn = new Burn();
 			burn.Init(context.target, 1, 0);
 			context.target.AddStatus(burn);

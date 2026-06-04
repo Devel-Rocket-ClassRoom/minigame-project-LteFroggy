@@ -29,7 +29,7 @@ public class CardUseManager : BattleSystemManager {
 	/// <param name="instance">효과 발동할 카드</param>
 	/// <param name="context">효과 발동 시의 전투 맥락</param>
 	public void UseCard(CardInstance instance, CardUseContext context) {
-		_currentEnergy -= instance._cardDefinition.cost;
+		_currentEnergy -= instance.Cost;
 
 		foreach (var action in instance._cardDefinition.actions) {
 			action.Execute(context);
@@ -39,6 +39,10 @@ public class CardUseManager : BattleSystemManager {
 		if (instance.Keyword.IsOverload) {
 			_nextTurnEnergyPenalty += 1;
 		}
+	}
+
+	public void GainEnergy(int amount) {
+		_currentEnergy += amount;
 	}
 	
 	private void Update() {
