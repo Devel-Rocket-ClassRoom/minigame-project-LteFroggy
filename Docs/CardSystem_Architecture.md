@@ -53,7 +53,7 @@ BattleManager.PlayCard(CardDefinition card)
 CardEffect (abstract)
   ├─ DealDamageEffect     → target에게 피해
   ├─ GetArmorEffect       → player에게 방어막
-  ├─ DrawCardEffect       → 카드 드로우
+  ├─ DrawCardAction       → 카드 드로우
   ├─ ExileCardEffect      → 카드 소멸 (추후)
   └─ DoubleCastEffect     → 이중시전 부여 (추후)
 ```
@@ -68,7 +68,7 @@ public abstract string GetPreviewText(BattleContext ctx);
 // 구체 클래스 예시
 DealDamageEffect.GetPreviewText(ctx) → "적에게 8의 피해를 입힙니다."
 GetArmorEffect.GetPreviewText(ctx)   → "5의 방어막을 획득합니다."
-DrawCardEffect.GetPreviewText(ctx)   → "카드를 2장 드로우합니다."
+DrawCardAction.GetPreviewText(ctx)   → "카드를 2장 드로우합니다."
 ```
 
 ### BattleContext
@@ -166,7 +166,7 @@ Relic (abstract)
 | 방어 | Defense | GetArmorEffect(5) | "5의 방어막을 획득합니다." |
 | 방어 | Defense | GetArmorEffect(5) | "5의 방어막을 획득합니다." |
 | 방어 | Defense | GetArmorEffect(5) | "5의 방어막을 획득합니다." |
-| 집중 | Util | DrawCardEffect(2) | "카드를 2장 드로우합니다." |
+| 집중 | Util | DrawCardAction(2) | "카드를 2장 드로우합니다." |
 | 회피 | Defense | GDD 확인 필요 | — |
 
 > **타격 4장**: 수치가 같으면 DealDamageEffect(6) 에셋 하나를 4장이 공유해도 된다.
@@ -199,7 +199,7 @@ Assets/
     │   ├─ CardEffects.cs        (CardEffect abstract)
     │   ├─ DealDamageEffect.cs
     │   ├─ GetArmorEffect.cs
-    │   └─ DrawCardEffect.cs     (추가 필요)
+    │   └─ DrawCardAction.cs
     └─ Battle/
         ├─ BattleContext.cs
         ├─ PlayerCharacter.cs

@@ -21,6 +21,9 @@ public class BattleManager : BattleSystemManager {
 	
 	[Header("=== 턴 종료 버튼 ===")]
 	[SerializeField] private Button _turnEndButton;
+
+	[Header("=== 임시 테스트 버튼 ===")]
+	[SerializeField] private Button _cleareNodeButton;
 	
 	// 카드 사용했을 때 발생시킬 이벤트
 	[HideInInspector] public UnityEvent OnCardUse;
@@ -51,13 +54,18 @@ public class BattleManager : BattleSystemManager {
 	}
 	
 	private void GameOver() {
+		if (IsGameEnd) return;
+
 		IsGameEnd = true;
 		RemoveBattleEndListeners();
 		DefeatResultPanel.Show();
 	}
 	
 	private void BattleEnd() {
+		if (IsGameEnd) return;
+
 		IsGameEnd = true;
+		SetCleareNodeButtonInteractable(false);
 
 		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
 		GamePlayData.Instance.AddGold(_goldReward);
@@ -75,17 +83,36 @@ public class BattleManager : BattleSystemManager {
 		RemoveBattleEndListeners();
 	}
 
+	private void CompleteNodeForDebug() {
+		if (IsGameEnd) return;
+
+		SetCleareNodeButtonInteractable(false);
+		BattleEnd();
+	}
+
 	private void RemoveBattleEndListeners() {
 		_characterManager.Player.OnDeath.RemoveListener(GameOver);
 		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
 	}
 
+	private void SetCleareNodeButtonInteractable(bool interactable) {
+		if (_cleareNodeButton == null) return;
+
+		_cleareNodeButton.interactable = interactable;
+	}
+
 	private void OnEnable() {
 		_enemyManager.OnEnemyTurnEnd.AddListener(StartPlayerTurn);
+
+		if (_cleareNodeButton != null)
+			_cleareNodeButton.onClick.AddListener(CompleteNodeForDebug);
 	}
 
 	private void OnDisable() {
 		_enemyManager.OnEnemyTurnEnd.RemoveListener(StartPlayerTurn);
+
+		if (_cleareNodeButton != null)
+			_cleareNodeButton.onClick.RemoveListener(CompleteNodeForDebug);
 	}
 
 	public override void StartPlayerTurn() {
@@ -133,7 +160,7 @@ public class BattleManager : BattleSystemManager {
 
 		// 위의 사항에 해당 없다면, 카드 사용 처리
 		// 사용에 필요한 맥락 만들어서 주기
-		_cardUseManager.UseCard(cardInstance, GetCardUseContext(cardInstance));
+		_cardUseManager.UseCard(cardInstance, GetCardUseContext(cardInstance, enemyInstance));
 		// 카드 사용을 상태이상에 알림 (공명 등 사용 횟수 추적)
 		_characterManager.Player.NotifyCardUsed();
 		// 사용한 카드는 핸드에서 제거 (소모: 덱에서 격리, 귀환: 다음 턴 복귀, 그 외: 버림)
@@ -157,12 +184,20 @@ public class BattleManager : BattleSystemManager {
 	/// </summary>
 	/// <returns>만들어진 전투 맥락</returns>
 	public CardUseContext GetCardUseContext(CardInstance cardInstance) {
+		return GetCardUseContext(cardInstance, _mouseController.TargetInstance);
+	}
+
+	/// <summary>
+	/// 전달받은 타겟 정보를 기준으로 BattleContext를 만든다.
+	/// </summary>
+	/// <returns>만들어진 전투 맥락</returns>
+	public CardUseContext GetCardUseContext(CardInstance cardInstance, EnemyInstance enemyInstance) {
 		return new CardUseContext(
 			this,
 			_relicManager,
 			_characterManager.Player,
 			_enemyManager.EnemyList.Cast<CharacterBase>().ToList(),
-			_mouseController.TargetInstance,
+			enemyInstance,
 			cardInstance
 		);
 	}
