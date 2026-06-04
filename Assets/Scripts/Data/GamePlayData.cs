@@ -17,6 +17,7 @@ public class GamePlayData : Singleton<GamePlayData> {
 	public event UnityAction<int, int> OnHealthChanged;
 	public event UnityAction<int> OnGoldChanged;
 	public event UnityAction OnRelicsChanged;
+	public event UnityAction OnDeckChanged;
 
 	[Header("=== 시작 카드들 등록 ===")]
 	[SerializeField] private CardDefinition[] _startCards;
@@ -66,6 +67,7 @@ public class GamePlayData : Singleton<GamePlayData> {
 			Deck.Add(new CardInstance(card));
 
 		_relics.Clear();
+		OnDeckChanged?.Invoke();
 		OnRelicsChanged?.Invoke();
 		OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
 		
@@ -117,9 +119,11 @@ public class GamePlayData : Singleton<GamePlayData> {
 
 	public void AddCardToDeck(CardDefinition definition) {
 		Deck.Add(new CardInstance(definition));
+		OnDeckChanged?.Invoke();
 	}
 
 	public void RemoveCardFromDeck(CardInstance card) {
 		Deck.Remove(card);
+		OnDeckChanged?.Invoke();
 	}
 }

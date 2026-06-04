@@ -4,6 +4,10 @@ using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 public class DeckManager : BattleSystemManager {
+	private const string DrawPileTooltipTitle = "뽑을 카드 더미";
+	private const string DrawPileTooltipDescription = "앞으로 뽑을 카드가 들어 있는 더미입니다. 클릭하면 카드 목록을 확인합니다.";
+	private const string DiscardPileTooltipTitle = "버린 카드 더미";
+	private const string DiscardPileTooltipDescription = "사용했거나 버려진 카드가 모이는 더미입니다. 클릭하면 카드 목록을 확인합니다.";
 
 	[Header("=== 실제 UI카드상에 보이는 카드를 관리할 Controller ===")]
 	[SerializeField] private HandLayoutController _handLayoutController;
@@ -35,6 +39,8 @@ public class DeckManager : BattleSystemManager {
 
 		_drawPileController.OnButtonPressed(ShowDrawPile);
 		_discardPileController.OnButtonPressed(ShowDiscardPile);
+		_drawPileController.SetTooltip(DrawPileTooltipTitle, DrawPileTooltipDescription);
+		_discardPileController.SetTooltip(DiscardPileTooltipTitle, DiscardPileTooltipDescription);
 
 		OnCardStateChanged.Invoke();
 	}
@@ -205,10 +211,12 @@ public class DeckManager : BattleSystemManager {
 	}
 
 	private void ShowDrawPile() {
+		DescriptionSystem.Hide();
 		CardListOverlayController.Instance?.Show(_drawPile, "뽑을 카드 더미");
 	}
 
 	private void ShowDiscardPile() {
+		DescriptionSystem.Hide();
 		CardListOverlayController.Instance?.Show(_discardPile, "버린 카드 더미");
 	}
 
