@@ -17,6 +17,6 @@
 
 	// 턴 시작할 때 데미지 주기
 	public override void OnTurnStart() {
-		Owner.GetDamage(Stack);
+		Owner.GetDamageWithoutArmor(Stack);
 	}
 }
