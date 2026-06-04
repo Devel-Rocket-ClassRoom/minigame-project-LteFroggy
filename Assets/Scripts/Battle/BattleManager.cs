@@ -119,7 +119,7 @@ public class BattleManager : BattleSystemManager {
 		if (IsGameEnd) return;
 		
 		_turnManager.StartPlayerTurn();
-		_cardUseManager.StartPlayerTurn();
+		_cardUseManager.StartPlayerTurn(_characterManager.Player);
 		_enemyManager.StartPlayerTurn();
 		_deckManager.StartPlayerTurn();
 		_characterManager.StartPlayerTurn();

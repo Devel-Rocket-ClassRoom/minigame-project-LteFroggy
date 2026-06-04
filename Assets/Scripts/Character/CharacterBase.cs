@@ -122,6 +122,15 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		foreach (var status in _statusRenderers) { amount = status.Value.Status.ModifyGivingBurn(amount); }
 		return amount;
 	}
+
+	public int CalculateStartingEnergy(int amount) {
+		foreach (var status in _statusRenderers) {
+			amount = status.Value.Status.ModifyStartingEnergy(amount);
+		}
+
+		RefreshStatusesInfo();
+		return amount;
+	}
 	
 	public virtual void OnTurnStart() {
 		// 매 턴 시작 시 방어도 초기화

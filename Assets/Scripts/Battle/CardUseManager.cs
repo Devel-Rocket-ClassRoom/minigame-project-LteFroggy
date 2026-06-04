@@ -4,14 +4,21 @@ using UnityEngine;
 public class CardUseManager : BattleSystemManager {
 	private int _maxEnergy = 3;
 	private int _currentEnergy;
-	private int _nextTurnEnergyPenalty;   // 과부하: 다음 턴 시작 시 깎일 에너지
 
 	[Header("=== 에너지 표시 텍스트 ===")]
 	[SerializeField] private TextMeshProUGUI _energyText;
 
 	public override void StartPlayerTurn() {
-		_currentEnergy = Mathf.Max(0, _maxEnergy - _nextTurnEnergyPenalty);
-		_nextTurnEnergyPenalty = 0;
+		_currentEnergy = _maxEnergy;
+	}
+
+	public void StartPlayerTurn(CharacterBase player) {
+		if (player == null) {
+			StartPlayerTurn();
+			return;
+		}
+
+		_currentEnergy = Mathf.Max(0, player.CalculateStartingEnergy(_maxEnergy));
 	}
 	
 	/// <summary>
@@ -35,9 +42,11 @@ public class CardUseManager : BattleSystemManager {
 			action.Execute(context);
 		}
 
-		// 과부하: 다음 턴 에너지 1 감소 예약
+		// 과부하: 다음 턴 에너지를 줄이는 상태이상 부여
 		if (instance.Keyword.IsOverload) {
-			_nextTurnEnergyPenalty += 1;
+			var overload = new Overload();
+			overload.Init(context.user, 1, 0);
+			context.user.AddStatus(overload);
 		}
 	}
 	
