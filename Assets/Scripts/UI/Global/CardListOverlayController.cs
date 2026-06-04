@@ -13,6 +13,7 @@ public class CardListOverlayController : MonoBehaviour {
 
 	[SerializeField] private OverlayPanelController _overlay;
 	[SerializeField] private DeckRenderer _deckRenderer;
+	private OverlayPanelController _mutuallyExclusiveOverlay;
 
 	private void Awake() {
 		if (_instance != null && _instance != this) {
@@ -32,6 +33,7 @@ public class CardListOverlayController : MonoBehaviour {
 		CacheComponents();
 		if (_overlay == null || _deckRenderer == null) return;
 
+		_mutuallyExclusiveOverlay?.Close();
 		_overlay.Open();
 		_deckRenderer.Init(cards, descriptionText, null);
 	}
@@ -50,10 +52,14 @@ public class CardListOverlayController : MonoBehaviour {
 
 	public void Close() {
 		CacheComponents();
-		if (_overlay == null || _deckRenderer == null) return;
+		if (_overlay == null) return;
 
 		_overlay.Close();
-		_deckRenderer.Clear();
+		_deckRenderer?.Clear();
+	}
+
+	public void SetMutuallyExclusiveOverlay(OverlayPanelController overlay) {
+		_mutuallyExclusiveOverlay = overlay;
 	}
 
 	private void CacheComponents() {

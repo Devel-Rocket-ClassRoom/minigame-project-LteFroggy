@@ -30,12 +30,12 @@ public class GlobalHUDController : MonoBehaviour {
 		_gamePlayData.OnGoldChanged += OnGoldChanged;
 		_gamePlayData.OnRelicsChanged += OnRelicsChanged;
 
-		GameEvents.OnNodeCompleted += _mapOverlay.Open;
+		GameEvents.OnNodeCompleted += OpenMapOverlay;
 		GameEvents.OnNextNodeSelected += _mapOverlay.Close;
 	}
 
 	private void OnDisable() {
-		GameEvents.OnNodeCompleted -= _mapOverlay.Open;
+		GameEvents.OnNodeCompleted -= OpenMapOverlay;
 		GameEvents.OnNextNodeSelected -= _mapOverlay.Close;
 
 		if (_gamePlayData == null) return;
@@ -45,10 +45,21 @@ public class GlobalHUDController : MonoBehaviour {
 	}
 
 	private void Start() {
-		_mapButton.onClick.AddListener(_mapOverlay.Toggle);
+		CardListOverlayController.Instance?.SetMutuallyExclusiveOverlay(_mapOverlay);
+		_mapButton.onClick.AddListener(ToggleMapOverlay);
 		_deckButton.onClick.AddListener(ToggleDeckList);
 		_mapOverlay.GetComponent<MapRenderer>().Init();
 		RefreshAll();
+	}
+
+	private void ToggleMapOverlay() {
+		CardListOverlayController.Instance?.Close();
+		_mapOverlay.Toggle();
+	}
+
+	private void OpenMapOverlay() {
+		CardListOverlayController.Instance?.Close();
+		_mapOverlay.Open();
 	}
 
 	private void ToggleDeckList() {
