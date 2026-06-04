@@ -28,6 +28,9 @@ public class BattleManager : BattleSystemManager {
 	
 	[Header("=== 턴 종료 버튼 ===")]
 	[SerializeField] private Button _turnEndButton;
+
+	[Header("=== 임시 테스트 버튼 ===")]
+	[SerializeField] private Button _cleareNodeButton;
 	
 	// 카드 사용했을 때 발생시킬 이벤트
 	[HideInInspector] public UnityEvent OnCardUse;
@@ -61,7 +64,10 @@ public class BattleManager : BattleSystemManager {
 	}
 	
 	private void GameOver() {
+		if (IsGameEnd) return;
+
 		IsGameEnd = true;
+		SetCleareNodeButtonInteractable(false);
 
 		_battleEndPanel.SetActive(true);
 		_battleEndText.text = "패배하였습니다";
@@ -76,7 +82,10 @@ public class BattleManager : BattleSystemManager {
 	}
 	
 	private void BattleEnd() {
+		if (IsGameEnd) return;
+
 		IsGameEnd = true;
+		SetCleareNodeButtonInteractable(false);
 
 		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
 		GamePlayData.Instance.AddGold(_goldReward);
@@ -94,17 +103,36 @@ public class BattleManager : BattleSystemManager {
 		RemoveBattleEndListeners();
 	}
 
+	private void CompleteNodeForDebug() {
+		if (IsGameEnd) return;
+
+		SetCleareNodeButtonInteractable(false);
+		BattleEnd();
+	}
+
 	private void RemoveBattleEndListeners() {
 		_characterManager.Player.OnDeath.RemoveListener(GameOver);
 		_enemyManager.OnEnemyAllDead.RemoveListener(BattleEnd);
 	}
 
+	private void SetCleareNodeButtonInteractable(bool interactable) {
+		if (_cleareNodeButton == null) return;
+
+		_cleareNodeButton.interactable = interactable;
+	}
+
 	private void OnEnable() {
 		_enemyManager.OnEnemyTurnEnd.AddListener(StartPlayerTurn);
+
+		if (_cleareNodeButton != null)
+			_cleareNodeButton.onClick.AddListener(CompleteNodeForDebug);
 	}
 
 	private void OnDisable() {
 		_enemyManager.OnEnemyTurnEnd.RemoveListener(StartPlayerTurn);
+
+		if (_cleareNodeButton != null)
+			_cleareNodeButton.onClick.RemoveListener(CompleteNodeForDebug);
 	}
 
 	public override void StartPlayerTurn() {
