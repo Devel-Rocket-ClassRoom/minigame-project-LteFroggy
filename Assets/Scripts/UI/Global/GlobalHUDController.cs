@@ -10,6 +10,7 @@ public class GlobalHUDController : MonoBehaviour {
 	[Header("=== 버튼 ===")]
 	[SerializeField] private Button _mapButton;
 	[SerializeField] private Button _deckButton;
+	[SerializeField] private TextMeshProUGUI _deckCountText;
 
 	[Header("=== 유물 목록 ===")]
 	[SerializeField] private Transform _relicRow;
@@ -21,6 +22,10 @@ public class GlobalHUDController : MonoBehaviour {
 
 	private const float RelicRowHeight = 88f;
 	private const float RelicLabelWidth = 50f;
+	private const string MapTooltipTitle = "지도";
+	private const string MapTooltipDescription = "현재 지도의 진행 상황과 다음 선택 가능한 노드를 확인합니다.";
+	private const string DeckTooltipTitle = "덱";
+	private const string DeckTooltipDescription = "현재 덱의 카드 목록과 총 카드 수를 확인합니다.";
 
 	private GamePlayData _gamePlayData;
 	private int _openOverlayCount;
@@ -30,6 +35,7 @@ public class GlobalHUDController : MonoBehaviour {
 		_gamePlayData.OnHealthChanged += OnHealthChanged;
 		_gamePlayData.OnGoldChanged += OnGoldChanged;
 		_gamePlayData.OnRelicsChanged += OnRelicsChanged;
+		_gamePlayData.OnDeckChanged += RefreshDeckCount;
 
 		GameEvents.OnNodeCompleted += OpenMapOverlay;
 		GameEvents.OnNextNodeSelected += _mapOverlay.Close;
@@ -48,9 +54,12 @@ public class GlobalHUDController : MonoBehaviour {
 		_gamePlayData.OnHealthChanged -= OnHealthChanged;
 		_gamePlayData.OnGoldChanged -= OnGoldChanged;
 		_gamePlayData.OnRelicsChanged -= OnRelicsChanged;
+		_gamePlayData.OnDeckChanged -= RefreshDeckCount;
 	}
 
 	private void Start() {
+		ConfigureButtonTooltips();
+		ConfigureDeckCountText();
 		CardListOverlayController.Instance?.SetMutuallyExclusiveOverlay(_mapOverlay);
 		_mapButton.onClick.AddListener(ToggleMapOverlay);
 		_deckButton.onClick.AddListener(ToggleDeckList);
@@ -59,22 +68,26 @@ public class GlobalHUDController : MonoBehaviour {
 	}
 
 	private void ToggleMapOverlay() {
+		DescriptionSystem.Hide();
 		CardListOverlayController.Instance?.Close();
 		_mapOverlay.Toggle();
 	}
 
 	private void OpenMapOverlay() {
+		DescriptionSystem.Hide();
 		CardListOverlayController.Instance?.Close();
 		_mapOverlay.Open();
 	}
 
 	private void ToggleDeckList() {
+		DescriptionSystem.Hide();
 		CardListOverlayController.Instance?.Toggle(GamePlayData.Instance.Deck, "덱 내의 카드 목록");
 	}
 
 	private void RefreshAll() {
 		OnHealthChanged(_gamePlayData.CurrentHealth, _gamePlayData.MaxHealth);
 		OnGoldChanged(_gamePlayData.Gold);
+		RefreshDeckCount();
 		OnRelicsChanged();
 	}
 
@@ -84,6 +97,49 @@ public class GlobalHUDController : MonoBehaviour {
 
 	private void OnGoldChanged(int gold) {
 		_goldText.text = $"{gold}G";
+	}
+
+	private void RefreshDeckCount() {
+		if (_deckCountText == null) return;
+
+		_deckCountText.text = $"덱 {_gamePlayData.Deck.Count}";
+	}
+
+	private void ConfigureButtonTooltips() {
+		EnsureTooltip(_mapButton, MapTooltipTitle, MapTooltipDescription);
+		EnsureTooltip(_deckButton, DeckTooltipTitle, DeckTooltipDescription);
+	}
+
+	private static void EnsureTooltip(Button button, string title, string description) {
+		if (button == null) return;
+
+		var trigger = button.GetComponent<DescriptionTooltipTrigger>();
+		if (trigger == null) trigger = button.gameObject.AddComponent<DescriptionTooltipTrigger>();
+		trigger.SetContent(title, description);
+	}
+
+	private void ConfigureDeckCountText() {
+		if (_deckCountText == null && _deckButton != null) {
+			_deckCountText = _deckButton.GetComponentInChildren<TextMeshProUGUI>(true);
+		}
+
+		if (_deckCountText == null) return;
+
+		_deckCountText.gameObject.SetActive(true);
+		_deckCountText.raycastTarget = false;
+		_deckCountText.alignment = TextAlignmentOptions.Center;
+		_deckCountText.fontSize = 16f;
+		_deckCountText.enableAutoSizing = true;
+		_deckCountText.fontSizeMin = 10f;
+		_deckCountText.fontSizeMax = 16f;
+		_deckCountText.overflowMode = TextOverflowModes.Ellipsis;
+
+		var textRect = (RectTransform)_deckCountText.transform;
+		textRect.anchorMin = new Vector2(0f, 0f);
+		textRect.anchorMax = new Vector2(1f, 0f);
+		textRect.pivot = new Vector2(0.5f, 0f);
+		textRect.anchoredPosition = new Vector2(0f, 4f);
+		textRect.sizeDelta = new Vector2(0f, 24f);
 	}
 
 	private void OnOverlayVisibilityChanged(bool isOpen) {

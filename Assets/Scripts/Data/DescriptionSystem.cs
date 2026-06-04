@@ -68,6 +68,13 @@ public static class DescriptionSystem {
 		return ProcessText(text);
 	}
 
+	public static void ProcessDescriptionPanel(string title, string description, RectTransform source) {
+		Hide();
+		SetContainerPosition(source);
+		Show(title, description);
+		Show(CollectKeywords(description));
+	}
+
 	// 유물의 이름/설명 패널을 표시하고, 설명 내 키워드 패널도 추가로 표시
 	public static void ProcessRelicPanel(RelicBase relic, RectTransform source) {
 		SetContainerPosition(source);
