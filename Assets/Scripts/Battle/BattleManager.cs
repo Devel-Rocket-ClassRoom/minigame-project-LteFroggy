@@ -180,7 +180,7 @@ public class BattleManager : BattleSystemManager {
 
 		// 위의 사항에 해당 없다면, 카드 사용 처리
 		// 사용에 필요한 맥락 만들어서 주기
-		_cardUseManager.UseCard(cardInstance, GetCardUseContext(cardInstance));
+		_cardUseManager.UseCard(cardInstance, GetCardUseContext(cardInstance, enemyInstance));
 		// 카드 사용을 상태이상에 알림 (공명 등 사용 횟수 추적)
 		_characterManager.Player.NotifyCardUsed();
 		// 사용한 카드는 핸드에서 제거 (소모: 덱에서 격리, 귀환: 다음 턴 복귀, 그 외: 버림)
@@ -204,12 +204,20 @@ public class BattleManager : BattleSystemManager {
 	/// </summary>
 	/// <returns>만들어진 전투 맥락</returns>
 	public CardUseContext GetCardUseContext(CardInstance cardInstance) {
+		return GetCardUseContext(cardInstance, _mouseController.TargetInstance);
+	}
+
+	/// <summary>
+	/// 전달받은 타겟 정보를 기준으로 BattleContext를 만든다.
+	/// </summary>
+	/// <returns>만들어진 전투 맥락</returns>
+	public CardUseContext GetCardUseContext(CardInstance cardInstance, EnemyInstance enemyInstance) {
 		return new CardUseContext(
 			this,
 			_relicManager,
 			_characterManager.Player,
 			_enemyManager.EnemyList.Cast<CharacterBase>().ToList(),
-			_mouseController.TargetInstance,
+			enemyInstance,
 			cardInstance
 		);
 	}
