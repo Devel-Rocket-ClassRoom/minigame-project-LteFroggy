@@ -8,7 +8,6 @@ public static class DescriptionSystem {
 	private static RectTransform _tooltipCanvas;
 	private static RectTransform _panelContainer;
 	private static readonly List<DescriptionPanelController> _activePanels = new();
-	public static bool IsEnemyIntentPanelActive { get; private set; }
 
 	// 최초 접근 시 Canvas 자동 생성 (Lazy Initialization)
 	private static RectTransform PanelContainer {
@@ -86,21 +85,40 @@ public static class DescriptionSystem {
 		}
 	}
 
-	public static void ProcessEnemyIntentPanel(EnemyAction action, EnemyActionContext context, RectTransform source) {
-		if (action == null || context == null || source == null) return;
-
+	public static void ProcessEnemyIntentAndStatusPanels(
+		IReadOnlyList<EnemyAction> actions,
+		EnemyActionContext context,
+		IEnumerable<StatusBase> statuses,
+		Vector2 screenPos
+	) {
 		Hide();
-		IsEnemyIntentPanelActive = true;
-		SetContainerPosition(source);
+		SetContainerPosition(screenPos);
 
-		string description = action.GetIntentDescriptionWithContext(context);
-		ShowWithIcon(action.IntentDescriptionTitle, description, action.IntentIcon);
-		Show(CollectKeywords(description));
+		Dictionary<string, string> keywordInfos = new();
+		if (actions != null && context != null) {
+			foreach (var action in actions) {
+				if (action == null) continue;
+
+				string description = action.GetIntentDescriptionWithContext(context);
+				ShowWithIcon(action.IntentDescriptionTitle, description, action.IntentIcon);
+				AddKeywords(description, keywordInfos);
+			}
+		}
+
+		if (statuses != null) {
+			foreach (var status in statuses) {
+				if (status == null) continue;
+
+				ShowWithIcon(status.DescriptionTitle, status.DescriptionContent, status.Icon);
+				AddKeywords(status.DescriptionContent, keywordInfos);
+			}
+		}
+
+		Show(keywordInfos);
 	}
 
 	// 현재 표시 중인 패널을 전부 Pool에 반납
 	public static void Hide() {
-		IsEnemyIntentPanelActive = false;
 		foreach (var panel in _activePanels)
 			DescriptionPanelPool.Instance.Release(panel);
 		_activePanels.Clear();
@@ -130,6 +148,14 @@ public static class DescriptionSystem {
 	private static void Show(Dictionary<string, string> infos) {
 		foreach (var (title, desc) in infos)
 			Show(title, desc);
+	}
+
+	private static void AddKeywords(string text, Dictionary<string, string> keywordInfos) {
+		foreach (var (title, desc) in CollectKeywords(text)) {
+			if (!keywordInfos.ContainsKey(title)) {
+				keywordInfos.Add(title, desc);
+			}
+		}
 	}
 
 	// Pool에서 패널을 꺼내 컨테이너 아래에 붙이고 활성 목록에 추가

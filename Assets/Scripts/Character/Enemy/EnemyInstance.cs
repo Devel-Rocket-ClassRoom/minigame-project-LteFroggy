@@ -26,6 +26,21 @@ public class EnemyInstance : CharacterBase {
 	
 	// 이번 턴에 수행할 PatternInThisTurn 가져오기
 	public EnemyActionPattern PatternInThisTurn => _enemyData.actions[_turnCount % _enemyData.actions.Count];
+
+	public bool TryGetCurrentIntentInfo(out IReadOnlyList<EnemyAction> actions, out EnemyActionContext context) {
+		actions = null;
+		context = null;
+
+		if (_enemyData == null || _enemyManager == null) return false;
+		if (_enemyData.actions == null || _enemyData.actions.Count == 0) return false;
+
+		EnemyActionPattern pattern = PatternInThisTurn;
+		if (pattern == null || pattern.actions == null || pattern.actions.Count == 0) return false;
+
+		actions = pattern.actions;
+		context = _enemyManager.GetEnemyActionContext(this);
+		return context != null;
+	}
 	
 	public void Init(EnemyData data, EnemyManager enemyManager) {
 		_enemyData = data;
