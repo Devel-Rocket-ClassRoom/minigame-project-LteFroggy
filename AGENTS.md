@@ -35,6 +35,19 @@ AI 에이전트가 이 레포에서 작업할 때 따라야 할 프로젝트별 
 
 ---
 
+## 워크트리 폴더명 규칙
+
+새 워크트리를 만들 때는 반드시 아래 형식으로 폴더명을 만든다.
+
+- 형식: `{프로젝트명}-codex-{issue-type}-{issue-number}-{issue-name}`
+- `프로젝트명`은 현재 레포 디렉터리 이름을 사용한다.
+- `issue-type`은 이슈 성격을 영어 소문자로 쓴다. 예: `feature`, `bug`, `chore`, `docs`, `refactor`, `asset`
+- `issue-number`는 GitHub 이슈 번호만 쓴다.
+- `issue-name`은 이슈 제목의 핵심 문구를 파일명에 안전한 kebab-case로 줄여 쓴다.
+- 예: `minigame-project-LteFroggy-codex-feature-135-player-damage-feedback`
+
+---
+
 ## 커밋 메시지 작성 규칙
 
 - 작성 전 반드시 `git log --oneline`으로 기존 형식을 확인한다.
