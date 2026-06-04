@@ -11,5 +11,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1f284e975c44cd59994bf176d3be9a1, type: 3}
   m_Name: Draw2Card
-  m_EditorClassIdentifier: Assembly-CSharp::DrawCardEffect
+  m_EditorClassIdentifier: Assembly-CSharp::DrawCardAction
   amount: 2
