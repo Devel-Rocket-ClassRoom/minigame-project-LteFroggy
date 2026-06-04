@@ -47,7 +47,7 @@ public class LoadoutManager : MonoBehaviour {
 			// 카드 자식 오브젝트에 텍스트 채우기
 			SetChildText(entry, "RelicName", captured.displayName);
 			SetChildText(entry, "EffectText", captured.effectDescription);
-			SetChildText(entry, "CostBadge/CostValue", $"◆ {captured.cost}");
+			SetChildText(entry, "CostBadge/CostValue", $"{captured.cost}");
 			SetChildText(entry, "RarityBadge/RarityText", StringTableManager.StringTable[captured.rarity.ToString()]);
 			SetRelicIcon(entry, captured.icon);
 
