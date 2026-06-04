@@ -72,7 +72,9 @@ public class DeckManager : BattleSystemManager {
 	/// </summary>
 	public void DrawCard() {
 		if (BlockAdditionalDrawThisTurn) return;
-		if (_drawPile.Count == 0) { Shuffle(); }
+		if (_drawPile.Count == 0 && _discardPile.Count > 0) { Shuffle(); }
+		if (_drawPile.Count == 0) return;
+
 		_handPile.Add(_drawPile[_drawPile.Count - 1]);
 		_drawPile.RemoveAt(_drawPile.Count - 1);
 		_handLayoutController.AddCard(_handPile[_handPile.Count - 1]);
