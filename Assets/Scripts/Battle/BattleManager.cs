@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -12,12 +11,6 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private CharacterManager _characterManager;
 	[SerializeField] private BattleMouseController _mouseController;
 	[SerializeField] private RelicManager _relicManager;
-
-	[Header("=== 패배 패널 ===")]
-	[SerializeField] private GameObject _battleEndPanel;
-	[SerializeField] private TextMeshProUGUI _battleEndText;
-	[SerializeField] private TextMeshProUGUI _buttonText;
-	[SerializeField] private Button _button;
 
 	[Header("=== 카드 보상 패널 ===")]
 	[SerializeField] private CardRewardController _cardRewardController;
@@ -38,9 +31,6 @@ public class BattleManager : BattleSystemManager {
 	// Start에서 게임 시작
 	private void Start() {
 		StartBattle();
-		
-		// 전투 결과 패널 비활성화
-		_battleEndPanel.SetActive(false);
 	}
 
 	public override void StartBattle() {
@@ -62,17 +52,8 @@ public class BattleManager : BattleSystemManager {
 	
 	private void GameOver() {
 		IsGameEnd = true;
-
-		_battleEndPanel.SetActive(true);
-		_battleEndText.text = "패배하였습니다";
-		_buttonText.text = "처음으로";
-
-		_button.onClick.AddListener(() => {
-			GamePlayData.Instance.Reset();
-			UISceneBootstrapper.Instance.TransitionTo("MainScene");
-		});
-
 		RemoveBattleEndListeners();
+		DefeatResultPanel.Show();
 	}
 	
 	private void BattleEnd() {
