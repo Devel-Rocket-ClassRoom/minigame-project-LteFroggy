@@ -6,17 +6,28 @@ using UnityEngine.UI;
 public class MainMenuManager : MonoBehaviour {
 	[SerializeField] private Button _continueButton;
 	[SerializeField] private Button _newRunButton;
+	[SerializeField] private Button _quitButton;
 	[SerializeField] private GameObject _loadoutPanel;
 
 	private void OnEnable() {
 		_newRunButton.onClick.AddListener(OpenLoadout);
+		_quitButton.onClick.AddListener(QuitGame);
 	}
 
 	private void OnDisable() {
 		_newRunButton.onClick.RemoveListener(OpenLoadout);
+		_quitButton.onClick.RemoveListener(QuitGame);
 	}
 
 	private void OpenLoadout() {
 		_loadoutPanel.SetActive(true);
+	}
+
+	private void QuitGame() {
+#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+#else
+		Application.Quit();
+#endif
 	}
 }
