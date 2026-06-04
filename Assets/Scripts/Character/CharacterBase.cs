@@ -28,6 +28,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	[Header("=== 상태 효과 표시용 ===")] 
 	[SerializeField] private Transform _statusParent;
 	[SerializeField] private StatusRenderer _statusPrefab; 
+
+	[Header("=== 피격 피드백 ===")]
+	[SerializeField] private HitFeedbackView _hitFeedbackView;
 	
 	// 현재 캐릭터에게 걸린 상태 효과 저장용
 	private readonly Dictionary<Type, StatusRenderer> _statusRenderers = new();
@@ -38,6 +41,10 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		SetHealth();
 		
 		_animator = GetComponent<Animator>();
+
+		if (_hitFeedbackView == null && !TryGetComponent(out _hitFeedbackView)) {
+			_hitFeedbackView = gameObject.AddComponent<HitFeedbackView>();
+		}
 		
 		// 시작 시에 Idle로 시작
 		PlayIdleAnimation();
@@ -52,6 +59,8 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	public abstract void SetHealth();
 
 	public void GetDamage(int amount) {
+		amount = Mathf.Max(0, amount);
+		int healthBefore = CurrentHealth;
 		int reduceBlockAmount = Math.Min(amount, Block);
 		// 피해를 받았을 땐 방어도부터 제거
 		amount -= reduceBlockAmount;
@@ -61,7 +70,10 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 
 		// 체력 0 이하로 내려가지 않게
 		CurrentHealth = Mathf.Max(CurrentHealth, 0);
+		int actualDamage = Mathf.Max(healthBefore - CurrentHealth, 0);
 		
+		_hitFeedbackView?.Play(actualDamage);
+
 		// 맞으면 맞는 애니메이션
 		PlayHitAnimation();
 

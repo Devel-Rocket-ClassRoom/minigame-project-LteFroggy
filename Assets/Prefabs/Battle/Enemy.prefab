@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1345572900165787339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9092316310208258173}
+  m_Layer: 0
+  m_Name: Hit Feedback Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9092316310208258173
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345572900165787339}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.05, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 976254159475781506}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1682222812524781499
 GameObject:
   m_ObjectHideFlags: 0
@@ -46,7 +77,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
     m_Left: 0
@@ -374,6 +405,7 @@ GameObject:
   - component: {fileID: 6557896690119479702}
   - component: {fileID: 8192774008414474432}
   - component: {fileID: 8471313455470435884}
+  - component: {fileID: 3752886056800971019}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -397,6 +429,7 @@ Transform:
   - {fileID: 4388513533839554946}
   - {fileID: 6253449382865542068}
   - {fileID: 3587125253142364679}
+  - {fileID: 9092316310208258173}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8249577401243052171
@@ -480,6 +513,7 @@ MonoBehaviour:
   _blockImage: {fileID: 5595595942588685800}
   _statusParent: {fileID: 5546049651371075800}
   _statusPrefab: {fileID: 639204572732058383, guid: ea0985ebf0c4dec4797a99addf88f88f, type: 3}
+  _hitFeedbackView: {fileID: 3752886056800971019}
   _targetBoxBorders:
   - {fileID: 2849009958633726547}
   - {fileID: 3673097850091243782}
@@ -556,6 +590,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3752886056800971019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2423004931810390244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 118a9486a5944df5a9f113687a7bc3ab, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::HitFeedbackView
+  _feedbackAnchor: {fileID: 9092316310208258173}
+  _hitParticlePrefab: {fileID: 7294232079615701105, guid: 3f24d2b418b555e4aa20e1f7544ab08a, type: 3}
+  _damageNumberPrefab: {fileID: 1951056791751147358, guid: 5ea1495f69515854d91bf3111b634cb5, type: 3}
+  _fallbackAnchorOffset: {x: 0, y: 2.2, z: 0}
+  _stackResetDelay: 0.45
+  _stackSpacingX: 0.32
+  _stackSpacingY: 0.16
 --- !u!1 &2899738829240160546
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +754,7 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
-  m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
+  m_sharedMaterial: {fileID: 3860429735652810780, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1018,7 +1071,7 @@ MonoBehaviour:
   m_text: 50/80
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
-  m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
+  m_sharedMaterial: {fileID: 3860429735652810780, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
