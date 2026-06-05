@@ -48,6 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -109,373 +110,391 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: frame_0
+      name: RitualBeast_Death_Sheet_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 768
-        width: 256
-        height: 256
+        x: 24
+        y: 771
+        width: 231
+        height: 228
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ef0b72cd17604608ab22128a4c6b4d79
-      internalID: 211979320
+      spriteID: 7825108cf3b8ccb4c905268c954e6958
+      internalID: -531606095
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_1
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_1
       rect:
         serializedVersion: 2
-        x: 256
-        y: 768
-        width: 256
-        height: 256
+        x: 271
+        y: 771
+        width: 229
+        height: 228
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: da40849c0ff9416f8012ab3b4919557b
-      internalID: 776864582
+      spriteID: 0652a12441e9e964ab633fa5c0cef219
+      internalID: 793528138
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_2
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_2
       rect:
         serializedVersion: 2
-        x: 512
-        y: 768
-        width: 256
-        height: 256
+        x: 526
+        y: 770
+        width: 231
+        height: 227
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5bd96bf8fed94d159a59897f3ea127e0
-      internalID: 2094083670
+      spriteID: 1f9845324ef4b4a44bd7a02f3febd7c3
+      internalID: 1203670670
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_3
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_3
       rect:
         serializedVersion: 2
-        x: 768
-        y: 768
-        width: 256
-        height: 256
+        x: 773
+        y: 769
+        width: 230
+        height: 225
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 07f7ee37a74f4c4f89201a4676840447
-      internalID: 957953627
+      spriteID: 0501a5cc158629243a77f4ebcbf70097
+      internalID: -668642774
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_4
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 512
-        width: 256
-        height: 256
+        x: 27
+        y: 511
+        width: 228
+        height: 225
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 44f2dd3af5b04bb9929e18073a4f2e83
-      internalID: -1224585455
+      spriteID: f1c71ed1523ed794aa20d953297f0bbe
+      internalID: 1508918422
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_5
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_5
       rect:
         serializedVersion: 2
-        x: 256
-        y: 512
-        width: 256
-        height: 256
+        x: 278
+        y: 511
+        width: 228
+        height: 219
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7515f4e9bfc345beb2b040bc28cd991b
-      internalID: -1305132776
+      spriteID: 077ed84452599ca4da789244ac3e17d6
+      internalID: -1561993914
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_6
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_6
       rect:
         serializedVersion: 2
-        x: 512
-        y: 512
-        width: 256
-        height: 256
+        x: 527
+        y: 511
+        width: 229
+        height: 214
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4e725538899842a08022be12f9c2bbe1
-      internalID: 421773780
+      spriteID: 79d6f4616147a3e45953e3585431a8c7
+      internalID: -797164071
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_7
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_7
       rect:
         serializedVersion: 2
-        x: 768
-        y: 512
-        width: 256
-        height: 256
+        x: 773
+        y: 511
+        width: 231
+        height: 206
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 398f985789ad46a0a031cbe82af5ae9b
-      internalID: -1245041181
+      spriteID: 47c4f7fc2654677449a26e218b87740b
+      internalID: 130839082
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_8
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 256
-        width: 256
-        height: 256
+        x: 22
+        y: 271
+        width: 232
+        height: 178
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0ff2c6be195945dd84e46fdb88069b51
-      internalID: -592349081
+      spriteID: de402bc7c9651284e8fdac4fad7f118e
+      internalID: -549695031
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_9
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_9
       rect:
         serializedVersion: 2
-        x: 256
-        y: 256
-        width: 256
-        height: 256
+        x: 269
+        y: 271
+        width: 235
+        height: 174
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b7b15ac0697c4c07962d250d5754d1ca
-      internalID: -1631253034
+      spriteID: cce17815951a38a49acc21e1cf271afd
+      internalID: 1643350452
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_10
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_10
       rect:
         serializedVersion: 2
-        x: 512
-        y: 256
-        width: 256
-        height: 256
+        x: 517
+        y: 271
+        width: 236
+        height: 162
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 64d96d5fbe344a7aac15e64780c677a0
-      internalID: 1590376040
+      spriteID: 309c4742071de324dac72b93c3e6f60c
+      internalID: 1133045298
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_11
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_11
       rect:
         serializedVersion: 2
-        x: 768
-        y: 256
-        width: 256
-        height: 256
+        x: 766
+        y: 270
+        width: 237
+        height: 136
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3c0d87fcceef4984a8af4968938f74ca
-      internalID: 879554159
+      spriteID: bb18a6ce4891902489721f623740eddf
+      internalID: 1391105544
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_12
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_12
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 256
-        height: 256
+        x: 20
+        y: 39
+        width: 231
+        height: 134
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c6831bab9f9543d7905ac49b182e1a4b
-      internalID: -1948123241
+      spriteID: ef78d246d95b4a04aa7f4408766d71f5
+      internalID: 90966774
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_13
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_13
       rect:
         serializedVersion: 2
-        x: 256
-        y: 0
-        width: 256
-        height: 256
+        x: 265
+        y: 38
+        width: 236
+        height: 123
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cde255ba8901497a90580688d1e759db
-      internalID: -1237189530
+      spriteID: 7dc0b948004cb2f47879d0b408c4f903
+      internalID: 1217366728
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_14
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_14
       rect:
         serializedVersion: 2
-        x: 512
-        y: 0
-        width: 256
-        height: 256
+        x: 514
+        y: 36
+        width: 238
+        height: 110
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 492784ef8309441aa8be382c4bce8e7d
-      internalID: 2120038467
+      spriteID: 6870d00c7fc50b942a07265613e81902
+      internalID: 455617706
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_15
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Death_Sheet_15
       rect:
         serializedVersion: 2
-        x: 768
-        y: 0
-        width: 256
-        height: 256
+        x: 763
+        y: 35
+        width: 240
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5dcbe1cd4272468083412e964fe73a5d
-      internalID: -1260574126
+      spriteID: b4254e2ec6dfbbf4fb9392fbca91d2d2
+      internalID: -652530380
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    outline: []
-    customData:
+      weights: []
+    outline: []
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
-    indices:
+    indices: 
     edges: []
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      frame_0: 211979320
-      frame_1: 776864582
-      frame_2: 2094083670
-      frame_3: 957953627
-      frame_4: -1224585455
-      frame_5: -1305132776
-      frame_6: 421773780
-      frame_7: -1245041181
-      frame_8: -592349081
-      frame_9: -1631253034
-      frame_10: 1590376040
-      frame_11: 879554159
-      frame_12: -1948123241
-      frame_13: -1237189530
-      frame_14: 2120038467
-      frame_15: -1260574126
-  mipmapLimitGroupName:
+      RitualBeast_Death_Sheet_0: -531606095
+      RitualBeast_Death_Sheet_1: 793528138
+      RitualBeast_Death_Sheet_10: 1133045298
+      RitualBeast_Death_Sheet_11: 1391105544
+      RitualBeast_Death_Sheet_12: 90966774
+      RitualBeast_Death_Sheet_13: 1217366728
+      RitualBeast_Death_Sheet_14: 455617706
+      RitualBeast_Death_Sheet_15: -652530380
+      RitualBeast_Death_Sheet_2: 1203670670
+      RitualBeast_Death_Sheet_3: -668642774
+      RitualBeast_Death_Sheet_4: 1508918422
+      RitualBeast_Death_Sheet_5: -1561993914
+      RitualBeast_Death_Sheet_6: -797164071
+      RitualBeast_Death_Sheet_7: 130839082
+      RitualBeast_Death_Sheet_8: -549695031
+      RitualBeast_Death_Sheet_9: 1643350452
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  userData: ""
-  assetBundleName: ""
-  assetBundleVariant: ""
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -48,6 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -109,373 +110,432 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: frame_0
+      name: RitualBeast_Hit_Sheet_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 768
-        width: 256
-        height: 256
+        x: 22
+        y: 782
+        width: 228
+        height: 220
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1a8b9c2a270b4ed7ac90fea0054c5583
-      internalID: -729174829
+      spriteID: f1ac734ddbc972e4e83e9027a0dcf5fb
+      internalID: 80053618
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_1
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_2
       rect:
         serializedVersion: 2
-        x: 256
-        y: 768
-        width: 256
-        height: 256
+        x: 271
+        y: 782
+        width: 230
+        height: 224
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fd89fb3c072446bdbaeec818ea1173ac
-      internalID: -1586770266
+      spriteID: f77ee4ae1fddc7e4f8fc0796ddbe02e2
+      internalID: -416982324
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_2
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_3
       rect:
         serializedVersion: 2
-        x: 512
-        y: 768
-        width: 256
-        height: 256
+        x: 519
+        y: 782
+        width: 228
+        height: 220
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d1fbeb3595f240ee937894d5807c82bd
-      internalID: -845811112
+      spriteID: 43d5b6da0a4c46a4dbbe23d62cdc9cab
+      internalID: 1932019127
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_3
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_4
       rect:
         serializedVersion: 2
-        x: 768
-        y: 768
-        width: 256
-        height: 256
+        x: 767
+        y: 782
+        width: 228
+        height: 213
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0d27030252db46d88aaabf0afd6ad18c
-      internalID: 1790644970
+      spriteID: 0a7f82c36f6042241b3a371d843c30f4
+      internalID: 1045285995
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_4
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_13
       rect:
         serializedVersion: 2
-        x: 0
-        y: 512
-        width: 256
-        height: 256
+        x: 276
+        y: 528
+        width: 209
+        height: 198
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4f812cc394964142a7b4e8069501e449
-      internalID: -1735610505
+      spriteID: 9c4fa0e2c3c4c46458d46fee1929da80
+      internalID: -1863930719
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_5
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_21
       rect:
         serializedVersion: 2
-        x: 256
-        y: 512
-        width: 256
-        height: 256
+        x: 31
+        y: 528
+        width: 206
+        height: 196
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b4ba61ead8c47989ce5c559a16a63c1
-      internalID: -1498084442
+      spriteID: b3c464988c874684da8592d7555232f0
+      internalID: 2094958971
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_6
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_22
       rect:
         serializedVersion: 2
-        x: 512
-        y: 512
-        width: 256
-        height: 256
+        x: 519
+        y: 529
+        width: 208
+        height: 194
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a56543219ad74248b64b7c88f6acdeb1
-      internalID: 973244204
+      spriteID: 730c2aaf4f99a9e4f93dc8c02b9f206d
+      internalID: -221918194
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_7
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_23
       rect:
         serializedVersion: 2
-        x: 768
-        y: 512
-        width: 256
-        height: 256
+        x: 767
+        y: 529
+        width: 215
+        height: 195
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: efd664dfb02d4837af468379574a9241
-      internalID: 107787311
+      spriteID: e027f3e517c639f42a1f1c1864b0e7de
+      internalID: -1546960605
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_8
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_49
       rect:
         serializedVersion: 2
-        x: 0
-        y: 256
-        width: 256
-        height: 256
+        x: 24
+        y: 277
+        width: 213
+        height: 206
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bdda44e351274c36a79e803278bb208e
-      internalID: -915432554
+      spriteID: 6cd9c5b05e3d5ac4a989a6c344a49b0b
+      internalID: 369515701
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_9
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_50
       rect:
         serializedVersion: 2
-        x: 256
-        y: 256
-        width: 256
-        height: 256
+        x: 265
+        y: 277
+        width: 212
+        height: 203
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cdb8277357274a938d974855e39e87af
-      internalID: -1224930420
+      spriteID: c13dc39f885e0eb458f87af076a07a1a
+      internalID: -1654506694
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_10
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_51
       rect:
         serializedVersion: 2
-        x: 512
-        y: 256
-        width: 256
-        height: 256
+        x: 514
+        y: 276
+        width: 217
+        height: 203
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d89f213ef3a64a458a60206380712949
-      internalID: -100826270
+      spriteID: 624d7900962e6294192c473ef68ea469
+      internalID: 172704813
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_11
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_52
       rect:
         serializedVersion: 2
-        x: 768
-        y: 256
-        width: 256
-        height: 256
+        x: 766
+        y: 275
+        width: 215
+        height: 202
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 54515e7ff8cf4634834f5660e3c25bf8
-      internalID: 454438827
+      spriteID: 1748daf122812f74bba291c2efa76acd
+      internalID: -1373110410
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_12
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_53
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 256
-        height: 256
+        x: 20
+        y: 33
+        width: 216
+        height: 210
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a0b0b0ed917f4c6f803de42f1c8b950f
-      internalID: -1613127505
+      spriteID: 3a20a3b31e5fcec40896beefb455d8c1
+      internalID: 1573840861
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_13
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_54
       rect:
         serializedVersion: 2
-        x: 256
-        y: 0
-        width: 256
-        height: 256
+        x: 268
+        y: 33
+        width: 217
+        height: 210
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3256f22377bf450b94ca2606e37ccb7c
-      internalID: 240090982
+      spriteID: b0d2dd58a55290b45a019f827a5725b0
+      internalID: 1792676931
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_14
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_55
       rect:
         serializedVersion: 2
-        x: 512
-        y: 0
-        width: 256
-        height: 256
+        x: 511
+        y: 33
+        width: 218
+        height: 210
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b8e12a86ccf44d2eb7cd35cfef8361f2
-      internalID: -564403974
+      spriteID: 1b71040f3c332d940973883709495fb2
+      internalID: -2123835858
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    - serializedVersion: 2
-      name: frame_15
+      weights: []
+    - serializedVersion: 2
+      name: RitualBeast_Hit_Sheet_56
       rect:
         serializedVersion: 2
-        x: 768
-        y: 0
-        width: 256
-        height: 256
+        x: 758
+        y: 33
+        width: 217
+        height: 210
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c9873b6dc73b4930a58c9c077af7677a
-      internalID: -1969611737
+      spriteID: 47a792973f0d3114d873779c7950c5a5
+      internalID: 196985977
       vertices: []
-      indices:
+      indices: 
       edges: []
-      weights: []    outline: []
-    customData:
+      weights: []
+    outline: []
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
-    indices:
+    indices: 
     edges: []
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":256.0,"y":256.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      frame_0: -729174829
-      frame_1: -1586770266
-      frame_2: -845811112
-      frame_3: 1790644970
-      frame_4: -1735610505
-      frame_5: -1498084442
-      frame_6: 973244204
-      frame_7: 107787311
-      frame_8: -915432554
-      frame_9: -1224930420
-      frame_10: -100826270
-      frame_11: 454438827
-      frame_12: -1613127505
-      frame_13: 240090982
-      frame_14: -564403974
-      frame_15: -1969611737
-  mipmapLimitGroupName:
+      RitualBeast_Hit_Sheet_0: 80053618
+      RitualBeast_Hit_Sheet_1: 2024231056
+      RitualBeast_Hit_Sheet_10: 1407354036
+      RitualBeast_Hit_Sheet_11: -267322575
+      RitualBeast_Hit_Sheet_12: -584561648
+      RitualBeast_Hit_Sheet_13: -1863930719
+      RitualBeast_Hit_Sheet_14: 1903754417
+      RitualBeast_Hit_Sheet_15: -1158495991
+      RitualBeast_Hit_Sheet_16: 2031387552
+      RitualBeast_Hit_Sheet_17: 1767017228
+      RitualBeast_Hit_Sheet_18: 1658071675
+      RitualBeast_Hit_Sheet_19: 1762687935
+      RitualBeast_Hit_Sheet_2: -416982324
+      RitualBeast_Hit_Sheet_20: 2013937980
+      RitualBeast_Hit_Sheet_21: 2094958971
+      RitualBeast_Hit_Sheet_22: -221918194
+      RitualBeast_Hit_Sheet_23: -1546960605
+      RitualBeast_Hit_Sheet_24: 28520100
+      RitualBeast_Hit_Sheet_25: -983790296
+      RitualBeast_Hit_Sheet_26: 362640794
+      RitualBeast_Hit_Sheet_27: -2018478575
+      RitualBeast_Hit_Sheet_28: -1414423061
+      RitualBeast_Hit_Sheet_29: -604807989
+      RitualBeast_Hit_Sheet_3: 1932019127
+      RitualBeast_Hit_Sheet_30: -1973699497
+      RitualBeast_Hit_Sheet_31: 1283492216
+      RitualBeast_Hit_Sheet_32: -82295472
+      RitualBeast_Hit_Sheet_33: 1688598508
+      RitualBeast_Hit_Sheet_34: -1003960643
+      RitualBeast_Hit_Sheet_35: -1148056724
+      RitualBeast_Hit_Sheet_36: 1546630569
+      RitualBeast_Hit_Sheet_37: 140740674
+      RitualBeast_Hit_Sheet_38: -1442976865
+      RitualBeast_Hit_Sheet_39: 684714346
+      RitualBeast_Hit_Sheet_4: 1045285995
+      RitualBeast_Hit_Sheet_40: -126034903
+      RitualBeast_Hit_Sheet_41: 1640478503
+      RitualBeast_Hit_Sheet_42: 1467756094
+      RitualBeast_Hit_Sheet_43: -633404579
+      RitualBeast_Hit_Sheet_44: 1927448420
+      RitualBeast_Hit_Sheet_45: -683425751
+      RitualBeast_Hit_Sheet_46: 928466092
+      RitualBeast_Hit_Sheet_47: -502376073
+      RitualBeast_Hit_Sheet_48: -2069002283
+      RitualBeast_Hit_Sheet_49: 369515701
+      RitualBeast_Hit_Sheet_5: -94542472
+      RitualBeast_Hit_Sheet_50: -1654506694
+      RitualBeast_Hit_Sheet_51: 172704813
+      RitualBeast_Hit_Sheet_52: -1373110410
+      RitualBeast_Hit_Sheet_53: 1573840861
+      RitualBeast_Hit_Sheet_54: 1792676931
+      RitualBeast_Hit_Sheet_55: -2123835858
+      RitualBeast_Hit_Sheet_56: 196985977
+      RitualBeast_Hit_Sheet_6: 829102217
+      RitualBeast_Hit_Sheet_7: 847993803
+      RitualBeast_Hit_Sheet_8: 8849602
+      RitualBeast_Hit_Sheet_9: -745576434
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  userData: ""
-  assetBundleName: ""
-  assetBundleVariant: ""
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
