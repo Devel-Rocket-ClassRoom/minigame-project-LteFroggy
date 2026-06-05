@@ -1,15 +1,19 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CardUseManager : BattleSystemManager {
 	private int _maxEnergy = 3;
 	private int _currentEnergy;
+	public int CurrentEnergy => _currentEnergy;
 
 	[Header("=== 에너지 표시 텍스트 ===")]
 	[SerializeField] private TextMeshProUGUI _energyText;
 
+	[HideInInspector] public UnityEvent<int> OnEnergyChanged = new();
+
 	public override void StartPlayerTurn() {
-		_currentEnergy = _maxEnergy;
+		SetCurrentEnergy(_maxEnergy);
 	}
 
 	public void StartPlayerTurn(CharacterBase player) {
@@ -18,7 +22,7 @@ public class CardUseManager : BattleSystemManager {
 			return;
 		}
 
-		_currentEnergy = Mathf.Max(0, player.CalculateStartingEnergy(_maxEnergy));
+		SetCurrentEnergy(Mathf.Max(0, player.CalculateStartingEnergy(_maxEnergy)));
 	}
 	
 	/// <summary>
@@ -36,7 +40,7 @@ public class CardUseManager : BattleSystemManager {
 	/// <param name="instance">효과 발동할 카드</param>
 	/// <param name="context">효과 발동 시의 전투 맥락</param>
 	public void UseCard(CardInstance instance, CardUseContext context) {
-		_currentEnergy -= instance.Cost;
+		SetCurrentEnergy(_currentEnergy - instance.Cost);
 
 		foreach (var action in instance._cardDefinition.actions) {
 			action.Execute(context);
@@ -51,10 +55,16 @@ public class CardUseManager : BattleSystemManager {
 	}
 
 	public void GainEnergy(int amount) {
-		_currentEnergy += amount;
+		SetCurrentEnergy(_currentEnergy + amount);
 	}
-	
-	private void Update() {
+
+	private void SetCurrentEnergy(int energy) {
+		_currentEnergy = energy;
+		RefreshEnergyText();
+		OnEnergyChanged.Invoke(_currentEnergy);
+	}
+
+	private void RefreshEnergyText() {
 		_energyText.text = $"{_currentEnergy}/{_maxEnergy}";
 	}
 }

@@ -44,6 +44,7 @@ public class HandLayoutController : MonoBehaviour {
 		// 생성 시 이벤트 등록
 		_battleManager.OnCardUse.AddListener(cardController.RefreshCardDescription);
 		_battleMouseController.OnTargetChange.AddListener(cardController.RefreshCardDescription);
+		_battleManager.CardUseManager.OnEnergyChanged.AddListener(cardController.RefreshEnergyCostColor);
 		
 		Arrange();
 	}
@@ -68,6 +69,7 @@ public class HandLayoutController : MonoBehaviour {
 
 		_battleManager.OnCardUse.RemoveListener(target.RefreshCardDescription);
 		_battleMouseController.OnTargetChange.RemoveListener(target.RefreshCardDescription);
+		_battleManager.CardUseManager.OnEnergyChanged.RemoveListener(target.RefreshEnergyCostColor);
 
 		target.RemoveCard();
 		_cards.RemoveAt(idx);
