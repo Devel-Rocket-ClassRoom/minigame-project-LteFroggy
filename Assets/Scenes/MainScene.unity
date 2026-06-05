@@ -553,9 +553,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9f8f69f4e61930a43a0bdd5492242743, type: 2}
   - {fileID: 11400000, guid: 9f8f69f4e61930a43a0bdd5492242743, type: 2}
   - {fileID: 11400000, guid: 9f8f69f4e61930a43a0bdd5492242743, type: 2}
-  - {fileID: 11400000, guid: 4008269e10a841c44948afb6d59c711c, type: 2}
-  - {fileID: 11400000, guid: ab04a398b90751741a444cdd7514e11e, type: 2}
-  - {fileID: 11400000, guid: c94f911a4534eb24fb2422f263f4a8bc, type: 2}
   _rewardCardPool:
   - {fileID: 11400000, guid: 7fc71c46d148c304b950b8f976f3fa78, type: 2}
   - {fileID: 11400000, guid: 4008269e10a841c44948afb6d59c711c, type: 2}
@@ -1401,9 +1398,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LoadoutManager
   _relicListParent: {fileID: 9100000000000008}
   _relicEntryPrefab: {fileID: 7921030280172104456, guid: 1c8d014fb3e3a5642bd1400d35bb6ee0, type: 3}
+  _cardEntryPrefab: {fileID: -4825520521799511937, guid: 6365593cd74c74e4ab2371bd04b14d82, type: 3}
+  _titleText: {fileID: 1523381604}
+  _descriptionText: {fileID: 2140360449}
   _totalCostText: {fileID: 1629515277}
   _startButton: {fileID: 687526706}
   _costLimit: 6
+  _cardPickCount: 2
 --- !u!114 &653418192
 MonoBehaviour:
   m_ObjectHideFlags: 0
