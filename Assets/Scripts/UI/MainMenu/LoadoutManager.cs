@@ -18,15 +18,25 @@ public class LoadoutManager : MonoBehaviour {
 	private readonly List<CardDefinition> _selectedCards = new();
 	private readonly Dictionary<int, CardViewController> _cardViewsById = new();
 	private int _totalCost;
+	private bool _relicListBuiltForCurrentOpen;
 	private LoadoutStep _step;
 
 	private void OnEnable() {
-		ShowRelicSelection();
+		// 패널이 열릴 때마다 목록을 새로 그린다
+		_relicListBuiltForCurrentOpen = false;
+		RefreshRelicList();
 		_startButton.onClick.AddListener(OnStartButtonClicked);
 	}
 
 	private void OnDisable() {
 		_startButton.onClick.RemoveListener(OnStartButtonClicked);
+		_relicListBuiltForCurrentOpen = false;
+	}
+
+	public void RefreshRelicList() {
+		if (_relicListBuiltForCurrentOpen) return;
+		ShowRelicSelection();
+		_relicListBuiltForCurrentOpen = true;
 	}
 
 	private void ShowRelicSelection() {
