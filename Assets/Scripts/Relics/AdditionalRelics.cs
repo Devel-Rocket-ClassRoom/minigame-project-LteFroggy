@@ -116,7 +116,15 @@ public class FrozenChains : AdditionalRelicBase {
 
 	public override void OnAfterCardUse(CardUseContext context) {
 		if (context.cardInfo._cardDefinition.tag != CardTag.Defense) return;
-		AddWeakness(context.target, effectAmount);
+
+		var candidates = new List<CharacterBase>();
+		foreach (var target in context.targets) {
+			if (target == null || target.IsDead) continue;
+			candidates.Add(target);
+		}
+
+		if (candidates.Count == 0) return;
+		AddWeakness(candidates[Random.Range(0, candidates.Count)], effectAmount);
 	}
 }
 
