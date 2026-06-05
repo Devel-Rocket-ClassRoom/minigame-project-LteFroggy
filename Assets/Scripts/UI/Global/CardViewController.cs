@@ -12,8 +12,11 @@ public class CardViewController : MonoBehaviour, IPointerEnterHandler, IPointerE
 	[SerializeField] private TextMeshProUGUI _cardCostText;
 
 	private Button _button;
+	private Graphic _targetGraphic;
 	private CardInstance _cardInstance;
 	private bool _isHovering;
+	private Color _defaultGraphicColor;
+	private bool _hasDefaultGraphicColor;
 
 	/// <summary>
 	/// CardView 초기화할 때 사용
@@ -23,18 +26,34 @@ public class CardViewController : MonoBehaviour, IPointerEnterHandler, IPointerE
 	public void Init(CardInstance instance, UnityAction<CardInstance> action = null) {
 		_cardInstance = instance;
 
-		_button = GetComponent<Button>();
+		CacheButton();
 		_button.onClick.RemoveAllListeners();
 		_button.onClick.AddListener(() => {
 			DescriptionSystem.Hide();
 			_isHovering = false;
 			action?.Invoke(_cardInstance);
 		});
+		SetSelected(false);
+		SetInteractable(true);
 
 		_cardIcon.sprite = _cardInstance.Icon;
 		_cardNameText.text = _cardInstance.CardName;
 		_cardDescriptionText.text = DescriptionSystem.ProcessText(_cardInstance.GetCardDescription());
 		_cardCostText.text = _cardInstance.Cost.ToString();
+	}
+
+	public void SetSelected(bool selected) {
+		CacheButton();
+		if (_targetGraphic == null) return;
+
+		_targetGraphic.color = selected
+			? new Color(0.95f, 0.72f, 0.24f, 1f)
+			: _defaultGraphicColor;
+	}
+
+	public void SetInteractable(bool interactable) {
+		CacheButton();
+		_button.interactable = interactable;
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
@@ -55,6 +74,15 @@ public class CardViewController : MonoBehaviour, IPointerEnterHandler, IPointerE
 		if (_isHovering) {
 			DescriptionSystem.Hide();
 			_isHovering = false;
+		}
+	}
+
+	private void CacheButton() {
+		if (_button == null) _button = GetComponent<Button>();
+		if (_targetGraphic == null) _targetGraphic = _button != null ? _button.targetGraphic : GetComponent<Graphic>();
+		if (_targetGraphic != null && !_hasDefaultGraphicColor) {
+			_defaultGraphicColor = _targetGraphic.color;
+			_hasDefaultGraphicColor = true;
 		}
 	}
 }
