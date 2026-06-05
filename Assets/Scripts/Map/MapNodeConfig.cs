@@ -6,6 +6,7 @@ public class MapNodeConfig : ScriptableObject {
 	public MapNodeType Type;
 	public Sprite Icon;
 	public int Weight;
+	public EnemySpawnTable[] EnemySpawnTables;
 	public string SceneName => Type switch {
 		MapNodeType.Battle => "BattleScene",
 		MapNodeType.Boss   => "BattleScene",
