@@ -18,15 +18,24 @@ public class LoadoutManager : MonoBehaviour {
 	// 현재 선택된 유물 목록 (HashSet으로 중복 방지)
 	private readonly HashSet<RelicBase> _selectedRelics = new();
 	private int _totalCost;
+	private bool _relicListBuiltForCurrentOpen;
 
 	private void OnEnable() {
 		// 패널이 열릴 때마다 목록을 새로 그린다
-		BuildRelicList();
+		_relicListBuiltForCurrentOpen = false;
+		RefreshRelicList();
 		_startButton.onClick.AddListener(StartRun);
 	}
 
 	private void OnDisable() {
 		_startButton.onClick.RemoveListener(StartRun);
+		_relicListBuiltForCurrentOpen = false;
+	}
+
+	public void RefreshRelicList() {
+		if (_relicListBuiltForCurrentOpen) return;
+		BuildRelicList();
+		_relicListBuiltForCurrentOpen = true;
 	}
 
 	// AllLoadoutRelics를 순회하며 유물 카드 UI를 생성한다

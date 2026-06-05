@@ -21,6 +21,8 @@ public class MainMenuManager : MonoBehaviour {
 
 	private void OpenLoadout() {
 		_loadoutPanel.SetActive(true);
+		if (_loadoutPanel.TryGetComponent(out LoadoutManager loadoutManager))
+			loadoutManager.RefreshRelicList();
 	}
 
 	private void QuitGame() {
