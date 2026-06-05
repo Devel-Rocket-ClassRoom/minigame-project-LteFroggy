@@ -177,6 +177,11 @@ public class ForgottenBook : AdditionalRelicBase {
 		context.AmountMultiplier *= effectAmount;
 		context.ForceExhaustAfterUse = true;
 	}
+
+	public override int CalculateAmount(CardAction action, CardUseContext context, int amount) {
+		if (_usedThisTurn) return amount;
+		return amount * effectAmount;
+	}
 }
 
 public class CrownKiss : AdditionalRelicBase {
