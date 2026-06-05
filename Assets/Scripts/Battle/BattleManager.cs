@@ -58,6 +58,7 @@ public class BattleManager : BattleSystemManager {
 		if (IsGameEnd) return;
 
 		IsGameEnd = true;
+		StopBattleInteraction();
 		RemoveBattleEndListeners();
 		DefeatResultPanel.Show();
 	}
@@ -66,6 +67,7 @@ public class BattleManager : BattleSystemManager {
 		if (IsGameEnd) return;
 
 		IsGameEnd = true;
+		StopBattleInteraction();
 		SetCleareNodeButtonInteractable(false);
 
 		MapNodeType nodeType = GamePlayData.Instance.InGameMapData.NodeNow.Config.Type;
@@ -104,6 +106,10 @@ public class BattleManager : BattleSystemManager {
 		if (_cleareNodeButton == null) return;
 
 		_cleareNodeButton.interactable = interactable;
+	}
+
+	private void StopBattleInteraction() {
+		_mouseController?.StopBattleInteraction();
 	}
 
 	private void OnEnable() {
