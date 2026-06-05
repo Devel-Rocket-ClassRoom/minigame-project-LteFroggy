@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -15,14 +16,19 @@ public class DeckManager : BattleSystemManager {
 	[Header("=== 뽑을 카드 더미, 사용한 카드 더미 텍스트 ===")]
 	[SerializeField] private CardPileController _drawPileController;
 	[SerializeField] private CardPileController _discardPileController;
+	[SerializeField] private DeckShuffleAnimator _deckShuffleAnimator;
 
 	private readonly List<CardInstance> _drawPile = new();
 	private readonly List<CardInstance> _discardPile = new();
 	private readonly List<CardInstance> _exhaustPile = new();
 	private readonly List<CardInstance> _handPile = new();
+	private readonly Queue<CardDrawSource> _pendingDraws = new();
 	private readonly List<CardInstance> _returnPile = new();   // 귀환: 다음 턴 손패로 돌아올 카드
 
 	private bool _isFirstTurn;   // 선천 카드 보장용 (전투 첫 턴 여부)
+
+	private Coroutine _drawQueueCoroutine;
+	private Coroutine _turnStartDrawCoroutine;
 
 	private readonly UnityEvent OnCardStateChanged = new();
 	private BattleManager _battleManager;
@@ -66,8 +72,18 @@ public class DeckManager : BattleSystemManager {
 		_returnPile.Clear();
 
 		// 선천: 첫 턴에는 선천 카드를 손패에 무조건 포함시킨 뒤, 남은 만큼만 드로우
+		if (_turnStartDrawCoroutine != null) {
+			StopCoroutine(_turnStartDrawCoroutine);
+		}
+		_turnStartDrawCoroutine = StartCoroutine(CoDrawTurnStartCards());
+	}
+
+	private IEnumerator CoDrawTurnStartCards() {
 		int drawCount = DrawCountOnNextTurn;
 		if (_isFirstTurn) {
+			if (_drawPile.Count == 0 && _discardPile.Count > 0) {
+				yield return CoShuffle();
+			}
 			drawCount -= DrawInnateCards();
 			_isFirstTurn = false;
 		}
@@ -76,6 +92,7 @@ public class DeckManager : BattleSystemManager {
 		}
 
 		OnCardStateChanged.Invoke();
+		_turnStartDrawCoroutine = null;
 	}
 
 	// 턴 종료되면, 유지 카드는 손에 남기고 나머지는 discardPile로
@@ -92,8 +109,6 @@ public class DeckManager : BattleSystemManager {
 	/// 선천 카드를 덱에서 찾아 손패에 추가하고, 추가한 장수를 반환한다.
 	/// </summary>
 	private int DrawInnateCards() {
-		if (_drawPile.Count == 0) { Shuffle(); }
-
 		List<CardInstance> innates = new();
 		foreach (var card in _drawPile) {
 			if (card.Keyword.IsInnate) innates.Add(card);
@@ -110,11 +125,21 @@ public class DeckManager : BattleSystemManager {
 	}
 
 	private void OnDisable() {
+		if (_turnStartDrawCoroutine != null) {
+			StopCoroutine(_turnStartDrawCoroutine);
+			_turnStartDrawCoroutine = null;
+		}
+		if (_drawQueueCoroutine != null) {
+			StopCoroutine(_drawQueueCoroutine);
+			_drawQueueCoroutine = null;
+		}
+
 		_drawPile.Clear();
 		_discardPile.Clear();
 		_exhaustPile.Clear();
 		_handPile.Clear();
 		_returnPile.Clear();
+		_pendingDraws.Clear();
 
 		OnCardStateChanged.RemoveListener(UpdateCardText);
 	}
@@ -124,9 +149,33 @@ public class DeckManager : BattleSystemManager {
 	/// </summary>
 	public void DrawCard(CardDrawSource source = CardDrawSource.CardEffect) {
 		if (BlockAdditionalDrawThisTurn) return;
-		if (_drawPile.Count == 0 && _discardPile.Count > 0) { Shuffle(); }
-		if (_drawPile.Count == 0) return;
 
+		if (_drawQueueCoroutine == null && _pendingDraws.Count == 0 && _drawPile.Count > 0) {
+			DrawTopCard(source);
+			return;
+		}
+
+		_pendingDraws.Enqueue(source);
+		if (_drawQueueCoroutine == null) {
+			_drawQueueCoroutine = StartCoroutine(CoProcessDrawQueue());
+		}
+	}
+
+	private IEnumerator CoProcessDrawQueue() {
+		while (_pendingDraws.Count > 0) {
+			CardDrawSource source = _pendingDraws.Dequeue();
+			if (_drawPile.Count == 0 && _discardPile.Count > 0) {
+				yield return CoShuffle();
+			}
+			if (_drawPile.Count == 0) continue;
+
+			DrawTopCard(source);
+		}
+
+		_drawQueueCoroutine = null;
+	}
+
+	private void DrawTopCard(CardDrawSource source) {
 		CardInstance drawn = _drawPile[_drawPile.Count - 1];
 		_handPile.Add(drawn);
 		_drawPile.RemoveAt(_drawPile.Count - 1);
@@ -214,28 +263,40 @@ public class DeckManager : BattleSystemManager {
 	/// <summary>
 	/// 카드 부족할 시, 카드를 섞는다.
 	/// </summary>
-	private void Shuffle() {
-		_drawPile.Clear();
-
-		List<List<int>> temp = new List<List<int>>(_discardPile.Count);
-
-		// 정렬 기준으로 0 ~ 100까지의 값 랜덤 할당
-		for (int i = 0; i < _discardPile.Count; i++) {
-			temp.Add(new List<int>());
-			temp[i].Add(i);
-			temp[i].Add(Random.Range(0, 100));
-		}
-		// 정렬 기준값 기반으로 Sort
-		temp.Sort((listA, listB) => listA[1].CompareTo(listB[1]));
-
-		// 이 기준으로 _drawPile에 삽입
-		foreach (var sorted in temp) {
-			_drawPile.Add(_discardPile[sorted[0]]);
-		}
-		// 버려진 카드 목록 초기화
-		_discardPile.Clear();
+	private IEnumerator CoShuffle() {
+		int shuffleCount = ShuffleDiscardPileIntoDrawPile();
+		if (shuffleCount == 0) yield break;
 
 		OnCardStateChanged.Invoke();
+		if (_deckShuffleAnimator == null) yield break;
+
+		yield return _deckShuffleAnimator.PlayShuffle(
+			_discardPileController != null ? _discardPileController.RectTransform : null,
+			_drawPileController != null ? _drawPileController.RectTransform : null,
+			shuffleCount
+		);
+
+	}
+
+	private int ShuffleDiscardPileIntoDrawPile() {
+		if (_discardPile.Count == 0) return 0;
+
+		List<CardInstance> shuffledCards = new(_discardPile);
+		for (int i = 0; i < shuffledCards.Count; i++) {
+			int randomIndex = Random.Range(i, shuffledCards.Count);
+			CardInstance card = shuffledCards[i];
+			shuffledCards[i] = shuffledCards[randomIndex];
+			shuffledCards[randomIndex] = card;
+		}
+
+		foreach (var card in shuffledCards) {
+			_drawPile.Add(card);
+		}
+		foreach (var card in shuffledCards) {
+			_discardPile.Remove(card);
+		}
+
+		return shuffledCards.Count;
 	}
 
 	private void ShowDrawPile() {
