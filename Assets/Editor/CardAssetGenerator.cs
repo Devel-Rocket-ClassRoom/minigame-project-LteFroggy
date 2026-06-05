@@ -245,11 +245,25 @@ public class CardAssetGenerator {
 		HashSet<int> usedIds
 	) {
 		string path = $"{CardPath}/{fileName}.asset";
-		if (AssetDatabase.LoadAssetAtPath<CardDefinition>(path) != null) {
-			Debug.Log($"{fileName}.asset 이미 존재, 건너뜀");
+		var existingCard = AssetDatabase.LoadAssetAtPath<CardDefinition>(path);
+		if (existingCard != null) {
+			if (existingCard.cardId != cardId && usedIds.Contains(cardId)) {
+				Debug.LogError($"[CardAssetGenerator] cardId {cardId} duplicate! {fileName}.asset update canceled");
+				return;
+			}
+
+			existingCard.cardId = cardId;
+			existingCard.rarity = rarity;
+			existingCard.cost = cost;
+			existingCard.tag = tag;
+			existingCard.needsTarget = needsTarget;
+			existingCard.keywords = keywords;
+			existingCard.actions = new List<CardAction>(actions);
+			existingCard.icon = LoadIcon(iconName);
+			EditorUtility.SetDirty(existingCard);
+			Debug.Log($"{fileName}.asset updated (cardId: {cardId})");
 			return;
 		}
-
 		if (!usedIds.Add(cardId)) {
 			Debug.LogError($"[CardAssetGenerator] cardId {cardId} 중복! {fileName}.asset 생성 취소");
 			return;
