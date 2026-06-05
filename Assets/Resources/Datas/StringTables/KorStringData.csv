@@ -59,7 +59,7 @@ OathOfRebelDesc,전투 시작 시 HP 3을 잃고 첫 턴 드로우 +-
 RustedThornArmorName,녹슨 가시 갑옷
 RustedThornArmorDesc,받은 피해의 -%를 공격자에게 반사합니다.
 FrozenChainsName,얼어붙은 사슬
-FrozenChainsDesc,[방어] 카드 사용 시 대상에게 약화 - 부여
+FrozenChainsDesc,[방어] 카드 사용 시 무작위 적에게 약화 - 부여
 PromiseOfRingName,고리의 약속
 PromiseOfRingDesc,카드 효과로 뽑은 카드의 이번 턴 비용 -
 HungrySwordName,굶주린 검
