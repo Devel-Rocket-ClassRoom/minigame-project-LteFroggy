@@ -145,11 +145,23 @@ public static class DescriptionSystem {
 	private static void SetContainerPosition(RectTransform source) {
 		Vector3[] corners = new Vector3[4];
 		source.GetWorldCorners(corners);
-		float minX = Mathf.Min(corners[0].x, corners[1].x, corners[2].x, corners[3].x);
-		float minY = Mathf.Min(corners[0].y, corners[1].y, corners[2].y, corners[3].y);
-		float maxX = Mathf.Max(corners[0].x, corners[1].x, corners[2].x, corners[3].x);
-		float maxY = Mathf.Max(corners[0].y, corners[1].y, corners[2].y, corners[3].y);
-		SetContainerPosition(new Vector2(maxX, maxY), new Vector2(minX, minY));
+		Camera sourceCamera = GetSourceCamera(source);
+		Vector2 corner0 = RectTransformUtility.WorldToScreenPoint(sourceCamera, corners[0]);
+		Vector2 corner1 = RectTransformUtility.WorldToScreenPoint(sourceCamera, corners[1]);
+		Vector2 corner2 = RectTransformUtility.WorldToScreenPoint(sourceCamera, corners[2]);
+		Vector2 corner3 = RectTransformUtility.WorldToScreenPoint(sourceCamera, corners[3]);
+
+		float minX = Mathf.Min(corner0.x, corner1.x, corner2.x, corner3.x);
+		float maxX = Mathf.Max(corner0.x, corner1.x, corner2.x, corner3.x);
+		float maxY = Mathf.Max(corner0.y, corner1.y, corner2.y, corner3.y);
+		SetContainerPosition(new Vector2(maxX, maxY), new Vector2(minX, maxY));
+	}
+
+	private static Camera GetSourceCamera(RectTransform source) {
+		Canvas canvas = source.GetComponentInParent<Canvas>();
+		if (canvas == null || canvas.renderMode == RenderMode.ScreenSpaceOverlay) return null;
+		if (canvas.worldCamera != null) return canvas.worldCamera;
+		return Camera.main;
 	}
 
 	// 스크린 좌표를 기준으로 패널 컨테이너 위치 설정
