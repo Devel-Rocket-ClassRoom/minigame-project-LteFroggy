@@ -7,7 +7,7 @@
 
 	// 방어도 얻는 카드 사용 시 적용됨
 	public override int CalculateAmount(CardAction action, CardInstance instance, int amount) {
-		if (action is GainArmorCardAction && instance._cardDefinition.tag == CardTag.Defense) {
+		if (action.IsBlockAction && instance._cardDefinition.tag == CardTag.Defense) {
 			return amount + 3;
 		}
 		return amount;

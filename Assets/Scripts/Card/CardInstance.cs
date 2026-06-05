@@ -7,14 +7,35 @@ public class CardInstance {
 	public string TagText => StringTableManager.StringTable[_cardDefinition.tag.ToString()];
 	public string RarityText => StringTableManager.StringTable[_cardDefinition.rarity.ToString()];
 	public Sprite Icon => _cardDefinition.icon;
-	public int Cost => _cardDefinition.cost;
+	public int Cost => Mathf.Max(0, _cardDefinition.cost + _temporaryCostModifier);
 	public bool NeedsTarget => _cardDefinition.needsTarget;
 	public CardKeyword Keyword { get; }
+	public float BattleAmountMultiplier { get; private set; } = 1f;
+
+	private int _temporaryCostModifier;
 
 
 	public CardInstance(CardDefinition cardDefinition) {
 		_cardDefinition = cardDefinition;
 		Keyword = new CardKeyword(cardDefinition.keywords);
+	}
+
+	public void AddTemporaryCostModifier(int amount) {
+		_temporaryCostModifier += amount;
+	}
+
+	public void AddBattleAmountMultiplier(float multiplier) {
+		BattleAmountMultiplier *= multiplier;
+	}
+
+	public void ResetTurnModifiers() {
+		_temporaryCostModifier = 0;
+	}
+
+	public void ResetBattleModifiers() {
+		_temporaryCostModifier = 0;
+		BattleAmountMultiplier = 1f;
+		Keyword.Reset(_cardDefinition.keywords);
 	}
 	
 	/// <summary>

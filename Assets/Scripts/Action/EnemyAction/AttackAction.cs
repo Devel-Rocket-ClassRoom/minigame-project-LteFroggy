@@ -34,7 +34,15 @@ public class AttackAction : EnemyAction {
 	// 데미지 주기
 	public override void Execute(EnemyActionContext context) {
 		if (context.target.IsDead) return;
-		context.target.GetDamage(CalculateAmountWithContext(context));
+		var damageContext = new DamageContext(
+			context.battleManager,
+			context.user,
+			context.target,
+			null,
+			null,
+			DamageSourceType.Enemy
+		);
+		context.target.GetDamage(CalculateAmountWithContext(context), damageContext);
 		context.user.PlayAttackAnimation();
 	}
 }

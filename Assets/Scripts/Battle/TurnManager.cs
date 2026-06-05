@@ -34,6 +34,7 @@ public class TurnManager : BattleSystemManager {
 
 	// 턴 관리
 	private int _turnCount = 0;
+	public int TurnCount => _turnCount;
 	private bool _isEnemyTurn;
 
 	private void Start() {

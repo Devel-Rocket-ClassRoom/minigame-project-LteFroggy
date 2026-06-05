@@ -1,5 +1,9 @@
 ﻿public abstract class CardAction : ActionBase<CardUseContext> {
 	public abstract string CardDescriptionKey { get; }
+	public virtual bool IsDamageAction => false;
+	public virtual bool IsBlockAction => false;
+	public virtual bool IsHealAction => false;
+	public virtual bool IsBurnAction => false;
 	
 	/// <summary>
 	/// 카드 기본 텍스트 반환. 카드 설명에서 사용한다.

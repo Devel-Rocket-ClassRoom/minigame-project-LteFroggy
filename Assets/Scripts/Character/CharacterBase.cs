@@ -10,6 +10,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	public int MaxHealth { get; set; } = 100;
 	public int CurrentHealth { get; protected set; }
 	public int Block { get; protected set; }
+	public BattleManager BattleManager { get; private set; }
 	
 	public UnityEvent OnDeath;
 	public bool IsDead => CurrentHealth <= 0;
@@ -58,13 +59,33 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	
 	public abstract void SetHealth();
 
+	public void SetBattleManager(BattleManager battleManager) {
+		BattleManager = battleManager;
+	}
+
+	public void SetCurrentHealth(int current) {
+		CurrentHealth = Mathf.Clamp(current, 0, MaxHealth);
+		OnHealthChanged();
+	}
+
 	public void GetDamage(int amount) {
+		GetDamage(amount, null);
+	}
+
+	public void GetDamage(int amount, DamageContext damageContext) {
 		amount = Mathf.Max(0, amount);
+		if (damageContext?.battleManager != null) {
+			amount = damageContext.battleManager.RelicManager.ModifyIncomingDamage(damageContext, amount);
+		}
+
 		int healthBefore = CurrentHealth;
-		int reduceBlockAmount = Math.Min(amount, Block);
-		// 피해를 받았을 땐 방어도부터 제거
-		amount -= reduceBlockAmount;
-		LoseBlock(reduceBlockAmount);
+		bool wasAlive = !IsDead;
+		if (damageContext == null || !damageContext.ignoresBlock) {
+			int reduceBlockAmount = Math.Min(amount, Block);
+			// 피해를 받았을 땐 방어도부터 제거
+			amount -= reduceBlockAmount;
+			LoseBlock(reduceBlockAmount);
+		}
 
 		CurrentHealth -= amount;
 
@@ -77,7 +98,19 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		// 맞으면 맞는 애니메이션
 		PlayHitAnimation();
 
-		if (IsDead) {
+		if (actualDamage > 0 && damageContext?.battleManager != null) {
+			damageContext.battleManager.RelicManager.OnAfterOwnerDamaged(this, damageContext.source, actualDamage);
+		}
+
+		if (wasAlive && IsDead && damageContext?.battleManager != null) {
+			if (damageContext.battleManager.RelicManager.TryPreventOwnerDeath(this)) {
+				OnHealthChanged();
+				return;
+			}
+			damageContext.battleManager.RelicManager.OnEnemyKilled(damageContext, this);
+		}
+
+		if (wasAlive && IsDead) {
 			PlayDeathAnimation();
 			OnDeath?.Invoke();
 		}
@@ -85,30 +118,13 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	}
 
 	//  화상 등의 특별한 효과들은 방어도 고려 않고 바로 체력을 깎는다.
-	public void GetDamageWithoutArmor(int amount) {
-		amount = Mathf.Max(0, amount);
-		int healthBefore = CurrentHealth;
-		CurrentHealth -= amount;
-
-		// 체력 0 이하로 내려가지 않게
-		CurrentHealth = Mathf.Max(CurrentHealth, 0);
-		int actualDamage = Mathf.Max(healthBefore - CurrentHealth, 0);
-
-		_hitFeedbackView?.Play(actualDamage);
-
-		// 맞으면 맞는 애니메이션
-		PlayHitAnimation();
-
-		if (IsDead) {
-			PlayDeathAnimation();
-			OnDeath?.Invoke();
-		}
-
-		OnHealthChanged();
+	public void GetDamageWithoutArmor(int amount, DamageContext damageContext = null) {
+		var context = damageContext ?? new DamageContext(BattleManager, null, this, null, null, DamageSourceType.Burn, true);
+		GetDamage(amount, context);
 	}
 
 	public void GetHeal(int amount) {
-		CurrentHealth += amount;
+		CurrentHealth = Mathf.Min(CurrentHealth + amount, MaxHealth);
 		OnHealthChanged();
 	}
 

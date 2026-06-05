@@ -1,5 +1,7 @@
-﻿public class EnemyActionContext : BattleContextBase {
-	public EnemyActionContext(CharacterBase user, CharacterBase target) : base(user, target) {
-		
+public class EnemyActionContext : BattleContextBase {
+	public readonly BattleManager battleManager;
+
+	public EnemyActionContext(BattleManager battleManager, CharacterBase user, CharacterBase target) : base(user, target) {
+		this.battleManager = battleManager;
 	}
 }

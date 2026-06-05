@@ -11,11 +11,11 @@ public class WeaknessCardAction : CardAction {
 		if (context.target.IsDead) return;
 		
 		var weakness = new Weakness();
-		weakness.Init(context.target, 0, Amount);
+		weakness.Init(context.target, 0, CalculateAmountWithContext(context));
 		context.target.AddStatus(weakness);
 	}
 	
 	protected override int CalculateAmountWithContext(CardUseContext context) {
-		return Amount;
+		return context.relicManager.CalculateAmountWithRelics(context, this, Amount);
 	}
 }

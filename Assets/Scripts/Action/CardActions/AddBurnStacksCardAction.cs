@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Card/Card Actions/Add Burn Stacks")]
 public class AddBurnStacksCardAction : CardAction {
 	public int amount;
+	public override bool IsBurnAction => true;
 
 	protected override int Amount => amount;
 	public override string CardDescriptionKey => "AddBurnStacksCardText";
@@ -17,7 +18,7 @@ public class AddBurnStacksCardAction : CardAction {
 
 	protected override int CalculateAmountWithContext(CardUseContext context) {
 		int result = amount;
-		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
+		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		return result;
 	}
 }

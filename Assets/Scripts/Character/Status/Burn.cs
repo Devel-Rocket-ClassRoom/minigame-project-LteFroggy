@@ -17,6 +17,7 @@
 
 	// 턴 시작할 때 데미지 주기
 	public override void OnTurnStart() {
-		Owner.GetDamageWithoutArmor(Stack);
+		var context = new DamageContext(Owner.BattleManager, null, Owner, null, null, DamageSourceType.Burn, true);
+		Owner.GetDamageWithoutArmor(Stack, context);
 	}
 }

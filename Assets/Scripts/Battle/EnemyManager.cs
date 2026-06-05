@@ -42,6 +42,7 @@ public class EnemyManager : BattleSystemManager {
 			EnemyInstance enemy = Instantiate(_enemyPrefab);
 			enemy.transform.position = _enemySpawnPoint + (Vector3.right * i * _enemySpawnSpacing);
 			enemy.Init(enemySpawnTable.enemyList[i], this);
+			enemy.SetBattleManager(_battleManager);
 			
 			_enemyList.Add(enemy);
 		}
@@ -82,6 +83,7 @@ public class EnemyManager : BattleSystemManager {
 		// 적의 경우 공격받는 대상이 항상 Player
 		// 공격하는 대상은 매개변수로 받아서 입력
 		return new EnemyActionContext(
+			_battleManager,
 			instance,
 			_characterManager.Player
 		);

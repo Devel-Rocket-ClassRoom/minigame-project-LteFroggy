@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Card/Card Actions/Hand Defense Count Armor")]
 public class HandDefenseCountArmorAction : CardAction {
 	public int amount;
+	public override bool IsBlockAction => true;
 
 	protected override int Amount => amount;
 	public override string CardDescriptionKey => "HandDefenseCountArmorCardText";
@@ -19,7 +20,7 @@ public class HandDefenseCountArmorAction : CardAction {
 
 	protected override int CalculateAmountWithContext(CardUseContext context) {
 		int result = amount;
-		result = context.relicManager.CalculateAmountWithRelics(context.cardInfo, this, result);
+		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		return result;
 	}
 }

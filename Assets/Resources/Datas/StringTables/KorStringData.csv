@@ -7,6 +7,8 @@ Fire,화염
 Common,일반
 Uncommon,고급
 Rare,희귀
+Epic,영웅
+Legendary,전설
 TurnText,-번째 턴
 EnemyTurn,적 턴
 EndTurn,턴 종료
@@ -27,6 +29,15 @@ AddBurnStacksCardText,적의 화상을 - 증가시킵니다.
 HandDefenseCountArmorCardText,손패의 [방어] 카드 수 × - 방어도를 얻습니다.
 BlockAdditionalDrawCardText,이번 턴 카드를 드로우할 수 없습니다.
 HalveCardText,반감을 1 부여합니다.
+LosePlayerHealthCardText,자신의 HP를 - 잃습니다.
+HealPlayerCardText,HP를 - 회복합니다.
+ExecuteCardText,적 HP가 #% 이하이면 처치합니다. 아니면 피해를 - 줍니다.
+ConditionalBurnCardText,화상을 - 부여합니다. 대상이 이미 화상이라면 화상을 # 추가로 부여합니다.
+ConditionalBurnDamageOrBurnCardText,대상이 화상이라면 피해를 - 줍니다. 아니면 화상을 # 부여합니다.
+ConditionalArmorOrDrawCardText,현재 방어도가 0이면 방어도를 - 얻습니다. 아니면 카드를 #장 뽑습니다.
+LowHealthArmorCardText,HP가 절반 이하면 방어도를 - 얻습니다. 아니면 방어도를 # 얻습니다.
+NextTurnDrawBonusCardText,다음 턴 시작 드로우가 - 증가합니다.
+LostHealthBonusDamageCardText,피해를 - 줍니다. 잃은 HP의 #%만큼 추가 피해를 줍니다.
 MapButton,지도
 DeckButton,덱
 GreatswordName,대검
@@ -35,6 +46,66 @@ DaggerName,단검
 DaggerDesc,카드 공격 횟수 +-
 ThickShieldName,두꺼운 방패
 ThickShieldDesc,카드 방어도 +-
+SageGlassesName,현자의 안경
+SageGlassesDesc,[유틸] 카드 사용 시 턴마다 한 번 에너지 +-
+RuneOfReturnName,회귀의 룬
+RuneOfReturnDesc,[귀환] 카드가 손으로 돌아올 때 방어도 +-
+OathOfIncinerationName,소각의 맹세
+OathOfIncinerationDesc,[소모] 카드 사용 시 카드를 -장 뽑습니다.
+CrownShardOfDesireName,욕망의 왕관 파편
+CrownShardOfDesireDesc,카드 보상 선택지가 -장 증가합니다.
+OathOfRebelName,반역자의 맹세
+OathOfRebelDesc,전투 시작 시 HP 3을 잃고 첫 턴 드로우 +-
+RustedThornArmorName,녹슨 가시 갑옷
+RustedThornArmorDesc,받은 피해의 -%를 공격자에게 반사합니다.
+FrozenChainsName,얼어붙은 사슬
+FrozenChainsDesc,[방어] 카드 사용 시 대상에게 약화 - 부여
+PromiseOfRingName,고리의 약속
+PromiseOfRingDesc,카드 효과로 뽑은 카드의 이번 턴 비용 -
+HungrySwordName,굶주린 검
+HungrySwordDesc,적 처치 시 무작위 손패 카드 효과 +-%
+AshGuideName,재의 인도자
+AshGuideDesc,화상 피해로 적 처치 시 잃은 HP의 -% 회복
+ForgottenBookName,잊혀진 자의 책
+ForgottenBookDesc,매 턴 첫 카드 효과 -배 후 그 카드는 소모됩니다.
+CrownKissName,왕관의 입맞춤
+CrownKissDesc,보스에게 주는 피해 +-% 일반 적에게 주는 피해 25% 감소
+ExecutionChainName,처형대의 사슬
+ExecutionChainDesc,같은 적에게 같은 카드 사용 시 효과 +-% 누적
+GraveBreathName,무덤의 호흡
+GraveBreathDesc,HP 0 도달 시 한 번 -% HP로 부활합니다.
+SandsOfTimeName,시간의 모래
+SandsOfTimeDesc,매 -턴마다 적 행동 없이 추가 턴을 얻습니다.
+SmallBrazierName,작은 화로
+SmallBrazierDesc,매 전투 첫 화상 부여량 +-
+AshCacheName,재 보관함
+AshCacheDesc,[화염] 카드 사용 시 방어도 +-
+WarDrumName,전투 북
+WarDrumDesc,매 턴 첫 [공격] 카드 피해 +-
+LeadDiceName,납 주사위
+LeadDiceDesc,카드 보상 중 일반 카드 -장을 다시 뽑습니다.
+OldMapName,낡은 지도
+OldMapDesc,전투 승리 골드 +-. 보스 전투에서는 +15
+BloodstainedBandageName,피 묻은 붕대
+BloodstainedBandageDesc,카드 효과로 받는 자기 피해 - 감소
+WhetstoneName,연마석
+WhetstoneDesc,[공격] 카드로 적 처치 시 카드를 -장 뽑습니다.
+HeavyBootsName,무거운 부츠
+HeavyBootsDesc,[유지] 카드가 턴 종료 시 손에 남으면 다음 턴 방어도 +-
+DryGunpowderName,마른 화약
+DryGunpowderDesc,[과부하] 카드 효과 +-%
+ColdHeartName,차가운 심장
+ColdHeartDesc,이전 턴에 카드를 쓰지 않았다면 다음 턴 힘 +-
+WatchmanBellName,파수꾼의 종
+WatchmanBellDesc,매 전투 첫 피격 피해 - 감소
+QuickHandName,재빠른 손
+QuickHandDesc,매 턴 첫 0비용 카드 사용 시 카드를 -장 뽑습니다.
+RoyalEmblemName,왕실 문장
+RoyalEmblemDesc,엘리트와 보스 전투 승리 골드 +-
+BrokenChaliceName,깨진 성배
+BrokenChaliceDesc,회복 카드 효과 +-. 전투 시작 시 HP 1을 잃습니다.
+BlackCandlestickName,검은 촛대
+BlackCandlestickDesc,[소모] 카드 사용 시 대상에게 화상 - 부여
 Burn,화상
 Halve,반감
 Strength,힘

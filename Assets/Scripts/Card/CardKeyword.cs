@@ -19,4 +19,5 @@ public class CardKeyword {
 	public bool Has(CardKeywordType type)    => (_flags & type) != 0;
 	public void Add(CardKeywordType type)    => _flags |= type;
 	public void Remove(CardKeywordType type) => _flags &= ~type;
+	public void Reset(CardKeywordType flags) => _flags = flags;
 }
