@@ -8,6 +8,10 @@ public static class DescriptionSystem {
 	private static RectTransform _tooltipCanvas;
 	private static RectTransform _panelContainer;
 	private static readonly List<DescriptionPanelController> _activePanels = new();
+	private static readonly Vector2 BottomLeftAnchor = Vector2.zero;
+	private static readonly Vector2 TopLeftPivot = new(0f, 1f);
+	private static Vector2 _preferredContainerPosition;
+	private static Vector2 _fallbackContainerPosition;
 
 	// 최초 접근 시 Canvas 자동 생성 (Lazy Initialization)
 	private static RectTransform PanelContainer {
@@ -54,9 +58,9 @@ public static class DescriptionSystem {
 		csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
 		_panelContainer = containerObj.GetComponent<RectTransform>();
-		_panelContainer.anchorMin = new Vector2(0.5f, 0.5f);
-		_panelContainer.anchorMax = new Vector2(0.5f, 0.5f);
-		_panelContainer.pivot = new Vector2(0f, 1f);
+		_panelContainer.anchorMin = BottomLeftAnchor;
+		_panelContainer.anchorMax = BottomLeftAnchor;
+		_panelContainer.pivot = TopLeftPivot;
 		_panelContainer.sizeDelta = new Vector2(300f, 0f);
 	}
 
@@ -65,6 +69,7 @@ public static class DescriptionSystem {
 	public static string ProcessCardText(string text, RectTransform source) {
 		SetContainerPosition(source);
 		Show(CollectKeywords(text));
+		ClampContainerToScreen();
 		return ProcessText(text);
 	}
 
@@ -73,6 +78,7 @@ public static class DescriptionSystem {
 		SetContainerPosition(source);
 		Show(title, description);
 		Show(CollectKeywords(description));
+		ClampContainerToScreen();
 	}
 
 	// 유물의 이름/설명 패널을 표시하고, 설명 내 키워드 패널도 추가로 표시
@@ -80,6 +86,7 @@ public static class DescriptionSystem {
 		SetContainerPosition(source);
 		Show(relic.displayName, relic.effectDescription);
 		Show(CollectKeywords(relic.effectDescription));
+		ClampContainerToScreen();
 	}
 
 	// 캐릭터에 걸린 상태이상 키워드들의 설명 패널 표시 (중첩 키워드 포함)
@@ -90,6 +97,7 @@ public static class DescriptionSystem {
 		foreach (var status in statuses) {
 			ShowWithIcon(status.DescriptionTitle, status.DescriptionContent, status.Icon);	
 		}
+		ClampContainerToScreen();
 	}
 
 	public static void ProcessEnemyIntentAndStatusPanels(
@@ -122,6 +130,7 @@ public static class DescriptionSystem {
 		}
 
 		Show(keywordInfos);
+		ClampContainerToScreen();
 	}
 
 	// 현재 표시 중인 패널을 전부 Pool에 반납
@@ -136,20 +145,77 @@ public static class DescriptionSystem {
 	private static void SetContainerPosition(RectTransform source) {
 		Vector3[] corners = new Vector3[4];
 		source.GetWorldCorners(corners);
+		float minX = Mathf.Min(corners[0].x, corners[1].x, corners[2].x, corners[3].x);
+		float minY = Mathf.Min(corners[0].y, corners[1].y, corners[2].y, corners[3].y);
 		float maxX = Mathf.Max(corners[0].x, corners[1].x, corners[2].x, corners[3].x);
 		float maxY = Mathf.Max(corners[0].y, corners[1].y, corners[2].y, corners[3].y);
-		SetContainerPosition(new Vector2(maxX, maxY));
+		SetContainerPosition(new Vector2(maxX, maxY), new Vector2(minX, minY));
 	}
 
 	// 스크린 좌표를 기준으로 패널 컨테이너 위치 설정
 	private static void SetContainerPosition(Vector2 screenPos) {
+		SetContainerPosition(screenPos, screenPos);
+	}
+
+	private static void SetContainerPosition(Vector2 preferredScreenPos, Vector2 fallbackScreenPos) {
+		PanelContainer.anchorMin = BottomLeftAnchor;
+		PanelContainer.anchorMax = BottomLeftAnchor;
+		PanelContainer.pivot = TopLeftPivot;
+		_preferredContainerPosition = ScreenToBottomLeftAnchoredPosition(preferredScreenPos);
+		_fallbackContainerPosition = ScreenToBottomLeftAnchoredPosition(fallbackScreenPos);
+		PanelContainer.anchoredPosition = _preferredContainerPosition;
+	}
+
+	private static Vector2 ScreenToBottomLeftAnchoredPosition(Vector2 screenPos) {
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(
 			TooltipCanvas,
 			screenPos,
 			null,
 			out Vector2 localPos
 		);
-		PanelContainer.anchoredPosition = localPos;
+		return localPos - TooltipCanvas.rect.min;
+	}
+
+	private static void ClampContainerToScreen() {
+		if (_activePanels.Count == 0) return;
+
+		Canvas.ForceUpdateCanvases();
+		LayoutRebuilder.ForceRebuildLayoutImmediate(PanelContainer);
+		Canvas.ForceUpdateCanvases();
+
+		Vector2 panelSize = PanelContainer.rect.size;
+		Vector2 position = IsOutsideCanvas(_preferredContainerPosition, panelSize)
+			? _fallbackContainerPosition
+			: _preferredContainerPosition;
+
+		PanelContainer.anchoredPosition = ClampToCanvas(position, panelSize);
+	}
+
+	private static bool IsOutsideCanvas(Vector2 topLeftPosition, Vector2 panelSize) {
+		Rect canvasRect = TooltipCanvas.rect;
+		return topLeftPosition.x < 0f
+			|| topLeftPosition.x + panelSize.x > canvasRect.width
+			|| topLeftPosition.y > canvasRect.height
+			|| topLeftPosition.y - panelSize.y < 0f;
+	}
+
+	private static Vector2 ClampToCanvas(Vector2 topLeftPosition, Vector2 panelSize) {
+		Rect canvasRect = TooltipCanvas.rect;
+		topLeftPosition.x = Mathf.Clamp(
+			topLeftPosition.x,
+			0f,
+			Mathf.Max(0f, canvasRect.width - panelSize.x)
+		);
+
+		if (topLeftPosition.y > canvasRect.height) {
+			topLeftPosition.y = canvasRect.height;
+		}
+
+		if (topLeftPosition.y - panelSize.y < 0f) {
+			topLeftPosition.y = Mathf.Min(canvasRect.height, panelSize.y);
+		}
+
+		return topLeftPosition;
 	}
 
 	private static void Show(Dictionary<string, string> infos) {
