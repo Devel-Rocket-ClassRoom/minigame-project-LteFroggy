@@ -11,8 +11,8 @@ public class ConditionalBurnBonusDamageCardAction : CardAction {
 
 	public override string GetCardDescription() {
 		return StringTableManager.StringTable[CardDescriptionKey]
-			.Replace("-", amount.ToString())
-			.Replace("#", bonusAmount.ToString());
+			.Replace("#", bonusAmount.ToString())
+			.Replace("-", amount.ToString());
 	}
 
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
@@ -21,8 +21,8 @@ public class ConditionalBurnBonusDamageCardAction : CardAction {
 			: calculated < amount ? GetRedText(calculated.ToString())
 			: calculated.ToString();
 		return StringTableManager.StringTable[CardDescriptionKey]
-			.Replace("-", amountText)
-			.Replace("#", bonusAmount.ToString());
+			.Replace("#", bonusAmount.ToString())
+			.Replace("-", amountText);
 	}
 
 	public override void Execute(CardUseContext context) {
