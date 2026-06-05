@@ -34,6 +34,7 @@ public class BattleMouseController : MonoBehaviour {
 
 	// 현재 마우스가 올라가 있는 캐릭터 (의도/상태이상 툴팁 표시용)
 	private CharacterBase _hoveredCharacter;
+	private bool _isBattleInteractionStopped;
 	
 	// 대상 선택해야 할 상황이라면, 라인 만들어주기
 	private RectTransform _lineStartPoint;
@@ -97,6 +98,8 @@ public class BattleMouseController : MonoBehaviour {
 
 	// 클릭한 위치가 UI의 카드 위인지 검사
 	private void OnClickStarted(InputAction.CallbackContext context) {
+		if (_isBattleInteractionStopped) { return; }
+
 		// 현재 Position을 읽어서 저장
 		PointerEventData pointerData = new PointerEventData(EventSystem.current) {
 			position = _mousePositionAction.ReadValue<Vector2>()
@@ -121,6 +124,7 @@ public class BattleMouseController : MonoBehaviour {
 	}
 	
 	private void OnClickReleased(InputAction.CallbackContext context) {
+		if (_isBattleInteractionStopped) { return; }
 		if (_selectedCard == null) { return; }
 		
 		// 현재 충돌 위치가 CardUseArea 내부라면, 사용 처리
@@ -154,6 +158,19 @@ public class BattleMouseController : MonoBehaviour {
 		TargetInstance = null;
 
 		DescriptionSystem.Hide();
+	}
+
+	public void StopBattleInteraction() {
+		if (_isBattleInteractionStopped) { return; }
+
+		_isBattleInteractionStopped = true;
+
+		if (_selectedCard != null) {
+			DeselectSelectedCard();
+		}
+
+		ClearCardUseState();
+		SetHoveredCharacter(null);
 	}
 
 	// 마우스 아래 캐릭터를 감지해 의도/상태이상 툴팁을 띄우거나 닫는다
@@ -193,6 +210,8 @@ public class BattleMouseController : MonoBehaviour {
 	}
 
 	private void Update() {
+		if (_isBattleInteractionStopped) { return; }
+
 		// 카드를 들고 있지 않을 때만 캐릭터 호버 의도/상태이상 툴팁 처리
 		HandleCharacterHover();
 
