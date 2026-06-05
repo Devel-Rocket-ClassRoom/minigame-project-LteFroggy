@@ -121,5 +121,5 @@ Chain,연쇄
 EnemyAttackIntentText,피해를 - 줍니다.
 EnemyGainArmorIntentText,자신의 방어도를 - 얻습니다.
 EnemySelfBuffIntentText,자신을 강화합니다.
-EnemyTargetDebuffIntentText,약화 효과를 시전합니다.
+EnemyTargetDebuffIntentText,플레이어에게 상태이상을 부여합니다.
 InsufficientEnergy,에너지가 부족합니다.

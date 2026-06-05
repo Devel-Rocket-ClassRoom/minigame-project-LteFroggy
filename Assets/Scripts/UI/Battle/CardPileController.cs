@@ -8,6 +8,7 @@ public class CardPileController : MonoBehaviour {
 	[SerializeField] private TextMeshProUGUI _countText;
 	private Button _button;
 	private DescriptionTooltipTrigger _tooltipTrigger;
+	public RectTransform RectTransform => transform as RectTransform;
 
 	private void Awake() {
 		_button = GetComponent<Button>();

@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
+	private static readonly Color k_NotEnoughEnergyColor = new Color(1f, 90f / 255f, 90f / 255f, 1f);
 
 	private RectTransform _rectTransform;
 	private RectTransform _drawPileLocation;
@@ -42,6 +43,8 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	[SerializeField] private TextMeshProUGUI _cardNameText;
 	[SerializeField] private TextMeshProUGUI _cardDescriptionText;
 	[SerializeField] private TextMeshProUGUI _cardCostText;
+	private Color _defaultCostTextColor;
+	private bool _hasDefaultCostTextColor;
 
 	[Header("=== 카드 사용, 삭제 시 이동할 위치 구하기 위함 ===")]
 	private RectTransform _drawPile;
@@ -95,7 +98,9 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		_cardIcon.sprite = _cardInstance.Icon;
 		_cardNameText.text = _cardInstance.CardName;
 		_cardNameText.fontSize = 40 - 2 * _cardInstance.CardName.Length;
+		CacheDefaultCostTextColor();
 		_cardCostText.text = _cardInstance.Cost.ToString();
+		RefreshEnergyCostColor(battleManager.CardUseManager.CurrentEnergy);
 		RefreshCardDescription();
 		
 		// 시작 위치를 DrawPile쪽으로 해서 생성되면 그쪽에서 오는 것처럼 표현
@@ -212,5 +217,19 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// </summary>
 	public void RefreshCardDescription() {
 		_cardDescriptionText.text = _cardInstance.GetCardDescriptionWithContext(GetBattleContext());
+	}
+
+	public void RefreshEnergyCostColor(int currentEnergy) {
+		CacheDefaultCostTextColor();
+		_cardCostText.color = _cardInstance.Cost > currentEnergy
+			? k_NotEnoughEnergyColor
+			: _defaultCostTextColor;
+	}
+
+	private void CacheDefaultCostTextColor() {
+		if (_hasDefaultCostTextColor) return;
+
+		_defaultCostTextColor = _cardCostText.color;
+		_hasDefaultCostTextColor = true;
 	}
 }

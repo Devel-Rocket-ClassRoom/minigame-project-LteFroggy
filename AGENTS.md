@@ -93,3 +93,13 @@ PR을 생성하거나 PR 본문을 작성할 때는 별도 지시가 없는 한 
 
 - 이 레포에서 사용자에게 답변할 때는 항상 존댓말을 사용한다.
 - 반말, 낮춤말, 지나치게 캐주얼한 말투를 사용하지 않는다.
+
+---
+
+## GitHub CLI 인증 처리 규칙
+
+Codex 샌드박스 내부 일반 실행에서 `gh auth status`가 invalid token으로 보이더라도, 사용자의 Windows keyring 인증은 정상일 수 있다.
+
+- `gh auth status`, `gh pr create`, `gh pr merge`, `gh pr checks`, `gh repo view` 등 GitHub CLI 인증이 필요한 명령은 `require_escalated` 승인 실행으로 재확인한다.
+- 승인 실행에서 keyring 인증이 정상으로 확인되면, PR 생성/머지 등 GitHub 작업도 같은 방식으로 진행한다.
+- 사용자가 토큰을 채팅에 직접 붙여넣도록 요구하지 않는다.

@@ -761,6 +761,7 @@ GameObject:
   m_Component:
   - component: {fileID: 288285110}
   - component: {fileID: 288285111}
+  - component: {fileID: 288285112}
   m_Layer: 0
   m_Name: Deck Manager
   m_TagString: Untagged
@@ -798,6 +799,29 @@ MonoBehaviour:
   _handLayoutController: {fileID: 1490730137}
   _drawPileController: {fileID: 1266715709}
   _discardPileController: {fileID: 1343037839}
+  _deckShuffleAnimator: {fileID: 288285112}
+--- !u!114 &288285112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288285109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62c9100352c84c0cb86390fc95a55ab2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::DeckShuffleAnimator
+  _animationRoot: {fileID: 353561517}
+  _cardSprite: {fileID: 21300000, guid: bd656af9ccaa4214bb2d7bdd054dc9f2, type: 3}
+  _cardSize: {x: 48, y: 64}
+  _cardColor: {r: 1, g: 1, b: 1, a: 1}
+  _moveDuration: 0.55
+  _maxStartDelay: 0.12
+  _positionJitter: 18
+  _curveSideOffset: 130
+  _curveHeightRange: {x: 70, y: 170}
+  _rotationRange: 24
 --- !u!1 &307796127
 GameObject:
   m_ObjectHideFlags: 0

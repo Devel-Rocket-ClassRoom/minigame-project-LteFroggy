@@ -109,7 +109,7 @@ public static class DescriptionSystem {
 		Hide();
 		SetContainerPosition(screenPos);
 
-		Dictionary<string, string> keywordInfos = new();
+		var keywordInfos = new List<KeyValuePair<string, string>>();
 		if (actions != null && context != null) {
 			foreach (var action in actions) {
 				if (action == null) continue;
@@ -230,15 +230,15 @@ public static class DescriptionSystem {
 		return topLeftPosition;
 	}
 
-	private static void Show(Dictionary<string, string> infos) {
+	private static void Show(IEnumerable<KeyValuePair<string, string>> infos) {
 		foreach (var (title, desc) in infos)
 			Show(title, desc);
 	}
 
-	private static void AddKeywords(string text, Dictionary<string, string> keywordInfos) {
+	private static void AddKeywords(string text, List<KeyValuePair<string, string>> keywordInfos) {
 		foreach (var (title, desc) in CollectKeywords(text)) {
-			if (!keywordInfos.ContainsKey(title)) {
-				keywordInfos.Add(title, desc);
+			if (!ContainsKeyword(keywordInfos, title)) {
+				keywordInfos.Add(new KeyValuePair<string, string>(title, desc));
 			}
 		}
 	}
@@ -263,20 +263,49 @@ public static class DescriptionSystem {
 
 	// BFS로 텍스트 내 키워드를 수집
 	// 키워드 설명 내에 또 다른 키워드가 있으면 그것도 재귀적으로 수집 (중복 제거)
-	private static Dictionary<string, string> CollectKeywords(string text) {
-		var result = new Dictionary<string, string>();
+	private static List<KeyValuePair<string, string>> CollectKeywords(string text) {
+		var result = new List<KeyValuePair<string, string>>();
 		var queue = new Queue<string>();
 		queue.Enqueue(text);
 		while (queue.Count > 0) {
 			string current = queue.Dequeue();
-			foreach (var keyword in StringTableManager.DescriptionTable.Keys) {
-				if (current.Contains(keyword) && !result.ContainsKey(keyword)) {
-					result.Add(keyword, StringTableManager.DescriptionTable[keyword]);
-					// 이 키워드의 설명에도 키워드가 있을 수 있으므로 큐에 추가
-					queue.Enqueue(StringTableManager.DescriptionTable[keyword]);
-				}
+			foreach (var keyword in FindKeywordsInTextOrder(current)) {
+				if (ContainsKeyword(result, keyword)) continue;
+
+				string description = StringTableManager.DescriptionTable[keyword];
+				result.Add(new KeyValuePair<string, string>(keyword, description));
+				queue.Enqueue(description);
 			}
 		}
+		return result;
+	}
+
+	private static bool ContainsKeyword(List<KeyValuePair<string, string>> infos, string title) {
+		foreach (var (existingTitle, _) in infos) {
+			if (existingTitle == title) return true;
+		}
+
+		return false;
+	}
+
+	private static List<string> FindKeywordsInTextOrder(string text) {
+		var result = new List<string>();
+
+		foreach (var keyword in StringTableManager.DescriptionTable.Keys) {
+			int index = text.IndexOf(keyword, System.StringComparison.Ordinal);
+			if (index < 0) continue;
+
+			int insertIndex = 0;
+			while (insertIndex < result.Count) {
+				int currentIndex = text.IndexOf(result[insertIndex], System.StringComparison.Ordinal);
+				if (index < currentIndex) break;
+				if (index == currentIndex && string.CompareOrdinal(keyword, result[insertIndex]) < 0) break;
+				insertIndex++;
+			}
+
+			result.Insert(insertIndex, keyword);
+		}
+
 		return result;
 	}
 }
