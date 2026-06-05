@@ -749,7 +749,7 @@ MonoBehaviour:
   m_text: 50/50
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
-  m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
+  m_sharedMaterial: {fileID: 3860429735652810780, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -886,7 +886,7 @@ MonoBehaviour:
   m_text: 0G
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
-  m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
+  m_sharedMaterial: {fileID: 3860429735652810780, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -991,6 +991,7 @@ MonoBehaviour:
   _goldText: {fileID: 705055450}
   _mapButton: {fileID: 1113944208}
   _deckButton: {fileID: 1690892938}
+  _deckCountText: {fileID: 0}
   _relicRow: {fileID: 2005369362}
   _relicIconPrefab: {fileID: 899244138718299657, guid: 8a41f4e4f41845141a93216a01d5840c, type: 3}
   _relicFont: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
@@ -2109,8 +2110,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2070238583}
   m_HandleRect: {fileID: 2070238582}
   m_Direction: 0
-  m_Value: -0.00000014305114
-  m_Size: 0.59999996
+  m_Value: 0.00022420619
+  m_Size: 0.59991026
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2213,7 +2214,7 @@ MonoBehaviour:
   m_text: X
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
-  m_sharedMaterial: {fileID: 4889640249127054656, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
+  m_sharedMaterial: {fileID: 3860429735652810780, guid: 7dab43aac4d8c7646b2e645654fcc191, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2434,7 +2435,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 313546530}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.0000897026, y: 0}
   m_AnchorMax: {x: 0.59999996, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
