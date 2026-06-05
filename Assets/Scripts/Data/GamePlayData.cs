@@ -147,6 +147,19 @@ public class GamePlayData : Singleton<GamePlayData> {
 		return result;
 	}
 
+	public CardInstance[] GetAllRewardCards() {
+		if (_rewardCardPool == null || _rewardCardPool.Length == 0) return Array.Empty<CardInstance>();
+
+		var seenCardIds = new HashSet<int>();
+		var result = new List<CardInstance>();
+		foreach (CardDefinition card in _rewardCardPool) {
+			if (card == null || !seenCardIds.Add(card.cardId)) continue;
+			result.Add(new CardInstance(card));
+		}
+
+		return result.ToArray();
+	}
+
 	public CardInstance GetRandomRewardCard(CardRarity rarity, IEnumerable<int> excludedCardIds) {
 		if (_rewardCardPool == null || _rewardCardPool.Length == 0) return null;
 
