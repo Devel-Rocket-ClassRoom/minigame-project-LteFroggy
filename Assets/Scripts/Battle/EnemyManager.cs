@@ -63,20 +63,26 @@ public class EnemyManager : BattleSystemManager {
 
 	// 플레이어 턴 시작하면, 적 의도 Icon 모두 갱신
 	private IEnumerator CoEnemyTurn() {
-		foreach (EnemyInstance enemy in EnemyList) {
+		foreach (EnemyInstance enemy in new List<EnemyInstance>(EnemyList)) {
 			// 적이 사망 상태면, 이런거 안함
-			if (enemy.IsDead) continue;
+			if (enemy == null || enemy.IsDead) continue;
 
 			// 적 턴 시작 처리
 			enemy.OnTurnStart();
+			if (enemy == null || enemy.IsDead) continue;
+
 			// 적 패턴 처리
 			yield return enemy.CoExecutePattern();
+			if (enemy == null || enemy.IsDead) continue;
+
 			// 적 턴 종료 처리
 			enemy.OnTurnEnd();
 		}
 		
 		// 모두 끝나면, 적 턴 끝
-		OnEnemyTurnEnd?.Invoke();
+		if (_enemyList.Count > 0) {
+			OnEnemyTurnEnd?.Invoke();
+		}
 	}
 	
 	public EnemyActionContext GetEnemyActionContext(EnemyInstance instance) {

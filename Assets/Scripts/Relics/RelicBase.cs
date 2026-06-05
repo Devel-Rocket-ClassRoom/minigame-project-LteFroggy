@@ -17,11 +17,8 @@ public abstract class RelicBase {
 	public string effectDescription {
 		get {
 			string template = StringTableManager.StringTable[$"{GetType().Name}Desc"]
-				.Replace("-", effectAmount.ToString());
-			if (!affectedTag.HasValue) return template;
-
-			string tag = StringTableManager.StringTable[affectedTag.Value.ToString()];
-			return $"[{tag}] {template}";
+				.Replace("-", effectAmount.ToString()); 
+			return template;
 		}
 	}
 

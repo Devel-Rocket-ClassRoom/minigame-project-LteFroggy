@@ -41,11 +41,11 @@ LostHealthBonusDamageCardText,피해를 - 줍니다. 잃은 HP의 #%만큼 추�
 MapButton,지도
 DeckButton,덱
 GreatswordName,대검
-GreatswordDesc,카드 피해 +-
+GreatswordDesc,[공격] 카드 피해 +-
 DaggerName,단검
-DaggerDesc,카드 공격 횟수 +-
+DaggerDesc,[연타] 카드 공격 횟수 +-
 ThickShieldName,두꺼운 방패
-ThickShieldDesc,카드 방어도 +-
+ThickShieldDesc,[방어] 카드 방어도 +-
 SageGlassesName,현자의 안경
 SageGlassesDesc,[유틸] 카드 사용 시 턴마다 한 번 에너지 +-
 RuneOfReturnName,회귀의 룬

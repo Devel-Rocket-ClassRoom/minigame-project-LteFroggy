@@ -92,10 +92,12 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		
 		// 값 할당
 		GetBattleContext = () => battleManager.GetCardUseContext(_cardInstance);
-		_cardIcon.sprite = instance._cardDefinition.icon;
-		_cardNameText.text = instance._cardDefinition.StringCardName;
-		_cardCostText.text = instance._cardDefinition.cost.ToString();
+		_cardIcon.sprite = _cardInstance.Icon;
+		_cardNameText.text = _cardInstance.CardName;
+		_cardNameText.fontSize = 40 - 2 * _cardInstance.CardName.Length;
+		_cardCostText.text = _cardInstance.Cost.ToString();
 		RefreshCardDescription();
+		
 		// 시작 위치를 DrawPile쪽으로 해서 생성되면 그쪽에서 오는 것처럼 표현
 		_rectTransform.position = _drawPileLocation.position;
 	}

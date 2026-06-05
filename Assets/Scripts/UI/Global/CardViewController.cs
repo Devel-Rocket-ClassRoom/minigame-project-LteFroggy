@@ -38,6 +38,7 @@ public class CardViewController : MonoBehaviour, IPointerEnterHandler, IPointerE
 
 		_cardIcon.sprite = _cardInstance.Icon;
 		_cardNameText.text = _cardInstance.CardName;
+		_cardNameText.fontSize = 40 - 2 * _cardInstance.CardName.Length;
 		_cardDescriptionText.text = DescriptionSystem.ProcessText(_cardInstance.GetCardDescription());
 		_cardCostText.text = _cardInstance.Cost.ToString();
 	}
