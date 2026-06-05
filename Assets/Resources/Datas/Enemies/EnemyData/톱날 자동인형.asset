@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fc8f47159a045208d054ee2158f5c72, type: 3}
+  m_Name: 톱날 자동인형
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  id: 7
+  health: 42
+  name: 톱날 자동인형
+  sprite: {fileID: 21300000, guid: 8d2140b69e9758f40b67a6cfaf03bc43, type: 3}
+  animatorController: {fileID: 22100000, guid: bc853e12178e4d54abe9d1c0c77931ff, type: 2}
+  actions:
+  - {fileID: 11400000, guid: 4def308a15c5409091956ade0722995e, type: 2}
+  - {fileID: 11400000, guid: 3ddfe1742ace4d46907d80206f83af2a, type: 2}
+  - {fileID: 11400000, guid: 4d9f8af41fac4c6489e66a0dfc08166c, type: 2}

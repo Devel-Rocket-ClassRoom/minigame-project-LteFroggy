@@ -15,3 +15,15 @@ MonoBehaviour:
   Type: 1
   Icon: {fileID: 21300000, guid: f044ea187f3aac243ac0c4a7b798af6c, type: 3}
   Weight: 30
+  EnemySpawnTables:
+  - {fileID: 11400000, guid: 3515043267df9234792b4c5f59a0bf7a, type: 2}
+  - {fileID: 11400000, guid: 7ae55b962f4b741479bff9d6897af131, type: 2}
+  - {fileID: 11400000, guid: 2c92a5b9c5945ee45a4fd1be6b813705, type: 2}
+  - {fileID: 11400000, guid: 828c0bbbac2361a439487bfaf7e297f0, type: 2}
+  - {fileID: 11400000, guid: f5e588167d682704e93345cba01b934b, type: 2}
+  - {fileID: 11400000, guid: 3671d41b55924b878f83ec37f4341292, type: 2}
+  - {fileID: 11400000, guid: d06beac4dae046ebb3b44714ab99ba93, type: 2}
+  - {fileID: 11400000, guid: 56192faf929840cabfccf2d858794d5c, type: 2}
+  - {fileID: 11400000, guid: 45248a34a9c34edfb039aa0299f0193d, type: 2}
+  - {fileID: 11400000, guid: ee38c0c24fa44147972662abd62cee58, type: 2}
+  - {fileID: 11400000, guid: 67b7e2e8c1ca4e8caa0e5d964374d2e6, type: 2}

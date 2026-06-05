@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fc8f47159a045208d054ee2158f5c72, type: 3}
+  m_Name: 왕실 연금술사
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  id: 6
+  health: 24
+  name: 왕실 연금술사
+  sprite: {fileID: 21300000, guid: 5ce7b1f7aae4b964fbd64095a684682e, type: 3}
+  animatorController: {fileID: 22100000, guid: ed24fbc7de42436b8f3ddab40c8f44dd, type: 2}
+  actions:
+  - {fileID: 11400000, guid: 68bbc995433345c788a29978b136c4b0, type: 2}
+  - {fileID: 11400000, guid: c9757123f6c743429c82490b60bd4904, type: 2}
+  - {fileID: 11400000, guid: f5d81901369a4417bb4b9483c4c41e92, type: 2}

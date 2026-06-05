@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fc8f47159a045208d054ee2158f5c72, type: 3}
+  m_Name: 잿불 사제
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  id: 5
+  health: 28
+  name: 잿불 사제
+  sprite: {fileID: 21300000, guid: 3a5208fc1224ca34a83db27deda67e67, type: 3}
+  animatorController: {fileID: 22100000, guid: 07c8ab0cbd2c4da6aa7af2eada680736, type: 2}
+  actions:
+  - {fileID: 11400000, guid: 552946849d26431eb1ac10d22a084214, type: 2}
+  - {fileID: 11400000, guid: 550bddec71084f31bbb4dcfd12c98a53, type: 2}
+  - {fileID: 11400000, guid: 977b48f17fbd47d79d597431bd6749e6, type: 2}
