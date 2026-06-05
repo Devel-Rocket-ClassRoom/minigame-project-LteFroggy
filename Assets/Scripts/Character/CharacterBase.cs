@@ -212,8 +212,12 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 
 	// 현재 걸린 상태이상들의 리스트 반환
 	public List<StatusBase> GetStatusKeywords() {
+		List<StatusRenderer> renderers = new();
+		foreach (var status in _statusRenderers) { renderers.Add(status.Value); }
+		renderers.Sort((a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
+
 		List<StatusBase> statuses = new();
-		foreach (var status in _statusRenderers) { statuses.Add(status.Value.Status); }
+		foreach (var renderer in renderers) { statuses.Add(renderer.Status); }
 		
 		return statuses;
 	}

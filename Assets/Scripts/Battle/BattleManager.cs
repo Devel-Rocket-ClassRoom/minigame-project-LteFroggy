@@ -17,6 +17,9 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private CardRewardController _cardRewardController;
 	[SerializeField] private int _goldReward = 20;
 
+	[Header("=== 에너지 부족 안내 패널 ===")]
+	[SerializeField] private InsufficientEnergyPanel _insufficientEnergyPanel;
+
 	public DeckManager DeckManager => _deckManager;
 	public RelicManager RelicManager => _relicManager;
 	public CardUseManager CardUseManager => _cardUseManager;
@@ -58,6 +61,7 @@ public class BattleManager : BattleSystemManager {
 		if (IsGameEnd) return;
 
 		IsGameEnd = true;
+		StopBattleInteraction();
 		RemoveBattleEndListeners();
 		DefeatResultPanel.Show();
 	}
@@ -66,6 +70,7 @@ public class BattleManager : BattleSystemManager {
 		if (IsGameEnd) return;
 
 		IsGameEnd = true;
+		StopBattleInteraction();
 		SetCleareNodeButtonInteractable(false);
 
 		MapNodeType nodeType = GamePlayData.Instance.InGameMapData.NodeNow.Config.Type;
@@ -104,6 +109,10 @@ public class BattleManager : BattleSystemManager {
 		if (_cleareNodeButton == null) return;
 
 		_cleareNodeButton.interactable = interactable;
+	}
+
+	private void StopBattleInteraction() {
+		_mouseController?.StopBattleInteraction();
 	}
 
 	private void OnEnable() {
@@ -148,6 +157,7 @@ public class BattleManager : BattleSystemManager {
 
 	public bool UseCard(CardInstance cardInstance, EnemyInstance enemyInstance) {
 		if (!_cardUseManager.isUsable(cardInstance)) {
+			_insufficientEnergyPanel?.Show();
 			Debug.Log("에너지가 부족합니다.");
 			return false;
 		}
