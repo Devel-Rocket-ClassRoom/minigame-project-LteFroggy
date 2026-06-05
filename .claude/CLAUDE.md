@@ -90,7 +90,18 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 - **Milestone**: 요청 날짜에 맞는 마일스톤을 `milestone` 파라미터로 설정한다. 아래 기준 사용:
 
-## 6. 워크트리 폴더명 규칙
+## 6. GitHub PR 작성 규칙
+
+PR을 생성하거나 PR 본문을 작성할 때는 별도 지시가 없는 한 관련 이슈를 자동으로 닫는 키워드를 반드시 포함한다.
+
+- 관련 이슈 번호가 명확하면 PR 본문에 `Close #이슈번호` 형식으로 작성한다.
+- 여러 이슈를 닫아야 하면 각 이슈 번호를 모두 `Close #이슈번호` 형식으로 적는다.
+- 사용자가 이슈를 닫지 말라고 명시한 경우에만 closing keyword를 제외한다.
+- 이슈 번호가 확정되지 않은 상태라면 PR 본문 작성 또는 PR 생성 전에 번호를 확인한다.
+
+---
+
+## 7. 워크트리 폴더명 규칙
 
 새 워크트리를 만들 때는 반드시 아래 형식으로 폴더명을 만든다.
 
@@ -103,7 +114,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ---
 
-## 7. 커밋 메시지 작성 규칙
+## 8. 커밋 메시지 작성 규칙
 
 커밋 메시지를 작성하기 전에 반드시 `git log --oneline`으로 기존 커밋 히스토리를 확인하고, 그 형식을 그대로 따른다.
 
@@ -115,7 +126,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
-## 8. 작업 범위 엄수
+## 9. 작업 범위 엄수
 
 **사용자가 요청한 작업만 수행한다. 임의로 그 이상을 진행하지 않는다.**
 
@@ -127,7 +138,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ---
 
-## 9. 한국어 응답 시 존댓말 사용
+## 10. 한국어 응답 시 존댓말 사용
 
 사용자에게 한국어로 응답할 때는 반드시 존댓말을 사용한다.
 
@@ -137,7 +148,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ---
 
-## 10. 커밋 금지 파일
+## 11. 커밋 금지 파일
 
 **폰트 바이너리 파일은 커밋하지 않는다.**
 
@@ -147,7 +158,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ---
 
-## 11. 커밋 단위 분리
+## 12. 커밋 단위 분리
 
 **사용자가 커밋을 요청하면, 모든 변경 파일을 한 번에 커밋하지 말고 작업 단위별로 나눠서 커밋한다.**
 
@@ -156,7 +167,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ---
 
-## 12. 커밋 타입 의미 기반 선택
+## 13. 커밋 타입 의미 기반 선택
 
 **커밋 타입은 기존 히스토리를 맹목적으로 복사하지 말고, 타입의 의미에 맞게 선택한다.**
 
