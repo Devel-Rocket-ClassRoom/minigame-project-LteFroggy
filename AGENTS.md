@@ -100,6 +100,8 @@ PR을 생성하거나 PR 본문을 작성할 때는 별도 지시가 없는 한 
 
 Codex 샌드박스 내부 일반 실행에서 `gh auth status`가 invalid token으로 보이더라도, 사용자의 Windows keyring 인증은 정상일 수 있다.
 
+- GitHub 권한이 없다는 메시지가 나오면 먼저 샌드박스 내부 인증 문제로 판단하고, 토큰을 요구하지 말고 `require_escalated` 승인 실행으로 같은 명령을 다시 시도한다.
 - `gh auth status`, `gh pr create`, `gh pr merge`, `gh pr checks`, `gh repo view` 등 GitHub CLI 인증이 필요한 명령은 `require_escalated` 승인 실행으로 재확인한다.
 - 승인 실행에서 keyring 인증이 정상으로 확인되면, PR 생성/머지 등 GitHub 작업도 같은 방식으로 진행한다.
+- 필요하면 같은 종류의 GitHub CLI 작업을 반복 승인 없이 처리할 수 있도록 적절한 `prefix_rule`을 제안한다.
 - 사용자가 토큰을 채팅에 직접 붙여넣도록 요구하지 않는다.
