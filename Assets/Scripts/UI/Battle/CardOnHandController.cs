@@ -11,6 +11,8 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	private RectTransform _rectTransform;
 	private RectTransform _drawPileLocation;
 	private RectTransform _discardPileLocation;
+	private CanvasGroup _canvasGroup;
+	private bool _isInputBlocked;
 	
 	// 카드 위치 이동시킬 때 소요될 시간
 	private readonly float _cardMoveDuration= 0.2f;
@@ -55,12 +57,21 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	
 	// BattleContext를 받기 위해 사용하는 함수
 	[HideInInspector] public Func<CardUseContext> GetBattleContext;
+
+	public bool CanReceiveInput => isActiveAndEnabled && gameObject.activeInHierarchy && !_isInputBlocked;
 	
 	public void SetCardPosition(Vector3 location, Quaternion rotation) {
 		if (_cardMoveCoroutine != null) {
 			StopCoroutine(_cardMoveCoroutine);
 			_cardMoveCoroutine = null;
 		}
+
+		if (!isActiveAndEnabled || !gameObject.activeInHierarchy) {
+			_rectTransform.localPosition = location;
+			_rectTransform.localRotation = rotation;
+			return;
+		}
+
 		_cardMoveCoroutine = StartCoroutine(CoCardMove(location, rotation));
 	}
 	
@@ -72,6 +83,8 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 
 	private void Awake() {
 		_rectTransform = GetComponent<RectTransform>();
+		_canvasGroup = GetComponent<CanvasGroup>();
+		if (_canvasGroup == null) _canvasGroup = gameObject.AddComponent<CanvasGroup>();
 	}
 	
 	public void Init(
@@ -86,6 +99,7 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		
 		// 값 초기화
 		_isSelected = false;
+		SetInputBlocked(false);
 		GetBattleContext = null;
 		
 		// 필요한 클래스 할당
@@ -111,12 +125,13 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	public void SetFanTransform(Vector3 position, Quaternion rotation) {
 		_fanPosition = position;
 		_fanRotation = rotation;
-		if (!_isSelected) {
+		if (!_isSelected && !_isInputBlocked) {
 			SetCardPosition(_fanPosition, _fanRotation);
 		}
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
+		if (!CanReceiveInput) { return; }
 		if (_isSelected) { return; }
 		ToHoverPosition();
 	}
@@ -126,6 +141,8 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 			StopCoroutine(_hoverTooltipCoroutine);
 			_hoverTooltipCoroutine = null;
 		}
+
+		if (!CanReceiveInput) { return; }
 
 		// 지금 선택된 카드는 커서 벗어나도 제자리로 돌아가지 않음
 		if (_isSelected) {
@@ -144,6 +161,8 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// 카드에 마우스를 올렸을 때, 카드 내용이 다 보이도록 카드를 이동시킨다.
 	/// </summary>
 	private void ToHoverPosition() {
+		if (!CanReceiveInput) { return; }
+
 		_rectTransform.SetAsLastSibling();
 		SetCardPosition(new Vector3(_fanPosition.x, k_HoverY, 0), Quaternion.identity);
 		if (_hoverTooltipCoroutine != null) StopCoroutine(_hoverTooltipCoroutine);
@@ -152,6 +171,8 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 
 	private IEnumerator CoShowTooltipAfterHover() {
 		yield return new WaitForSeconds(_cardMoveDuration);
+		if (!CanReceiveInput) yield break;
+
 		string rawDesc = _cardInstance.GetCardDescriptionWithContext(GetBattleContext());
 		_cardDescriptionText.text = DescriptionSystem.ProcessCardText(rawDesc, _rectTransform);
 	}
@@ -164,6 +185,7 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	}
 	
 	public void ToUsePosition() {
+		SetInputBlocked(true);
 		SetCardPosition(_usePosition, Quaternion.identity);
 	}
 	
@@ -171,6 +193,8 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// 카드의 위치를 원래 위치로 되돌린다.
 	/// </summary>
 	public void ToOriginalPosition() {
+		if (!CanReceiveInput) { return; }
+
 		_rectTransform.SetSiblingIndex(CardIdxInHand);
 		SetCardPosition(_fanPosition, _fanRotation);
 	}
@@ -179,6 +203,7 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// 카드를 _discardPile의 위치로 이동시켜 제거한다.
 	/// </summary>
 	public void RemoveCard() {
+		SetInputBlocked(true);
 		StartCoroutine(CoCardRemove());
 	}
 	
@@ -210,6 +235,22 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 	public IEnumerator CoCardRemove() {
 		yield return CoCardMove(_discardPileLocation.position, Quaternion.identity);
 		_cardPool.Release(this);
+	}
+
+	private void SetInputBlocked(bool blocked) {
+		_isInputBlocked = blocked;
+		if (blocked) {
+			_isSelected = false;
+			if (_hoverTooltipCoroutine != null) {
+				StopCoroutine(_hoverTooltipCoroutine);
+				_hoverTooltipCoroutine = null;
+			}
+		}
+
+		if (_canvasGroup == null) return;
+
+		_canvasGroup.blocksRaycasts = !blocked;
+		_canvasGroup.interactable = !blocked;
 	}
 	
 	/// <summary>
