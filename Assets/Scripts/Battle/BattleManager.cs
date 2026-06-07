@@ -156,6 +156,11 @@ public class BattleManager : BattleSystemManager {
 	}
 
 	public bool UseCard(CardInstance cardInstance, EnemyInstance enemyInstance) {
+		if (!_deckManager.HandPile.Contains(cardInstance)) {
+			Debug.Log("Card is no longer in hand.");
+			return false;
+		}
+
 		if (_characterManager.Player.TryGetCardUseBlockedMessageKey(out string blockedMessageKey)) {
 			_insufficientEnergyPanel?.Show(blockedMessageKey);
 			Debug.Log("Status effect prevents card use.");

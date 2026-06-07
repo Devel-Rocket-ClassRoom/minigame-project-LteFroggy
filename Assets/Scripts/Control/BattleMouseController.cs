@@ -113,6 +113,7 @@ public class BattleMouseController : MonoBehaviour {
 			CardOnHandController cardController = result.gameObject.GetComponent<CardOnHandController>();
 			// 결과 중 카드가 있는지 검사
 			if (cardController == null) { continue; }
+			if (!cardController.CanReceiveInput) { continue; }
 
 			// 있다면 등록, 타겟이 필요한 카드인지도 검사해서 저장
 			_selectedCard = cardController;
@@ -126,6 +127,10 @@ public class BattleMouseController : MonoBehaviour {
 	private void OnClickReleased(InputAction.CallbackContext context) {
 		if (_isBattleInteractionStopped) { return; }
 		if (_selectedCard == null) { return; }
+		if (!_selectedCard.CanReceiveInput) {
+			ClearCardUseState();
+			return;
+		}
 		
 		// 현재 충돌 위치가 CardUseArea 내부라면, 사용 처리
 		if (RectTransformUtility.RectangleContainsScreenPoint(_cardUseArea, _mousePositionAction.ReadValue<Vector2>())) {
@@ -143,8 +148,12 @@ public class BattleMouseController : MonoBehaviour {
 	}
 	
 	public void DeselectSelectedCard() {
+		if (_selectedCard == null) { return; }
+
 		_selectedCard.IsSelected = false;
-		_selectedCard.ToOriginalPosition();
+		if (_selectedCard.CanReceiveInput) {
+			_selectedCard.ToOriginalPosition();
+		}
 	}
 	
 	public void ClearCardUseState() {
@@ -216,6 +225,11 @@ public class BattleMouseController : MonoBehaviour {
 		HandleCharacterHover();
 
 		if (_selectedCard != null) {
+			if (!_selectedCard.CanReceiveInput) {
+				ClearCardUseState();
+				return;
+			}
+
 			// 선택된 카드가 대상이 필요 없으면, 그냥 끌고 다닐 수 있어야 함
 			if (!NeedsTarget) {
 				_selectedCard.transform.position = _mousePositionAction.ReadValue<Vector2>();	
