@@ -9,6 +9,9 @@ public class OverlayPanelController : MonoBehaviour {
 	[SerializeField] private Button _closeButton;
 
 	private void Awake() {
+		if (_closeButton == null) return;
+
+		_closeButton.transform.SetAsLastSibling();
 		_closeButton.onClick.AddListener(Close);
 	}
 
