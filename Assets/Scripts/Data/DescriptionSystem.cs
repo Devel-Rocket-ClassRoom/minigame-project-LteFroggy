@@ -5,6 +5,7 @@ using UnityEngine.UI;
 // 키워드 강조 및 설명 패널 표시를 담당하는 정적 시스템
 // 툴팁 Canvas를 직접 생성하고 DontDestroyOnLoad로 관리하므로 외부 초기화 불필요
 public static class DescriptionSystem {
+	private const string KeywordHighlightColor = "#2563EB";
 	private static RectTransform _tooltipCanvas;
 	private static RectTransform _panelContainer;
 	private static readonly List<DescriptionPanelController> _activePanels = new();
@@ -64,7 +65,7 @@ public static class DescriptionSystem {
 		_panelContainer.sizeDelta = new Vector2(300f, 0f);
 	}
 
-	// 카드 설명 텍스트의 키워드를 노란색으로 강조하고, 키워드 설명 패널을 source 옆에 표시
+	// 카드 설명 텍스트의 키워드를 강조색으로 표시하고, 키워드 설명 패널을 source 옆에 표시
 	// 강조 처리된 텍스트를 반환하므로, 반환값을 TMP에 넣으면 됨
 	public static string ProcessCardText(string text, RectTransform source) {
 		SetContainerPosition(source);
@@ -254,10 +255,10 @@ public static class DescriptionSystem {
 		_activePanels.Add(controller);
 	}
 
-	// 텍스트 내 DescriptionTable 키워드를 노란색(#FFED53) 태그로 래핑
+	// 텍스트 내 DescriptionTable 키워드를 진한 파랑 강조색 태그로 래핑
 	public static string ProcessText(string text) {
 		foreach (var keyword in StringTableManager.DescriptionTable.Keys)
-			text = text.Replace(keyword, $"<color=#FFED53>{keyword}</color>");
+			text = text.Replace(keyword, $"<color={KeywordHighlightColor}>{keyword}</color>");
 		return text;
 	}
 
