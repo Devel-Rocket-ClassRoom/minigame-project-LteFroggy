@@ -18,7 +18,11 @@ public class InsufficientEnergyPanel : MonoBehaviour {
 	}
 
 	public void Show() {
-		EnsureReferences();
+		Show(_messageKey);
+	}
+
+	public void Show(string messageKey) {
+		EnsureReferences(messageKey);
 		if (!gameObject.activeSelf) gameObject.SetActive(true);
 
 		if (_showCoroutine != null) StopCoroutine(_showCoroutine);
@@ -26,8 +30,12 @@ public class InsufficientEnergyPanel : MonoBehaviour {
 	}
 
 	private void EnsureReferences() {
+		EnsureReferences(_messageKey);
+	}
+
+	private void EnsureReferences(string messageKey) {
 		if (_canvasGroup == null) _canvasGroup = GetComponent<CanvasGroup>();
-		if (_messageText != null && StringTableManager.StringTable.TryGetValue(_messageKey, out string message))
+		if (_messageText != null && StringTableManager.StringTable.TryGetValue(messageKey, out string message))
 			_messageText.text = message;
 	}
 

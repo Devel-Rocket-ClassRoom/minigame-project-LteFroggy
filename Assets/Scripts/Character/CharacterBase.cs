@@ -198,6 +198,19 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return true;
 	}
 
+	public bool TryGetCardUseBlockedMessageKey(out string messageKey) {
+		foreach (var status in _statusRenderers) {
+			StatusBase statusInfo = status.Value.Status;
+			if (statusInfo.CanUseCard()) continue;
+
+			messageKey = statusInfo.CardUseBlockedMessageKey;
+			return !string.IsNullOrEmpty(messageKey);
+		}
+
+		messageKey = null;
+		return false;
+	}
+
 	// 카드 사용 시 모든 상태이상에 알림 (공명 등 사용 횟수 추적)
 	public void NotifyCardUsed() {
 		foreach (var status in _statusRenderers) {

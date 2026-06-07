@@ -156,6 +156,12 @@ public class BattleManager : BattleSystemManager {
 	}
 
 	public bool UseCard(CardInstance cardInstance, EnemyInstance enemyInstance) {
+		if (_characterManager.Player.TryGetCardUseBlockedMessageKey(out string blockedMessageKey)) {
+			_insufficientEnergyPanel?.Show(blockedMessageKey);
+			Debug.Log("Status effect prevents card use.");
+			return false;
+		}
+
 		if (!_cardUseManager.isUsable(cardInstance)) {
 			_insufficientEnergyPanel?.Show();
 			Debug.Log("에너지가 부족합니다.");
