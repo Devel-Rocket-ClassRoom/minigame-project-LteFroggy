@@ -47,7 +47,7 @@ public class LoadoutManager : MonoBehaviour {
 
 	private void ShowRelicSelection() {
 		_step = LoadoutStep.RelicSelection;
-		SetHeader("유물 선택", "코스트 합계 6 이내로 유물을 선택하세요");
+		SetHeader("유물 선택", "유물은 카드 효과를 강화하거나 특별한 효과를 더해줍니다.\n이번 도전에 사용할 유물을 코스트 합계 6 이내로 선택하세요.");
 		SetStartButtonText("카드 선택");
 		_startButton.interactable = true;
 		BuildRelicList();
