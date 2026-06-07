@@ -5,8 +5,8 @@ public class GiveBurnAction : EnemyAction {
 	public int amount;
 
 	public override string IntentIconName => "Burn";
-	public override string IntentDescriptionTitle => "약화 효과";
-	public override string IntentDescriptionKey => "EnemyTargetDebuffIntentText";
+	public override string IntentDescriptionTitle => "화상 부여";
+	public override string IntentDescriptionKey => "EnemyBurnDebuffIntentText";
 
 	protected override int Amount => amount;
 
