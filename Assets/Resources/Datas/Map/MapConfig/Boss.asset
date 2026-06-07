@@ -15,3 +15,5 @@ MonoBehaviour:
   Type: 6
   Icon: {fileID: 21300000, guid: 301c6b32f0b43214c9fe40c95ec5446b, type: 3}
   Weight: 0
+  EnemySpawnTables:
+  - {fileID: 11400000, guid: 8a1657451bbcc6c4f87c43d91f449d31, type: 2}

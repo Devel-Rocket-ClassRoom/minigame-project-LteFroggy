@@ -32,11 +32,14 @@ public class EnemyManager : BattleSystemManager {
 	// 전투 시작 시에, 불러와야 할 적 리스트대로 생성
 	public override void StartBattle() {
 		// 현재 노드가 보스 노드면 보스 스폰 테이블, 아니면 일반 스폰 테이블 사용
-		var tables = GamePlayData.Instance.InGameMapData.NodeNow.Config.Type == MapNodeType.Boss
-			? _bossTables
-			: _normalTables;
+		var nodeConfig = GamePlayData.Instance.InGameMapData.NodeNow.Config;
+		var tables = ResolveSpawnTables(nodeConfig);
 		// 테이블에서 랜덤한 인스턴스 고르기
-		var enemySpawnTable = tables[Random.Range(0, tables.Length)];
+		var enemySpawnTable = SelectRandomTable(tables);
+		if (enemySpawnTable == null) {
+			Debug.LogError($"Enemy spawn table is empty for node type {nodeConfig.Type}.");
+			return;
+		}
 		
 		for (int i = 0; i < enemySpawnTable.enemyList.Length; i++) {
 			EnemyInstance enemy = Instantiate(_enemyPrefab);
@@ -46,6 +49,29 @@ public class EnemyManager : BattleSystemManager {
 			
 			_enemyList.Add(enemy);
 		}
+	}
+
+	private EnemySpawnTable[] ResolveSpawnTables(MapNodeConfig nodeConfig) {
+		if (nodeConfig.EnemySpawnTables != null && nodeConfig.EnemySpawnTables.Length > 0)
+			return nodeConfig.EnemySpawnTables;
+
+		return nodeConfig.Type == MapNodeType.Boss
+			? _bossTables
+			: _normalTables;
+	}
+
+	private EnemySpawnTable SelectRandomTable(EnemySpawnTable[] tables) {
+		if (tables == null || tables.Length == 0) return null;
+
+		List<EnemySpawnTable> validTables = new();
+		foreach (var table in tables) {
+			if (table == null || table.enemyList == null || table.enemyList.Length == 0) continue;
+			validTables.Add(table);
+		}
+
+		return validTables.Count == 0
+			? null
+			: validTables[Random.Range(0, validTables.Count)];
 	}
 	
 	public void DeleteEnemy(EnemyInstance instance) {
