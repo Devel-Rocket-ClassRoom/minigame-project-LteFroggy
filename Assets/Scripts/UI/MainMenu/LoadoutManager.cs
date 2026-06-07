@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,18 +8,19 @@ public class LoadoutManager : MonoBehaviour {
 	[SerializeField] private Transform _relicListParent;
 	[SerializeField] private GameObject _relicEntryPrefab;
 	[SerializeField] private CardViewController _cardEntryPrefab;
+	[SerializeField] private ScrollRect _scrollRect;
 	[SerializeField] private TextMeshProUGUI _titleText;
 	[SerializeField] private TextMeshProUGUI _descriptionText;
 	[SerializeField] private TextMeshProUGUI _totalCostText;
 	[SerializeField] private Button _startButton;
 	[SerializeField] private int _costLimit = 6;
 	[SerializeField] private int _cardPickCount = 2;
-
 	private readonly HashSet<RelicBase> _selectedRelics = new();
 	private readonly List<CardDefinition> _selectedCards = new();
 	private readonly Dictionary<int, CardViewController> _cardViewsById = new();
 	private int _totalCost;
 	private bool _relicListBuiltForCurrentOpen;
+	private Coroutine _resetScrollCoroutine;
 	private LoadoutStep _step;
 
 	private void OnEnable() {
@@ -31,6 +33,10 @@ public class LoadoutManager : MonoBehaviour {
 	private void OnDisable() {
 		_startButton.onClick.RemoveListener(OnStartButtonClicked);
 		_relicListBuiltForCurrentOpen = false;
+		if (_resetScrollCoroutine != null) {
+			StopCoroutine(_resetScrollCoroutine);
+			_resetScrollCoroutine = null;
+		}
 	}
 
 	public void RefreshRelicList() {
@@ -45,6 +51,7 @@ public class LoadoutManager : MonoBehaviour {
 		SetStartButtonText("카드 선택");
 		_startButton.interactable = true;
 		BuildRelicList();
+		ResetScrollToTop();
 	}
 
 	private void BuildRelicList() {
@@ -86,6 +93,31 @@ public class LoadoutManager : MonoBehaviour {
 		}
 
 		UpdateCardSelectionDisplay();
+		ResetScrollToTop();
+	}
+
+	private void ResetScrollToTop() {
+		if (_scrollRect == null) return;
+
+		if (_resetScrollCoroutine != null)
+			StopCoroutine(_resetScrollCoroutine);
+		_resetScrollCoroutine = StartCoroutine(CoResetScrollToTop());
+	}
+
+	private IEnumerator CoResetScrollToTop() {
+		Canvas.ForceUpdateCanvases();
+		SetScrollToTop();
+
+		yield return null;
+
+		Canvas.ForceUpdateCanvases();
+		SetScrollToTop();
+		_resetScrollCoroutine = null;
+	}
+
+	private void SetScrollToTop() {
+		_scrollRect.velocity = Vector2.zero;
+		_scrollRect.verticalNormalizedPosition = 1f;
 	}
 
 	private static void SetChildText(GameObject root, string path, string text) {
