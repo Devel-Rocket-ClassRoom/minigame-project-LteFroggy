@@ -14,6 +14,7 @@ public class Ringing : StatusBase {
 
 	// 공명: 이번 턴에 카드를 1장만 사용할 수 있음
 	public override bool CanUseCard() => !_usedCardThisTurn;
+	public override string CardUseBlockedMessageKey => _usedCardThisTurn ? "StatusCardUseBlocked" : null;
 	public override void OnCardUsed() => _usedCardThisTurn = true;
 
 	// 턴 시작 시 사용 가능 상태로 초기화

@@ -124,3 +124,4 @@ EnemySelfBuffIntentText,자신을 강화합니다.
 EnemyTargetDebuffIntentText,플레이어에게 상태이상을 부여합니다.
 EnemyBurnDebuffIntentText,플레이어에게 화상을 부여합니다.
 InsufficientEnergy,에너지가 부족합니다.
+StatusCardUseBlocked,상태이상으로 인해 사용 불가능!
