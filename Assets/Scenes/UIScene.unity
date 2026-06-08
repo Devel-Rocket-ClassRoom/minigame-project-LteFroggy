@@ -992,6 +992,7 @@ MonoBehaviour:
   _goldText: {fileID: 705055450}
   _mapButton: {fileID: 1113944208}
   _deckButton: {fileID: 1690892938}
+  _pauseIcon: {fileID: 21300000, guid: 1c9e95e2c19b45049a7fc0dcd018d31a, type: 3}
   _deckCountText: {fileID: 0}
   _relicRow: {fileID: 2005369362}
   _relicIconPrefab: {fileID: 899244138718299657, guid: 8a41f4e4f41845141a93216a01d5840c, type: 3}

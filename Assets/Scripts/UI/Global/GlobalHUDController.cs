@@ -10,6 +10,7 @@ public class GlobalHUDController : MonoBehaviour {
 	[Header("=== 버튼 ===")]
 	[SerializeField] private Button _mapButton;
 	[SerializeField] private Button _deckButton;
+	[SerializeField] private Sprite _pauseIcon;
 	[SerializeField] private TextMeshProUGUI _deckCountText;
 
 	[Header("=== 유물 목록 ===")]
@@ -28,6 +29,7 @@ public class GlobalHUDController : MonoBehaviour {
 	private const string DeckTooltipDescription = "현재 덱의 카드 목록과 총 카드 수를 확인합니다.";
 
 	private GamePlayData _gamePlayData;
+	private PauseMenuController _pauseMenu;
 	private int _openOverlayCount;
 
 	private void OnEnable() {
@@ -64,6 +66,7 @@ public class GlobalHUDController : MonoBehaviour {
 		_mapButton.onClick.AddListener(ToggleMapOverlay);
 		_deckButton.onClick.AddListener(ToggleDeckList);
 		_mapOverlay.GetComponent<MapRenderer>().Init();
+		ConfigurePauseMenu();
 		RefreshAll();
 	}
 
@@ -140,6 +143,13 @@ public class GlobalHUDController : MonoBehaviour {
 		textRect.pivot = new Vector2(0.5f, 0f);
 		textRect.anchoredPosition = new Vector2(0f, 4f);
 		textRect.sizeDelta = new Vector2(0f, 24f);
+	}
+
+	private void ConfigurePauseMenu() {
+		if (_pauseMenu == null) _pauseMenu = GetComponent<PauseMenuController>();
+		if (_pauseMenu == null) _pauseMenu = gameObject.AddComponent<PauseMenuController>();
+
+		_pauseMenu.Initialize(_mapButton, _deckButton, _mapOverlay, _pauseIcon, GetHudFont());
 	}
 
 	private void OnOverlayVisibilityChanged(bool isOpen) {
