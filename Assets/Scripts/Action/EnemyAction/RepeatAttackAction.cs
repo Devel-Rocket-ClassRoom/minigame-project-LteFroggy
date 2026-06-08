@@ -11,15 +11,15 @@ public class RepeatAttackAction : EnemyAction {
 
 	protected override int Amount => amount;
 
-	protected override int CalculateAmountWithContext(EnemyActionContext context) {
+	protected override int CalculateAmountWithContext(EnemyActionContext context, CalculationMode mode) {
 		int result = amount;
-		result = context.user.CalculateAttackingDamage(result);
-		if (context.target != null) result = context.target.CalculateGainingDamage(result);
+		result = CalculateAttackingDamageModifiers(context.user, result, mode);
+		if (context.target != null) result = CalculateTakingDamageModifiers(context.target, result, mode);
 		return result;
 	}
 
 	public override string GetIntentTextWithContext(EnemyActionContext context) {
-		var calculatedAmount = CalculateAmountWithContext(context);
+		var calculatedAmount = CalculatePreviewAmountWithContext(context);
 		string amountText = calculatedAmount.ToString();
 		if (calculatedAmount > amount) amountText = GetGreenText(amountText);
 		if (calculatedAmount < amount) amountText = GetRedText(amountText);
@@ -27,7 +27,7 @@ public class RepeatAttackAction : EnemyAction {
 	}
 
 	public override string GetIntentDescriptionWithContext(EnemyActionContext context) {
-		return $"{CalculateAmountWithContext(context)} 피해를 {repeat}번 줍니다.";
+		return $"{CalculatePreviewAmountWithContext(context)} ?�해�?{repeat}�?줍니??";
 	}
 
 	public override void Execute(EnemyActionContext context) {
@@ -43,7 +43,7 @@ public class RepeatAttackAction : EnemyAction {
 
 		for (int i = 0; i < repeat; i++) {
 			if (context.target.IsDead) break;
-			context.target.GetDamage(CalculateAmountWithContext(context), damageContext);
+			context.target.GetDamage(ApplyAmountWithContext(context), damageContext);
 		}
 
 		context.user.PlayAttackAnimation();

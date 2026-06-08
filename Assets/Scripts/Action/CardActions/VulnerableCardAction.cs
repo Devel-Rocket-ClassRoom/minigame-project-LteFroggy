@@ -1,17 +1,17 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Card/Card Actions/Give Vulnerable")]
 public class VulnerableCardAction : CardAction {
 	public int amount;
 	protected override int Amount => amount;
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		return context.relicManager.CalculateAmountWithRelics(context, this, amount);
 	}
 	
 	public override void Execute(CardUseContext context) {
 		Vulnerable vulnerable = new Vulnerable();
-		vulnerable.Init(context.target, 0, CalculateAmountWithContext(context));
+		vulnerable.Init(context.target, 0, ApplyAmountWithContext(context));
 		context.target.AddStatus(vulnerable);
 	}
 	

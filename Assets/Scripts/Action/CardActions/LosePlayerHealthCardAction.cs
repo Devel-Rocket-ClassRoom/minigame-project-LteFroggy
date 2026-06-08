@@ -8,10 +8,10 @@ public class LosePlayerHealthCardAction : CardAction {
 	public override string CardDescriptionKey => "LosePlayerHealthCardText";
 
 	public override void Execute(CardUseContext context) {
-		context.DamagePlayer(this, CalculateAmountWithContext(context));
+		context.DamagePlayer(this, ApplyAmountWithContext(context));
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		return context.relicManager.CalculateAmountWithRelics(context, this, amount);
 	}
 }

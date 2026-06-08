@@ -18,5 +18,5 @@ public class ApplyHalveCardAction : CardAction {
 		context.target.AddStatus(halve);
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) => 0;
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) => 0;
 }

@@ -24,14 +24,14 @@ public class LostHealthBonusDamageCardAction : CardAction {
 
 		int lostHealth = context.user.MaxHealth - context.user.CurrentHealth;
 		int damage = baseDamage + Mathf.RoundToInt(lostHealth * (lostHealthPercent / 100f));
-		damage = context.user.CalculateAttackingDamage(damage);
-		damage = context.target.CalculateGainingDamage(damage);
+		damage = CalculateAttackingDamageModifiers(context.user, damage, CalculationMode.Apply);
+		damage = CalculateTakingDamageModifiers(context.target, damage, CalculationMode.Apply);
 		damage = context.relicManager.CalculateAmountWithRelics(context, this, damage);
 		context.DealDamage(context.target, this, damage);
 		context.user.PlayAttackAnimation();
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		return baseDamage;
 	}
 }

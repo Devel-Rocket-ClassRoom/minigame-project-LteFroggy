@@ -6,9 +6,14 @@ public class Halve : StatusBase {
 	public override void Merge(StatusBase status) { Stack += status.Stack; }
 	public override void OnTurnEnd() { }
 
-	public override int ModifyAttackingDamage(int damage) {
+	public override int PreviewAttackingDamageModifier(int damage) {
 		if (Stack <= 0) return damage;
-		Stack--;
 		return damage / 2;
+	}
+
+	public override int ApplyAttackingDamageModifier(int damage) {
+		int result = PreviewAttackingDamageModifier(damage);
+		if (Stack > 0) Stack--;
+		return result;
 	}
 }

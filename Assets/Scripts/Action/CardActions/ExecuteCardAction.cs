@@ -34,15 +34,15 @@ public class ExecuteCardAction : CardAction {
 			);
 			context.target.GetDamage(context.target.CurrentHealth, damageContext);
 		} else {
-			context.DealDamage(context.target, this, CalculateAmountWithContext(context));
+			context.DealDamage(context.target, this, ApplyAmountWithContext(context));
 		}
 		context.user.PlayAttackAnimation();
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = fallbackDamage;
-		result = context.user.CalculateAttackingDamage(result);
-		if (context.target != null) result = context.target.CalculateGainingDamage(result);
+		result = CalculateAttackingDamageModifiers(context.user, result, mode);
+		if (context.target != null) result = CalculateTakingDamageModifiers(context.target, result, mode);
 		return context.relicManager.CalculateAmountWithRelics(context, this, result);
 	}
 }

@@ -1,17 +1,16 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Enemy/Enemy Actions/Give Ringing")]
 public class GiveRingingAction : EnemyAction {
 	public int amount;
 
-	// 상대에게 거는 디버프는 약화 의도 아이콘 재사용
 	public override string IntentIconName => "Debuff";
-	public override string IntentDescriptionTitle => "상대 디버프";
+	public override string IntentDescriptionTitle => "대상 디버프";
 	public override string IntentDescriptionKey => "EnemyTargetDebuffIntentText";
 
 	protected override int Amount => amount;
 
-	protected override int CalculateAmountWithContext(EnemyActionContext context) {
+	protected override int CalculateAmountWithContext(EnemyActionContext context, CalculationMode mode) {
 		return amount;
 	}
 
@@ -19,12 +18,11 @@ public class GiveRingingAction : EnemyAction {
 		return "";
 	}
 
-	// 상대(플레이어)에게 공명 부여
 	public override void Execute(EnemyActionContext context) {
 		if (context.target.IsDead) return;
 
 		Ringing ringing = new Ringing();
-		ringing.Init(context.target, 0, amount);
+		ringing.Init(context.target, 0, ApplyAmountWithContext(context));
 		context.target.AddStatus(ringing);
 
 		context.user.PlaySkillAnimation();

@@ -1,4 +1,4 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Card/Card Actions/Give Weakness")]
 public class WeaknessCardAction : CardAction {
@@ -6,16 +6,16 @@ public class WeaknessCardAction : CardAction {
 	protected override int Amount => amount; 
 	public override string CardDescriptionKey => "WeaknessCardText";
 	
-	// ì·¨ì•½ íš¨ê³¼ ë¶€ì—¬
+	// Ãë¾à È¿°ú ºÎ¿©
 	public override void Execute(CardUseContext context) {
 		if (context.target.IsDead) return;
 		
 		var weakness = new Weakness();
-		weakness.Init(context.target, 0, CalculateAmountWithContext(context));
+		weakness.Init(context.target, 0, ApplyAmountWithContext(context));
 		context.target.AddStatus(weakness);
 	}
 	
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		return context.relicManager.CalculateAmountWithRelics(context, this, Amount);
 	}
 }

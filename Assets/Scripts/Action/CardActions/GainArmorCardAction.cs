@@ -1,4 +1,4 @@
-ï»¿
+
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Card/Card Actions/Gain Armor")]
@@ -10,17 +10,17 @@ public class GainArmorCardAction : CardAction {
 	public override string CardDescriptionKey => "GainArmorCardText";
 
 	public override void Execute(CardUseContext context) {
-		context.user.AddBlock(CalculateAmountWithContext(context));
+		context.user.AddBlock(ApplyAmountWithContext(context));
 		
 		context.user.PlaySkillAnimation();
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = amount;
 		
-		// ì‚¬ìš©ìì˜ Gain Block ì–‘ ê¸°ë°˜ìœ¼ë¡œ ì•„ë¨¸ ì–»ê¸°
-		result = context.user.CalculateGainingArmor(result);
-		// ìœ ë¬¼ ê¸°ë°˜ìœ¼ë¡œ ìˆ˜ì •ë˜ëŠ” ê°’ ìˆëŠ”ì§€ ê³„ì‚°
+		// »ç¿ëÀÚÀÇ Gain Block ¾ç ±â¹İÀ¸·Î ¾Æ¸Ó ¾ò±â
+		result = CalculateGainingArmorModifiers(context.user, result, mode);
+		// À¯¹° ±â¹İÀ¸·Î ¼öÁ¤µÇ´Â °ª ÀÖ´ÂÁö °è»ê
 		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		
 		return result;

@@ -21,14 +21,14 @@ public class ConditionalArmorOrDrawCardAction : CardAction {
 
 	public override void Execute(CardUseContext context) {
 		if (context.user.Block == 0) {
-			context.user.AddBlock(context.user.CalculateGainingArmor(CalculateAmountWithContext(context)));
+			context.user.AddBlock(CalculateGainingArmorModifiers(context.user, ApplyAmountWithContext(context), CalculationMode.Apply));
 			context.user.PlaySkillAnimation();
 		} else {
 			context.DrawCards(drawAmount);
 		}
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		return context.relicManager.CalculateAmountWithRelics(context, this, armorAmount);
 	}
 }

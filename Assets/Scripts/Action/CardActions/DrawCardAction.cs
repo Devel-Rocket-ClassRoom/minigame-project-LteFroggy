@@ -1,23 +1,23 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Card/Card Actions/Draw Card")]
 public class DrawCardAction : CardAction {
 	public int amount;
 	
-	// ì¹´ë“œë¥¼ ë½‘ëŠ”ë‹¤.
+	// Ä«µå¸¦ »Ì´Â´Ù.
 	protected override int Amount => amount;
 	public override string CardDescriptionKey => "DrawCardText";
 
 	public override void Execute(CardUseContext context) {
 		context.user.PlaySkillAnimation();
 
-		int drawAmount = CalculateAmountWithContext(context);
+		int drawAmount = ApplyAmountWithContext(context);
 		context.DrawCards(drawAmount);
 	}
 	
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = amount;
-		// ìœ ë¬¼ ê¸°ë°˜ìœ¼ë¡œ ìˆ˜ì •ë˜ëŠ” ê°’ ìˆëŠ”ì§€ ê³„ì‚°
+		// À¯¹° ±â¹İÀ¸·Î ¼öÁ¤µÇ´Â °ª ÀÖ´ÂÁö °è»ê
 		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		
 		return result;

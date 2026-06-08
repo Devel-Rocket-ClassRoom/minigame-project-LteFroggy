@@ -1,24 +1,24 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Enemy/Enemy Actions/Gain Armor")]
 public class GainArmorAction : EnemyAction {
 	public int amount;
 	protected override int Amount => amount;
 	public override string IntentIconName => $"Defend";
-	public override string IntentDescriptionTitle => "ë°©ì–´";
+	public override string IntentDescriptionTitle => "¹æ¾î";
 	public override string IntentDescriptionKey => "EnemyGainArmorIntentText";
 	
-	protected override int CalculateAmountWithContext(EnemyActionContext context) {
-		// ë³¸ì¸ ê°•í™”ê°’ì— ê¸°ë°˜í•œ ê°•í™”ë„ ë³´ê¸°
-		return context.user.CalculateGainingArmor(amount);
+	protected override int CalculateAmountWithContext(EnemyActionContext context, CalculationMode mode) {
+		// º»ÀÎ °­È­°ª¿¡ ±â¹İÇÑ °­È­µµ º¸±â
+		return CalculateGainingArmorModifiers(context.user, amount, mode);
 	}
 	
 	public override void Execute(EnemyActionContext context) {
-		context.user.AddBlock(CalculateAmountWithContext(context));
+		context.user.AddBlock(ApplyAmountWithContext(context));
 		context.user.PlaySkillAnimation();
 	}
 	
-	// ì–¼ë§ˆ ì–»ì„ì§€ ì•Œë ¤ì£¼ì§€ ì•ŠìŒ
+	// ¾ó¸¶ ¾òÀ»Áö ¾Ë·ÁÁÖÁö ¾ÊÀ½
 	public override string GetIntentTextWithContext(EnemyActionContext context) { return ""; }
 
 }

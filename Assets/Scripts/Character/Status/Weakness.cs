@@ -4,7 +4,7 @@
 	public override bool IsActive => Duration > 0;
 
 	// 취약 걸리면 주는 데미지 25% 감소로 수정..
-	public override int ModifyAttackingDamage(int damage) {
+	public override int PreviewAttackingDamageModifier(int damage) {
 		return damage = (int)(damage * 0.75f);
 	}
 

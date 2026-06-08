@@ -18,7 +18,7 @@
 	/// <param name="context"></param>
 	/// <returns></returns>
 	public virtual string GetCardDescriptionWithContext(CardUseContext context) {
-		int calculatedAmount = CalculateAmountWithContext(context);
+		int calculatedAmount = CalculatePreviewAmountWithContext(context);
 		string replaceText;
 		// 강화되었으면 초록색 텍스트
 		if (calculatedAmount > Amount) { replaceText = GetGreenText(calculatedAmount.ToString()); }

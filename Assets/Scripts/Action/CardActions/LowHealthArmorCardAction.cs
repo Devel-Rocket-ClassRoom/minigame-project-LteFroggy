@@ -25,11 +25,11 @@ public class LowHealthArmorCardAction : CardAction {
 			? lowHealthArmor
 			: normalArmor;
 		int amount = context.relicManager.CalculateAmountWithRelics(context, this, baseAmount);
-		context.user.AddBlock(context.user.CalculateGainingArmor(amount));
+		context.user.AddBlock(CalculateGainingArmorModifiers(context.user, amount, CalculationMode.Apply));
 		context.user.PlaySkillAnimation();
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		return lowHealthArmor;
 	}
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Enemy/Enemy Actions/Give Burn")]
 public class GiveBurnAction : EnemyAction {
@@ -10,7 +10,7 @@ public class GiveBurnAction : EnemyAction {
 
 	protected override int Amount => amount;
 
-	protected override int CalculateAmountWithContext(EnemyActionContext context) {
+	protected override int CalculateAmountWithContext(EnemyActionContext context, CalculationMode mode) {
 		return amount;
 	}
 
@@ -22,7 +22,7 @@ public class GiveBurnAction : EnemyAction {
 		if (context.target.IsDead) return;
 
 		var burn = new Burn();
-		burn.Init(context.target, CalculateAmountWithContext(context), 0);
+		burn.Init(context.target, ApplyAmountWithContext(context), 0);
 		context.target.AddStatus(burn);
 
 		context.user.PlayAttackAnimation();

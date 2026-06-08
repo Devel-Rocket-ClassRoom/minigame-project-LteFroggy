@@ -10,7 +10,7 @@
 	// 힘은 줄어들 필요 없음.
 	public override void OnTurnEnd() { }
 
-	public override int ModifyAttackingDamage(int damage) {
-		return damage += Stack;
+	public override int PreviewAttackingDamageModifier(int damage) {
+		return damage + Stack;
 	}
 }

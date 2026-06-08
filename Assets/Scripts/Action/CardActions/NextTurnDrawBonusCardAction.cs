@@ -8,11 +8,11 @@ public class NextTurnDrawBonusCardAction : CardAction {
 	public override string CardDescriptionKey => "NextTurnDrawBonusCardText";
 
 	public override void Execute(CardUseContext context) {
-		context.battleManager.DeckManager.AddNextTurnDrawBonus(CalculateAmountWithContext(context));
+		context.battleManager.DeckManager.AddNextTurnDrawBonus(ApplyAmountWithContext(context));
 		context.user.PlaySkillAnimation();
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		return context.relicManager.CalculateAmountWithRelics(context, this, amount);
 	}
 }
