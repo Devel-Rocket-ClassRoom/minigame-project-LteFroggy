@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class Overload : StatusBase {
-	public override string IconName => "DebuffIcon";
+	public override string IconName => "OverloadIcon";
 	public override string DescriptionContent => base.DescriptionContent.Replace("1", Stack.ToString());
 	public override string TextToShow => Stack.ToString();
 	public override bool IsActive => Stack > 0;
