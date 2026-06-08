@@ -16,7 +16,10 @@ public class ExecuteCardAction : CardAction {
 	}
 
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
-		return GetCardDescription();
+		string damageText = FormatPreviewAmount(CalculatePreviewAmountWithContext(context), fallbackDamage);
+		return StringTableManager.StringTable[CardDescriptionKey]
+			.Replace("-", damageText)
+			.Replace("#", thresholdPercent.ToString());
 	}
 
 	public override void Execute(CardUseContext context) {

@@ -16,22 +16,24 @@ public class LostHealthBonusDamageCardAction : CardAction {
 	}
 
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
-		return GetCardDescription();
+		string damageText = FormatPreviewAmount(CalculatePreviewAmountWithContext(context), baseDamage);
+		return StringTableManager.StringTable[CardDescriptionKey]
+			.Replace("-", damageText)
+			.Replace("#", lostHealthPercent.ToString());
 	}
 
 	public override void Execute(CardUseContext context) {
 		if (context.target == null || context.target.IsDead) return;
 
-		int lostHealth = context.user.MaxHealth - context.user.CurrentHealth;
-		int damage = baseDamage + Mathf.RoundToInt(lostHealth * (lostHealthPercent / 100f));
-		damage = CalculateAttackingDamageModifiers(context.user, damage, CalculationMode.Apply);
-		damage = CalculateTakingDamageModifiers(context.target, damage, CalculationMode.Apply);
-		damage = context.relicManager.CalculateAmountWithRelics(context, this, damage);
-		context.DealDamage(context.target, this, damage);
+		context.DealDamage(context.target, this, ApplyAmountWithContext(context));
 		context.user.PlayAttackAnimation();
 	}
 
 	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
-		return baseDamage;
+		int lostHealth = context.user.MaxHealth - context.user.CurrentHealth;
+		int result = baseDamage + Mathf.RoundToInt(lostHealth * (lostHealthPercent / 100f));
+		result = CalculateAttackingDamageModifiers(context.user, result, mode);
+		if (context.target != null) result = CalculateTakingDamageModifiers(context.target, result, mode);
+		return context.relicManager.CalculateAmountWithRelics(context, this, result);
 	}
 }

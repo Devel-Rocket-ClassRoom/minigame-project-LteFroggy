@@ -16,12 +16,15 @@ public class ConditionalArmorOrDrawCardAction : CardAction {
 	}
 
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
-		return GetCardDescription();
+		string armorText = FormatPreviewAmount(CalculatePreviewAmountWithContext(context), armorAmount);
+		return StringTableManager.StringTable[CardDescriptionKey]
+			.Replace("-", armorText)
+			.Replace("#", drawAmount.ToString());
 	}
 
 	public override void Execute(CardUseContext context) {
 		if (context.user.Block == 0) {
-			context.user.AddBlock(CalculateGainingArmorModifiers(context.user, ApplyAmountWithContext(context), CalculationMode.Apply));
+			context.user.AddBlock(ApplyAmountWithContext(context));
 			context.user.PlaySkillAnimation();
 		} else {
 			context.DrawCards(drawAmount);
@@ -29,6 +32,8 @@ public class ConditionalArmorOrDrawCardAction : CardAction {
 	}
 
 	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
-		return context.relicManager.CalculateAmountWithRelics(context, this, armorAmount);
+		int result = armorAmount;
+		result = CalculateGainingArmorModifiers(context.user, result, mode);
+		return context.relicManager.CalculateAmountWithRelics(context, this, result);
 	}
 }

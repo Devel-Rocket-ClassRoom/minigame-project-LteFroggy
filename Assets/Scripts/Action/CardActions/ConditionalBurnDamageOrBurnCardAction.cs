@@ -17,7 +17,11 @@ public class ConditionalBurnDamageOrBurnCardAction : CardAction {
 	}
 
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
-		return GetCardDescription();
+		string damageText = FormatPreviewAmount(CalculatePreviewAmountWithContext(context), damageAmount);
+		string burnText = FormatPreviewAmount(CalculateBurnAmountWithContext(context, CalculationMode.Preview), burnAmount);
+		return StringTableManager.StringTable[CardDescriptionKey]
+			.Replace("-", damageText)
+			.Replace("#", burnText);
 	}
 
 	public override void Execute(CardUseContext context) {
@@ -30,9 +34,7 @@ public class ConditionalBurnDamageOrBurnCardAction : CardAction {
 		}
 
 		var burn = new Burn();
-		int result = CalculateGivingBurnModifiers(context.user, burnAmount, CalculationMode.Apply);
-		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
-		burn.Init(context.target, result, 0);
+		burn.Init(context.target, CalculateBurnAmountWithContext(context, CalculationMode.Apply), 0);
 		context.target.AddStatus(burn);
 	}
 
@@ -40,6 +42,12 @@ public class ConditionalBurnDamageOrBurnCardAction : CardAction {
 		int result = damageAmount;
 		result = CalculateAttackingDamageModifiers(context.user, result, mode);
 		if (context.target != null) result = CalculateTakingDamageModifiers(context.target, result, mode);
+		return context.relicManager.CalculateAmountWithRelics(context, this, result);
+	}
+
+	private int CalculateBurnAmountWithContext(CardUseContext context, CalculationMode mode) {
+		int result = burnAmount;
+		result = CalculateGivingBurnModifiers(context.user, result, mode);
 		return context.relicManager.CalculateAmountWithRelics(context, this, result);
 	}
 }

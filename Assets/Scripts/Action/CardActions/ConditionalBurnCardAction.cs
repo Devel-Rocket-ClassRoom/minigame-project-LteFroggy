@@ -16,7 +16,10 @@ public class ConditionalBurnCardAction : CardAction {
 	}
 
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
-		return GetCardDescription();
+		string burnText = FormatPreviewAmount(CalculatePreviewAmountWithContext(context), amount);
+		return StringTableManager.StringTable[CardDescriptionKey]
+			.Replace("-", burnText)
+			.Replace("#", bonusAmount.ToString());
 	}
 
 	public override void Execute(CardUseContext context) {

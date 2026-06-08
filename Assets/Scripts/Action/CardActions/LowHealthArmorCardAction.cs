@@ -17,19 +17,36 @@ public class LowHealthArmorCardAction : CardAction {
 	}
 
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
-		return GetCardDescription();
+		string lowHealthArmorText = FormatPreviewAmount(
+			CalculateArmorAmountWithContext(context, lowHealthArmor, CalculationMode.Preview),
+			lowHealthArmor
+		);
+		string normalArmorText = FormatPreviewAmount(
+			CalculateArmorAmountWithContext(context, normalArmor, CalculationMode.Preview),
+			normalArmor
+		);
+		return StringTableManager.StringTable[CardDescriptionKey]
+			.Replace("-", lowHealthArmorText)
+			.Replace("#", normalArmorText);
 	}
 
 	public override void Execute(CardUseContext context) {
-		int baseAmount = context.user.CurrentHealth * 100 <= context.user.MaxHealth * thresholdPercent
-			? lowHealthArmor
-			: normalArmor;
-		int amount = context.relicManager.CalculateAmountWithRelics(context, this, baseAmount);
-		context.user.AddBlock(CalculateGainingArmorModifiers(context.user, amount, CalculationMode.Apply));
+		context.user.AddBlock(ApplyAmountWithContext(context));
 		context.user.PlaySkillAnimation();
 	}
 
 	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
-		return lowHealthArmor;
+		int baseAmount = IsLowHealth(context) ? lowHealthArmor : normalArmor;
+		return CalculateArmorAmountWithContext(context, baseAmount, mode);
+	}
+
+	private int CalculateArmorAmountWithContext(CardUseContext context, int baseAmount, CalculationMode mode) {
+		int result = baseAmount;
+		result = CalculateGainingArmorModifiers(context.user, result, mode);
+		return context.relicManager.CalculateAmountWithRelics(context, this, result);
+	}
+
+	private bool IsLowHealth(CardUseContext context) {
+		return context.user.CurrentHealth * 100 <= context.user.MaxHealth * thresholdPercent;
 	}
 }

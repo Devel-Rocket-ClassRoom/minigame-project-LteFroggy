@@ -19,14 +19,14 @@
 	/// <returns></returns>
 	public virtual string GetCardDescriptionWithContext(CardUseContext context) {
 		int calculatedAmount = CalculatePreviewAmountWithContext(context);
-		string replaceText;
-		// 강화되었으면 초록색 텍스트
-		if (calculatedAmount > Amount) { replaceText = GetGreenText(calculatedAmount.ToString()); }
-		// 약화되면, 빨간색 텍스트
-		else if (calculatedAmount < Amount) { replaceText = GetRedText(calculatedAmount.ToString()); }
-		// 별 일 없으면 그냥 초록색
-		else { replaceText = calculatedAmount.ToString(); }
+		string replaceText = FormatPreviewAmount(calculatedAmount, Amount);
 		
 		return StringTableManager.StringTable[CardDescriptionKey].Replace("-", replaceText);
+	}
+
+	protected string FormatPreviewAmount(int calculatedAmount, int baseAmount) {
+		if (calculatedAmount > baseAmount) return GetGreenText(calculatedAmount.ToString());
+		if (calculatedAmount < baseAmount) return GetRedText(calculatedAmount.ToString());
+		return calculatedAmount.ToString();
 	}
 }

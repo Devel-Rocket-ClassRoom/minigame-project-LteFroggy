@@ -17,9 +17,7 @@ public class ConditionalBurnBonusDamageCardAction : CardAction {
 
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
 		int calculated = CalculatePreviewAmountWithContext(context);
-		string amountText = calculated > amount ? GetGreenText(calculated.ToString())
-			: calculated < amount ? GetRedText(calculated.ToString())
-			: calculated.ToString();
+		string amountText = FormatPreviewAmount(calculated, amount);
 		return StringTableManager.StringTable[CardDescriptionKey]
 			.Replace("#", bonusAmount.ToString())
 			.Replace("-", amountText);
