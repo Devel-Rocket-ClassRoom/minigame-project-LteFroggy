@@ -80,7 +80,7 @@ public class LoadoutManager : MonoBehaviour {
 
 	private void ShowCardSelection() {
 		_step = LoadoutStep.CardSelection;
-		SetHeader("시작 카드 선택", "카드 보상 풀에서 서로 다른 카드 2장을 선택하세요");
+		SetHeader("시작 카드 선택", "기본 덱은 타격 4장, 방어 4장으로 시작합니다.\n선택한 카드 2장을 더해 총 10장 덱으로 출발합니다.");
 		SetStartButtonText("출발");
 		ClearSelectionList();
 		_selectedCards.Clear();
