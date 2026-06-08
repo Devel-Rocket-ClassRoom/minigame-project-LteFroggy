@@ -11,6 +11,6 @@ public abstract class EnemyAction : ActionBase<EnemyActionContext> {
 
 	public virtual string GetIntentDescriptionWithContext(EnemyActionContext context) {
 		return StringTableManager.StringTable[IntentDescriptionKey]
-			.Replace("-", CalculateAmountWithContext(context).ToString());
+			.Replace("-", CalculatePreviewAmountWithContext(context).ToString());
 	}
 }

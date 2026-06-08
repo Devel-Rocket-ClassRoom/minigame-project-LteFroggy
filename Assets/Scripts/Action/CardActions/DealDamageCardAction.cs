@@ -1,4 +1,4 @@
-ï»¿using System.ComponentModel.Design.Serialization;
+using System.ComponentModel.Design.Serialization;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Card/Card Actions/Deal Damage")]
@@ -6,25 +6,25 @@ public class DealDamageCardAction : CardAction {
 	public int amount;
 	public override bool IsDamageAction => true;
 	
-	// íŠ¹ì • ì  í•˜ë‚˜ì—ê²Œ ë°ë¯¸ì§€ë¥¼ ì¤€ë‹¤
+	// Æ¯Á¤ Àû ÇÏ³ª¿¡°Ô µ¥¹ÌÁö¸¦ ÁØ´Ù
 	protected override int Amount => amount;
 	public override string CardDescriptionKey => "AttackCardText";
 
 	public override void Execute(CardUseContext context) {
 		if (context.target.IsDead) return;
-		context.DealDamage(context.target, this, CalculateAmountWithContext(context));
+		context.DealDamage(context.target, this, ApplyAmountWithContext(context));
 		
-		// ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
+		// °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
 		context.user.PlayAttackAnimation();
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = amount;
-		// ì‚¬ìš©ì ê¸°ë°˜ ì£¼ëŠ” ë°ë¯¸ì§€ ê³„ì‚°
-		result = context.user.CalculateAttackingDamage(result);
-		// íƒ€ê²Ÿì´ ìˆë‹¤ë©´, ì£¼ëŠ” ë°ë¯¸ì§€ë„ ê³„ì‚°
-		if (context.target != null) { result = context.target.CalculateGainingDamage(result); }
-		// ìœ ë¬¼ ê¸°ë°˜ìœ¼ë¡œ ìˆ˜ì •ë˜ëŠ” ë°ë¯¸ì§€ ìˆëŠ”ì§€ ê³„ì‚°
+		// »ç¿ëÀÚ ±â¹İ ÁÖ´Â µ¥¹ÌÁö °è»ê
+		result = CalculateAttackingDamageModifiers(context.user, result, mode);
+		// Å¸°ÙÀÌ ÀÖ´Ù¸é, ÁÖ´Â µ¥¹ÌÁöµµ °è»ê
+		if (context.target != null) { result = CalculateTakingDamageModifiers(context.target, result, mode); }
+		// À¯¹° ±â¹İÀ¸·Î ¼öÁ¤µÇ´Â µ¥¹ÌÁö ÀÖ´ÂÁö °è»ê
 		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		
 		return result;

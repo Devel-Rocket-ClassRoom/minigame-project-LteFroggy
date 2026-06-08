@@ -136,29 +136,72 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 
 	public void ClearBlock() { Block = 0; }
 	
-	public int CalculateAttackingDamage(int amount) {
+	public int PreviewAttackingDamageModifiers(int amount) {
 		foreach (var status in _statusRenderers) {
-			amount = status.Value.Status.ModifyAttackingDamage(amount);
+			amount = status.Value.Status.PreviewAttackingDamageModifier(amount);
+		}
+
+		return amount;
+	}
+	
+	public int ApplyAttackingDamageModifiers(int amount) {
+		foreach (var status in _statusRenderers) {
+			amount = status.Value.Status.ApplyAttackingDamageModifier(amount);
+		}
+
+		RefreshStatusesInfo();
+		OnStatusChanged();
+
+		return amount;
+	}
+	
+	public int PreviewTakingDamageModifiers(int amount) {
+		foreach (var status in _statusRenderers) {
+			amount = status.Value.Status.PreviewTakingDamageModifier(amount);
 		}
 		return amount;
 	}
 	
-	public int CalculateGainingDamage(int amount) {
+	public int ApplyTakingDamageModifiers(int amount) {
 		foreach (var status in _statusRenderers) {
-			amount = status.Value.Status.ModifyGainingDamage(amount);
+			amount = status.Value.Status.ApplyTakingDamageModifier(amount);
+		}
+
+		RefreshStatusesInfo();
+		OnStatusChanged();
+
+		return amount;
+	}
+
+	public int PreviewGainingArmorModifiers(int amount) {
+		foreach (var status in _statusRenderers) {
+			amount = status.Value.Status.PreviewGainingArmorModifier(amount);
 		}
 		return amount;
 	}
-	
-	public int CalculateGainingArmor(int amount) {
+
+	public int ApplyGainingArmorModifiers(int amount) {
 		foreach (var status in _statusRenderers) {
-			amount = status.Value.Status.ModifyGainingArmor(amount);
+			amount = status.Value.Status.ApplyGainingArmorModifier(amount);
 		}
+
+		RefreshStatusesInfo();
+		OnStatusChanged();
+
 		return amount;
 	}
-	
-	public int CalculateGiveBurn(int amount) {
-		foreach (var status in _statusRenderers) { amount = status.Value.Status.ModifyGivingBurn(amount); }
+
+	public int PreviewGivingBurnModifiers(int amount) {
+		foreach (var status in _statusRenderers) { amount = status.Value.Status.PreviewGivingBurnModifier(amount); }
+		return amount;
+	}
+
+	public int ApplyGivingBurnModifiers(int amount) {
+		foreach (var status in _statusRenderers) { amount = status.Value.Status.ApplyGivingBurnModifier(amount); }
+
+		RefreshStatusesInfo();
+		OnStatusChanged();
+
 		return amount;
 	}
 
@@ -268,13 +311,23 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		foreach (var status in pendingDelete) {
 			// 이미 삭제되었거나 해서 없다면, Destroy 중복으로 호출하지 않도록 continue;
 			if (!_statusRenderers.Remove(status, out var statusInstance)) continue;
-			Destroy(statusInstance.gameObject);
+			DestroyStatusRenderer(statusInstance);
 		}
 		
 		// 이후 상태 갱신
 		foreach (var pair in _statusRenderers) {
 			pair.Value.UpdateStatus();
 		}
+	}
+
+	private void DestroyStatusRenderer(StatusRenderer statusInstance) {
+#if UNITY_EDITOR
+		if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) {
+			DestroyImmediate(statusInstance.gameObject);
+			return;
+		}
+#endif
+		Destroy(statusInstance.gameObject);
 	}
 
 	protected virtual void Update() {

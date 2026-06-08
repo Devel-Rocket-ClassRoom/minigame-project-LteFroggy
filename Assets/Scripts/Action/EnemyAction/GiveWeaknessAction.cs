@@ -5,12 +5,12 @@ public class GiveWeaknessAction : EnemyAction {
 	public int amount;
 
 	public override string IntentIconName => "Debuff";
-	public override string IntentDescriptionTitle => "약화 효과";
+	public override string IntentDescriptionTitle => "?�화 ?�과";
 	public override string IntentDescriptionKey => "EnemyTargetDebuffIntentText";
 
 	protected override int Amount => amount;
 
-	protected override int CalculateAmountWithContext(EnemyActionContext context) {
+	protected override int CalculateAmountWithContext(EnemyActionContext context, CalculationMode mode) {
 		return amount;
 	}
 
@@ -22,7 +22,7 @@ public class GiveWeaknessAction : EnemyAction {
 		if (context.target.IsDead) return;
 
 		var weakness = new Weakness();
-		weakness.Init(context.target, 0, CalculateAmountWithContext(context));
+		weakness.Init(context.target, 0, ApplyAmountWithContext(context));
 		context.target.AddStatus(weakness);
 
 		context.user.PlayAttackAnimation();

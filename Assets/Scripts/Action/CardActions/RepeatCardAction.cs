@@ -11,7 +11,7 @@ public abstract class RepeatCardAction : CardAction {
 	}
 	
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
-		int calculatedAmount = CalculateAmountWithContext(context);
+		int calculatedAmount = CalculatePreviewAmountWithContext(context);
 		int calculatedRepeat = CalculateRepeatWithContext(context);
 		string replaceAmount;
 		string replaceRepeat;

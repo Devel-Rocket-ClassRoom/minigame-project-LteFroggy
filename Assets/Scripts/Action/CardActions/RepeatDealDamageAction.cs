@@ -1,4 +1,4 @@
-ï»¿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class RepeatDealDamageAction : RepeatCardAction {
@@ -16,23 +16,23 @@ public class RepeatDealDamageAction : RepeatCardAction {
 	
 	protected override IEnumerator ExecuteRepeat(CardUseContext context) {
 		for (int i = 0; i < CalculateRepeatWithContext(context); i++) {
-			// ë°ë¯¸ì§€ë¥¼ ë°˜ë³µ íšŸìˆ˜ë§Œí¼ ì¤€ë‹¤
-			context.DealDamage(context.target, this, CalculateAmountWithContext(context));
+			// µ¥¹ÌÁö¸¦ ¹Ýº¹ È½¼ö¸¸Å­ ÁØ´Ù
+			context.DealDamage(context.target, this, ApplyAmountWithContext(context));
 			context.user.PlayAttackAnimation();
 			yield return new WaitForSeconds(0.5f);
 		}
 	}
 	
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = amount;
-		result = context.user.CalculateAttackingDamage(result);
-		if (context.target != null) result = context.target.CalculateGainingDamage(result);
+		result = CalculateAttackingDamageModifiers(context.user, result, mode);
+		if (context.target != null) result = CalculateTakingDamageModifiers(context.target, result, mode);
 		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		return result;
 	}
 	
 	protected override int CalculateRepeatWithContext(CardUseContext context) {
-		// ìœ ë¬¼ ì ìš©
+		// À¯¹° Àû¿ë
 		return context.relicManager.CalculateRepeatWithRelics(context, this, repeat);
 	}
 }

@@ -22,16 +22,16 @@ public class ConditionalBurnCardAction : CardAction {
 	public override void Execute(CardUseContext context) {
 		if (context.target == null) return;
 
-		int burnAmount = CalculateAmountWithContext(context);
+		int burnAmount = ApplyAmountWithContext(context);
 		if (context.target.HasStatus<Burn>()) burnAmount += bonusAmount;
 		var burn = new Burn();
 		burn.Init(context.target, burnAmount, 0);
 		context.target.AddStatus(burn);
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = amount;
-		result = context.user.CalculateGiveBurn(result);
+		result = CalculateGivingBurnModifiers(context.user, result, mode);
 		return context.relicManager.CalculateAmountWithRelics(context, this, result);
 	}
 }

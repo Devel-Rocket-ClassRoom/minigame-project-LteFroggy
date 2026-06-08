@@ -12,11 +12,11 @@ public class AddBurnStacksCardAction : CardAction {
 		if (context.target == null) return;
 		if (!context.target.HasStatus<Burn>()) return;
 		var burn = new Burn();
-		burn.Init(context.target, CalculateAmountWithContext(context), 0);
+		burn.Init(context.target, ApplyAmountWithContext(context), 0);
 		context.target.AddStatus(burn);
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = amount;
 		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		return result;

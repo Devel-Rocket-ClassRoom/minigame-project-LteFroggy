@@ -9,7 +9,7 @@ public class LastHitDoubleRepeatDamageAction : RepeatDealDamageAction {
 		int totalRepeat = CalculateRepeatWithContext(context);
 		for (int i = 0; i < totalRepeat; i++) {
 			if (context.target.IsDead) yield break;
-			int damage = CalculateAmountWithContext(context);
+			int damage = ApplyAmountWithContext(context);
 			if (i == totalRepeat - 1) damage *= 2;
 			context.DealDamage(context.target, this, damage);
 			context.user.PlayAttackAnimation();

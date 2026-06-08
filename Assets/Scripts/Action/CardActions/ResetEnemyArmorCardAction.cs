@@ -16,5 +16,5 @@ public class ResetEnemyArmorCardAction : CardAction {
 		context.target.ClearBlock();
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) => 0;
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) => 0;
 }

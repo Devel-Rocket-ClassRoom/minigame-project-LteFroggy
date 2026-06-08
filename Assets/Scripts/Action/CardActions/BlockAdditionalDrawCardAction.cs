@@ -15,5 +15,5 @@ public class BlockAdditionalDrawCardAction : CardAction {
 		context.battleManager.DeckManager.BlockAdditionalDrawThisTurn = true;
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) => 0;
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) => 0;
 }

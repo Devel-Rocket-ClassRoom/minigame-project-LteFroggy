@@ -24,22 +24,22 @@ public class ConditionalBurnDamageOrBurnCardAction : CardAction {
 		if (context.target == null || context.target.IsDead) return;
 
 		if (context.target.HasStatus<Burn>()) {
-			context.DealDamage(context.target, this, CalculateAmountWithContext(context));
+			context.DealDamage(context.target, this, ApplyAmountWithContext(context));
 			context.user.PlayAttackAnimation();
 			return;
 		}
 
 		var burn = new Burn();
-		int result = context.user.CalculateGiveBurn(burnAmount);
+		int result = CalculateGivingBurnModifiers(context.user, burnAmount, CalculationMode.Apply);
 		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		burn.Init(context.target, result, 0);
 		context.target.AddStatus(burn);
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = damageAmount;
-		result = context.user.CalculateAttackingDamage(result);
-		if (context.target != null) result = context.target.CalculateGainingDamage(result);
+		result = CalculateAttackingDamageModifiers(context.user, result, mode);
+		if (context.target != null) result = CalculateTakingDamageModifiers(context.target, result, mode);
 		return context.relicManager.CalculateAmountWithRelics(context, this, result);
 	}
 }

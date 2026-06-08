@@ -7,7 +7,7 @@
 		Duration += status.Duration;
 	}
 
-	public override int ModifyGainingDamage(int damage) {
+	public override int PreviewTakingDamageModifier(int damage) {
 		return damage = (int)(damage * 1.5f);
 	}
 }

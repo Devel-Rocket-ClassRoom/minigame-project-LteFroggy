@@ -1,16 +1,49 @@
 ﻿using UnityEngine;
 
+public enum CalculationMode {
+	Preview,
+	Apply
+}
+
 public abstract class ActionBase<TContext> : ScriptableObject where TContext : BattleContextBase {
-	// 특정 효과가 적용된다면, 효과를 얼마나 적용할지
 	protected abstract int Amount { get; }
-	
-	// 공격자, 방어자의 Status를 고려해 실제 효과가 적용될 양 계산
-	protected abstract int CalculateAmountWithContext(TContext context);
-	
-	// 강화되었을 때 사용할 초록색 텍스트
+
+	protected abstract int CalculateAmountWithContext(TContext context, CalculationMode mode);
+
+	protected int CalculatePreviewAmountWithContext(TContext context) {
+		return CalculateAmountWithContext(context, CalculationMode.Preview);
+	}
+
+	protected int ApplyAmountWithContext(TContext context) {
+		return CalculateAmountWithContext(context, CalculationMode.Apply);
+	}
+
+	protected int CalculateAttackingDamageModifiers(CharacterBase character, int amount, CalculationMode mode) {
+		return mode == CalculationMode.Apply
+			? character.ApplyAttackingDamageModifiers(amount)
+			: character.PreviewAttackingDamageModifiers(amount);
+	}
+
+	protected int CalculateTakingDamageModifiers(CharacterBase character, int amount, CalculationMode mode) {
+		return mode == CalculationMode.Apply
+			? character.ApplyTakingDamageModifiers(amount)
+			: character.PreviewTakingDamageModifiers(amount);
+	}
+
+	protected int CalculateGainingArmorModifiers(CharacterBase character, int amount, CalculationMode mode) {
+		return mode == CalculationMode.Apply
+			? character.ApplyGainingArmorModifiers(amount)
+			: character.PreviewGainingArmorModifiers(amount);
+	}
+
+	protected int CalculateGivingBurnModifiers(CharacterBase character, int amount, CalculationMode mode) {
+		return mode == CalculationMode.Apply
+			? character.ApplyGivingBurnModifiers(amount)
+			: character.PreviewGivingBurnModifiers(amount);
+	}
+
 	protected string GetGreenText(string text) => $"<color=#00FF00>{text}</color>";
-	// 열화되었을 때 사용할 빨간색 텍스트
 	protected string GetRedText(string text) => $"<color=#FF0000>{text}</color>";
-	
+
 	public abstract void Execute(TContext context);
 }

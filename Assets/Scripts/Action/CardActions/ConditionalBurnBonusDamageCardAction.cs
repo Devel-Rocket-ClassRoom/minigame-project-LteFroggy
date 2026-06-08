@@ -16,7 +16,7 @@ public class ConditionalBurnBonusDamageCardAction : CardAction {
 	}
 
 	public override string GetCardDescriptionWithContext(CardUseContext context) {
-		int calculated = CalculateAmountWithContext(context);
+		int calculated = CalculatePreviewAmountWithContext(context);
 		string amountText = calculated > amount ? GetGreenText(calculated.ToString())
 			: calculated < amount ? GetRedText(calculated.ToString())
 			: calculated.ToString();
@@ -27,16 +27,16 @@ public class ConditionalBurnBonusDamageCardAction : CardAction {
 
 	public override void Execute(CardUseContext context) {
 		if (context.target.IsDead) return;
-		int damage = CalculateAmountWithContext(context);
+		int damage = ApplyAmountWithContext(context);
 		if (context.target.HasStatus<Burn>()) damage += bonusAmount;
 		context.DealDamage(context.target, this, damage);
 		context.user.PlayAttackAnimation();
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = amount;
-		result = context.user.CalculateAttackingDamage(result);
-		if (context.target != null) { result = context.target.CalculateGainingDamage(result); }
+		result = CalculateAttackingDamageModifiers(context.user, result, mode);
+		if (context.target != null) { result = CalculateTakingDamageModifiers(context.target, result, mode); }
 		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		return result;
 	}

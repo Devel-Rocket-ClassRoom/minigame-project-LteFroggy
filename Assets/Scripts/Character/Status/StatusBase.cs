@@ -1,67 +1,83 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 
 public abstract class StatusBase {
 	public CharacterBase Owner { get; private set; }
-	
+
 	public int Stack { get; protected set;  }
-	
+
 	public int Duration { get; protected set; }
-	
+
 	public abstract string IconName { get; }
-	
+
 	public Sprite Icon => Resources.Load<Sprite>($"Sprites/Statuses/{IconName}");
-	
-	// í™”ë©´ì— í‘œì‹œí•  í‚¤ì›Œë“œ (StringTable í‚¤ì™€ ì¼ì¹˜)
+
+	// È­¸é¿¡ Ç¥½ÃÇÒ Å°¿öµå (StringTable Å°¿Í ÀÏÄ¡)
 	public virtual string DescriptionTitle => StringTableManager.StringTable[GetType().Name];
 	public virtual string DescriptionContent => StringTableManager.DescriptionTable[DescriptionTitle];
-	
-	// ìƒíƒœì´ìƒ ì°½ ì•„ë˜ì— ë³´ì¼ í…ìŠ¤íŠ¸
+
+	// »óÅÂÀÌ»ó Ã¢ ¾Æ·¡¿¡ º¸ÀÏ ÅØ½ºÆ®
 	public abstract string TextToShow { get; }
-	
-	// í•´ë‹¹ ìƒíƒœì´ìƒì´ ì•„ì§ ì ìš©ë˜ëŠ”ê±´ì§€
+
+	// ÇØ´ç »óÅÂÀÌ»óÀÌ ¾ÆÁ÷ Àû¿ëµÇ´Â°ÇÁö
 	public abstract bool IsActive { get;}
-	
+
 	public void Init(CharacterBase owner, int stack, int duration) {
 		Owner = owner;
 		Stack = stack;
 		Duration = duration;
 	}
-	
-	// ì ìš©ë  ë•Œ ìƒê¸¸ ì¼
+
+	// Àû¿ëµÉ ¶§ »ı±æ ÀÏ
 	public virtual void OnApply() { }
-	// ì‚¬ë¼ì§ˆ ë•Œ ìƒê¸¸ ì¼
+	// »ç¶óÁú ¶§ »ı±æ ÀÏ
 	public virtual void OnRemove() { }
-	// í„´ ì‹œì‘ ì‹œ ìƒê¸¸ ì¼
+	// ÅÏ ½ÃÀÛ ½Ã »ı±æ ÀÏ
 	public virtual void OnTurnStart() { }
-	// í„´ ì¢…ë£Œ ì‹œ ìƒê¸¸ ì¼
+	// ÅÏ Á¾·á ½Ã »ı±æ ÀÏ
 	public virtual void OnTurnEnd() { Duration--; }
-	
-	public virtual int ModifyAttackingDamage(int damage) {
+
+	public virtual int PreviewAttackingDamageModifier(int damage) {
 		return damage;
 	}
-	
-	public virtual int ModifyGainingDamage(int damage) {
+
+	public virtual int ApplyAttackingDamageModifier(int damage) {
+		return PreviewAttackingDamageModifier(damage);
+	}
+
+	public virtual int PreviewTakingDamageModifier(int damage) {
 		return damage;
 	}
-	
-	public virtual int ModifyGainingArmor(int armor) {
+
+	public virtual int ApplyTakingDamageModifier(int damage) {
+		return PreviewTakingDamageModifier(damage);
+	}
+
+	public virtual int PreviewGainingArmorModifier(int armor) {
 		return armor;
 	}
-	
-	public virtual int ModifyGivingBurn(int burn) {
+
+	public virtual int ApplyGainingArmorModifier(int armor) {
+		return PreviewGainingArmorModifier(armor);
+	}
+
+	public virtual int PreviewGivingBurnModifier(int burn) {
 		return burn;
+	}
+
+	public virtual int ApplyGivingBurnModifier(int burn) {
+		return PreviewGivingBurnModifier(burn);
 	}
 
 	public virtual int ModifyStartingEnergy(int energy) {
 		return energy;
 	}
 
-	// ì´ ìƒíƒœì´ìƒì´ ì¹´ë“œ ì‚¬ìš©ì„ í—ˆìš©í•˜ëŠ”ì§€ (ê¸°ë³¸ê°’: í—ˆìš©)
+	// ÀÌ »óÅÂÀÌ»óÀÌ Ä«µå »ç¿ëÀ» Çã¿ëÇÏ´ÂÁö (±âº»°ª: Çã¿ë)
 	public virtual bool CanUseCard() => true;
 	public virtual string CardUseBlockedMessageKey => null;
-	// ì¹´ë“œë¥¼ ì‚¬ìš©í–ˆì„ ë•Œ í˜¸ì¶œ (ì‚¬ìš© íšŸìˆ˜ ì¶”ì  ë“±)
+	// Ä«µå¸¦ »ç¿ëÇßÀ» ¶§ È£Ãâ (»ç¿ë È½¼ö ÃßÀû µî)
 	public virtual void OnCardUsed() { }
 
-	// ê°™ì€ ì¢…ë¥˜ì˜ ìƒíƒœì´ìƒê³¼ í•©ì³ì§ˆ ë•Œ í•©ì³ì§€ëŠ” ë°©ë²•
+	// °°Àº Á¾·ùÀÇ »óÅÂÀÌ»ó°ú ÇÕÃÄÁú ¶§ ÇÕÃÄÁö´Â ¹æ¹ı
 	public abstract void Merge(StatusBase status);
 }

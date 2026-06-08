@@ -1,37 +1,37 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Enemy/Enemy Actions/Deal Damage")]
 public class AttackAction : EnemyAction {
 	public int amount;
 
 	public override string IntentIconName => "Attack";
-	public override string IntentDescriptionTitle => "ê³µê²©";
+	public override string IntentDescriptionTitle => "°ø°İ";
 	public override string IntentDescriptionKey => "EnemyAttackIntentText";
 	
-	// ê³µê²©ëŸ‰ì€ ì‹¤ì œ Amountì™€ ë™ì¼í•˜ê²Œ ì‘ì„±
+	// °ø°İ·®Àº ½ÇÁ¦ Amount¿Í µ¿ÀÏÇÏ°Ô ÀÛ¼º
 	public override string GetIntentTextWithContext(EnemyActionContext context) {
-		var calculatedAmount = CalculateAmountWithContext(context);
-		// í”¼í•´ëŸ‰ë³´ë‹¤ ë†’ìœ¼ë©´ ì´ˆë¡ìƒ‰
+		var calculatedAmount = CalculatePreviewAmountWithContext(context);
+		// ÇÇÇØ·®º¸´Ù ³ôÀ¸¸é ÃÊ·Ï»ö
 		if (calculatedAmount > amount) { return GetGreenText(calculatedAmount.ToString()); }
-		// ë‚®ìœ¼ë©´ ë¹¨ê°„ìƒ‰
+		// ³·À¸¸é »¡°£»ö
 		if (calculatedAmount < amount) { return GetRedText(calculatedAmount.ToString()); }
-		// ê°™ìœ¼ë©´ ê·¸ëƒ¥
+		// °°À¸¸é ±×³É
 		return calculatedAmount.ToString();
 	}
 
 	protected override int Amount => amount;
 
-	protected override int CalculateAmountWithContext(EnemyActionContext context) {
+	protected override int CalculateAmountWithContext(EnemyActionContext context, CalculationMode mode) {
 		int result = amount;
-		// ì‚¬ìš©ì ê¸°ë°˜ ì£¼ëŠ” ë°ë¯¸ì§€ ê³„ì‚°
-		result = context.user.CalculateAttackingDamage(result);
-		// íƒ€ê²Ÿì´ ìˆë‹¤ë©´, ì£¼ëŠ” ë°ë¯¸ì§€ë„ ê³„ì‚°
-		if (context.target != null) { result = context.target.CalculateGainingDamage(result); }
+		// »ç¿ëÀÚ ±â¹İ ÁÖ´Â µ¥¹ÌÁö °è»ê
+		result = CalculateAttackingDamageModifiers(context.user, result, mode);
+		// Å¸°ÙÀÌ ÀÖ´Ù¸é, ÁÖ´Â µ¥¹ÌÁöµµ °è»ê
+		if (context.target != null) { result = CalculateTakingDamageModifiers(context.target, result, mode); }
 		
 		return result;
 	}
 	
-	// ë°ë¯¸ì§€ ì£¼ê¸°
+	// µ¥¹ÌÁö ÁÖ±â
 	public override void Execute(EnemyActionContext context) {
 		if (context.target.IsDead) return;
 		var damageContext = new DamageContext(
@@ -42,7 +42,7 @@ public class AttackAction : EnemyAction {
 			null,
 			DamageSourceType.Enemy
 		);
-		context.target.GetDamage(CalculateAmountWithContext(context), damageContext);
+		context.target.GetDamage(ApplyAmountWithContext(context), damageContext);
 		context.user.PlayAttackAnimation();
 	}
 }

@@ -11,14 +11,14 @@ public class ArmorDamageCardAction : CardAction {
 
 	public override void Execute(CardUseContext context) {
 		if (context.target.IsDead) return;
-		context.DealDamage(context.target, this, CalculateAmountWithContext(context));
+		context.DealDamage(context.target, this, ApplyAmountWithContext(context));
 		context.user.PlayAttackAnimation();
 	}
 
-	protected override int CalculateAmountWithContext(CardUseContext context) {
+	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = context.user.Block;
-		result = context.user.CalculateAttackingDamage(result);
-		if (context.target != null) { result = context.target.CalculateGainingDamage(result); }
+		result = CalculateAttackingDamageModifiers(context.user, result, mode);
+		if (context.target != null) { result = CalculateTakingDamageModifiers(context.target, result, mode); }
 		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		return result;
 	}
