@@ -136,6 +136,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 
 	public void ClearBlock() { Block = 0; }
 	
+	/// <summary>
+	/// 자신의 상태 기반으로 공격 데미지 미리보기.
+	/// </summary>
 	public int PreviewAttackingDamageModifiers(int amount) {
 		foreach (var status in _statusRenderers) {
 			amount = status.Value.Status.PreviewAttackingDamageModifier(amount);
@@ -144,6 +147,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return amount;
 	}
 	
+	/// <summary>
+	/// 자신의 상태 기반으로 공격 데미지 적용하기
+	/// </summary>
 	public int ApplyAttackingDamageModifiers(int amount) {
 		foreach (var status in _statusRenderers) {
 			amount = status.Value.Status.ApplyAttackingDamageModifier(amount);
@@ -155,6 +161,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return amount;
 	}
 	
+	/// <summary>
+	/// 자신의 상태 기반으로 받는 데미지 계산하기
+	/// </summary>
 	public int PreviewTakingDamageModifiers(int amount) {
 		foreach (var status in _statusRenderers) {
 			amount = status.Value.Status.PreviewTakingDamageModifier(amount);
@@ -162,6 +171,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return amount;
 	}
 	
+	/// <summary>
+	/// 자신의 상태 기반으로 받는 데미지 적용하기
+	/// </summary>
 	public int ApplyTakingDamageModifiers(int amount) {
 		foreach (var status in _statusRenderers) {
 			amount = status.Value.Status.ApplyTakingDamageModifier(amount);
@@ -173,6 +185,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return amount;
 	}
 
+	/// <summary>
+	/// 자신의 상태 기반으로 얻는 방어도 계산하기
+	/// </summary>
 	public int PreviewGainingArmorModifiers(int amount) {
 		foreach (var status in _statusRenderers) {
 			amount = status.Value.Status.PreviewGainingArmorModifier(amount);
@@ -180,6 +195,9 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return amount;
 	}
 
+	/// <summary>
+	/// 자신의 상태 기반으로 얻는 방어도 적용하기
+	/// </summary>
 	public int ApplyGainingArmorModifiers(int amount) {
 		foreach (var status in _statusRenderers) {
 			amount = status.Value.Status.ApplyGainingArmorModifier(amount);
@@ -191,11 +209,17 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		return amount;
 	}
 
+	/// <summary>
+	/// 자신의 상태 기반으로 화상 계산하기
+	/// </summary>
 	public int PreviewGivingBurnModifiers(int amount) {
 		foreach (var status in _statusRenderers) { amount = status.Value.Status.PreviewGivingBurnModifier(amount); }
 		return amount;
 	}
 
+	/// <summary>
+	/// 자신의 상태 기반으로 화상 적용하기
+	/// </summary>
 	public int ApplyGivingBurnModifiers(int amount) {
 		foreach (var status in _statusRenderers) { amount = status.Value.Status.ApplyGivingBurnModifier(amount); }
 
