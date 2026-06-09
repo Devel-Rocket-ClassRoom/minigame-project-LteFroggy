@@ -6,7 +6,7 @@ public class DealDamageCardAction : CardAction {
 	public int amount;
 	public override bool IsDamageAction => true;
 	
-	// Æ¯Á¤ Àû ÇÏ³ª¿¡°Ô µ¥¹ÌÁö¸¦ ÁØ´Ù
+	// íŠ¹ì • ì  í•˜ë‚˜ì—ê²Œ ë°ë¯¸ì§€ë¥¼ ì¤€ë‹¤
 	protected override int Amount => amount;
 	public override string CardDescriptionKey => "AttackCardText";
 
@@ -14,17 +14,17 @@ public class DealDamageCardAction : CardAction {
 		if (context.target.IsDead) return;
 		context.DealDamage(context.target, this, ApplyAmountWithContext(context));
 		
-		// °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+		// ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
 		context.user.PlayAttackAnimation();
 	}
 
 	protected override int CalculateAmountWithContext(CardUseContext context, CalculationMode mode) {
 		int result = amount;
-		// »ç¿ëÀÚ ±â¹İ ÁÖ´Â µ¥¹ÌÁö °è»ê
+		// ì‚¬ìš©ì ê¸°ë°˜ ì£¼ëŠ” ë°ë¯¸ì§€ ê³„ì‚°
 		result = CalculateAttackingDamageModifiers(context.user, result, mode);
-		// Å¸°ÙÀÌ ÀÖ´Ù¸é, ÁÖ´Â µ¥¹ÌÁöµµ °è»ê
+		// íƒ€ê²Ÿì´ ìˆë‹¤ë©´, ì£¼ëŠ” ë°ë¯¸ì§€ë„ ê³„ì‚°
 		if (context.target != null) { result = CalculateTakingDamageModifiers(context.target, result, mode); }
-		// À¯¹° ±â¹İÀ¸·Î ¼öÁ¤µÇ´Â µ¥¹ÌÁö ÀÖ´ÂÁö °è»ê
+		// ìœ ë¬¼ ê¸°ë°˜ìœ¼ë¡œ ìˆ˜ì •ë˜ëŠ” ë°ë¯¸ì§€ ìˆëŠ”ì§€ ê³„ì‚°
 		result = context.relicManager.CalculateAmountWithRelics(context, this, result);
 		
 		return result;
