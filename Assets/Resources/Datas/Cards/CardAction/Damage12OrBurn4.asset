@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 408e4e81c794436392f7498e5b9e321c, type: 3}
   m_Name: Damage12OrBurn4
   m_EditorClassIdentifier: Assembly-CSharp::ConditionalBurnDamageOrBurnCardAction
-  burnAmount: 4
   damageAmount: 12
+  burnAmount: 4

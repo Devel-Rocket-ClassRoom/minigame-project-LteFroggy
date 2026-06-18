@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b84d596b2e304f5a8e45974e5c39ab8d, type: 3}
   m_Name: Armor10OrDraw1
   m_EditorClassIdentifier: Assembly-CSharp::ConditionalArmorOrDrawCardAction
-  drawAmount: 1
   armorAmount: 10
+  drawAmount: 1
