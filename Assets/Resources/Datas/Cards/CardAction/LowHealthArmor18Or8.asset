@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LowHealthArmor18Or8
   m_EditorClassIdentifier: Assembly-CSharp::LowHealthArmorCardAction
   lowHealthArmor: 18
-  thresholdPercent: 50
   normalArmor: 8
+  thresholdPercent: 50

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02ccbb8d5fb24bf1b8e78c864f99fcc5, type: 3}
   m_Name: RepeatDamage3x4
   m_EditorClassIdentifier: Assembly-CSharp::RepeatDealDamageAction
-  repeat: 4
   amount: 3
+  repeat: 4

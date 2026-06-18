@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7f6f0a1d728440f93d61f4575107c76, type: 3}
   m_Name: Burn2Bonus2
   m_EditorClassIdentifier: Assembly-CSharp::ConditionalBurnCardAction
-  bonusAmount: 2
   amount: 2
+  bonusAmount: 2
