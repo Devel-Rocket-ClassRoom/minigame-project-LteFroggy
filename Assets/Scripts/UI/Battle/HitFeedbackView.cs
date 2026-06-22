@@ -1,6 +1,11 @@
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class HitFeedbackView : MonoBehaviour {
+	private const string DefaultFeedbackSortingLayer = "Characters";
+	private const int DefaultParticleSortingOrder = 45;
+	private const int DefaultDamageNumberSortingOrder = 50;
+
 	[SerializeField] private Transform _feedbackAnchor;
 	[SerializeField] private ParticleSystem _hitParticlePrefab;
 	[SerializeField] private DamageNumberView _damageNumberPrefab;
@@ -8,9 +13,37 @@ public class HitFeedbackView : MonoBehaviour {
 	[SerializeField] private float _stackResetDelay = 0.45f;
 	[SerializeField] private float _stackSpacingX = 0.32f;
 	[SerializeField] private float _stackSpacingY = 0.16f;
+	[SerializeField] private string _feedbackSortingLayerName = DefaultFeedbackSortingLayer;
+	[SerializeField] private int _hitParticleSortingOrder = DefaultParticleSortingOrder;
+	[SerializeField] private int _damageNumberSortingOrder = DefaultDamageNumberSortingOrder;
+	[SerializeField] private int _defaultPoolCapacity = 4;
+	[SerializeField] private int _maxPoolSize = 24;
 
 	private int _stackIndex;
 	private float _lastFeedbackTime;
+	private ObjectPool<ParticleSystem> _hitParticlePool;
+	private ObjectPool<DamageNumberView> _damageNumberPool;
+
+	private void Awake() {
+		_hitParticlePool = new ObjectPool<ParticleSystem>(
+			CreateHitParticle,
+			OnGetHitParticle,
+			OnReleaseHitParticle,
+			particle => Destroy(particle.gameObject),
+			true,
+			_defaultPoolCapacity,
+			_maxPoolSize
+		);
+		_damageNumberPool = new ObjectPool<DamageNumberView>(
+			CreateDamageNumber,
+			OnGetDamageNumber,
+			OnReleaseDamageNumber,
+			damageNumber => Destroy(damageNumber.gameObject),
+			true,
+			_defaultPoolCapacity,
+			_maxPoolSize
+		);
+	}
 
 	public void Play(int actualDamage) {
 		if (actualDamage <= 0) return;
@@ -26,21 +59,22 @@ public class HitFeedbackView : MonoBehaviour {
 	}
 
 	private void PlayParticle(Vector3 spawnPosition) {
-		ParticleSystem particle = _hitParticlePrefab == null
-			? CreateRuntimeHitParticle(spawnPosition)
-			: Instantiate(_hitParticlePrefab, spawnPosition, Quaternion.identity);
+		ParticleSystem particle = _hitParticlePool.Get();
+		particle.transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
+		ConfigureParticleRenderer(particle);
+		particle.Clear(true);
 		particle.Play();
 
 		var main = particle.main;
-		float destroyDelay = main.duration + main.startLifetime.constantMax + 0.2f;
-		Destroy(particle.gameObject, destroyDelay);
+		float releaseDelay = main.duration + main.startLifetime.constantMax + 0.2f;
+		StartCoroutine(ReleaseParticleAfterDelay(particle, releaseDelay));
 	}
 
 	private void PlayDamageNumber(Transform anchor, int actualDamage) {
-		DamageNumberView damageNumber = _damageNumberPrefab == null
-			? CreateRuntimeDamageNumber(anchor)
-			: Instantiate(_damageNumberPrefab, anchor);
-		damageNumber.Play(actualDamage, GetStackOffset(_stackIndex));
+		DamageNumberView damageNumber = _damageNumberPool.Get();
+		damageNumber.transform.SetParent(anchor, false);
+		damageNumber.SetSorting(_feedbackSortingLayerName, _damageNumberSortingOrder);
+		damageNumber.Play(actualDamage, GetStackOffset(_stackIndex), ReleaseDamageNumber);
 		_stackIndex++;
 	}
 
@@ -53,9 +87,66 @@ public class HitFeedbackView : MonoBehaviour {
 		return new Vector3(x, y, 0f);
 	}
 
-	private static ParticleSystem CreateRuntimeHitParticle(Vector3 spawnPosition) {
+	private ParticleSystem CreateHitParticle() {
+		ParticleSystem particle = _hitParticlePrefab == null
+			? CreateRuntimeHitParticle()
+			: Instantiate(_hitParticlePrefab);
+		ConfigureParticleRenderer(particle);
+		particle.gameObject.SetActive(false);
+		return particle;
+	}
+
+	private DamageNumberView CreateDamageNumber() {
+		DamageNumberView damageNumber = _damageNumberPrefab == null
+			? CreateRuntimeDamageNumber()
+			: Instantiate(_damageNumberPrefab);
+		damageNumber.SetSorting(_feedbackSortingLayerName, _damageNumberSortingOrder);
+		damageNumber.gameObject.SetActive(false);
+		return damageNumber;
+	}
+
+	private void OnGetHitParticle(ParticleSystem particle) {
+		particle.transform.SetParent(null);
+		particle.transform.localScale = Vector3.one;
+		particle.gameObject.SetActive(true);
+	}
+
+	private static void OnReleaseHitParticle(ParticleSystem particle) {
+		particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+		particle.transform.SetParent(null);
+		particle.gameObject.SetActive(false);
+	}
+
+	private void OnGetDamageNumber(DamageNumberView damageNumber) {
+		damageNumber.transform.localScale = Vector3.one;
+		damageNumber.gameObject.SetActive(true);
+	}
+
+	private static void OnReleaseDamageNumber(DamageNumberView damageNumber) {
+		damageNumber.ResetForPool();
+		damageNumber.transform.SetParent(null);
+		damageNumber.gameObject.SetActive(false);
+	}
+
+	private void ReleaseDamageNumber(DamageNumberView damageNumber) {
+		_damageNumberPool.Release(damageNumber);
+	}
+
+	private System.Collections.IEnumerator ReleaseParticleAfterDelay(ParticleSystem particle, float delay) {
+		yield return new WaitForSeconds(delay);
+		_hitParticlePool.Release(particle);
+	}
+
+	private void ConfigureParticleRenderer(ParticleSystem particle) {
+		ParticleSystemRenderer renderer = particle.GetComponent<ParticleSystemRenderer>();
+		if (renderer == null) return;
+
+		renderer.sortingLayerName = _feedbackSortingLayerName;
+		renderer.sortingOrder = _hitParticleSortingOrder;
+	}
+
+	private ParticleSystem CreateRuntimeHitParticle() {
 		GameObject particleObject = new("Hit Particle");
-		particleObject.transform.position = spawnPosition;
 
 		ParticleSystem particleSystem = particleObject.AddComponent<ParticleSystem>();
 		ConfigureRuntimeHitParticle(particleSystem);
@@ -63,7 +154,7 @@ public class HitFeedbackView : MonoBehaviour {
 		return particleSystem;
 	}
 
-	private static void ConfigureRuntimeHitParticle(ParticleSystem particleSystem) {
+	private void ConfigureRuntimeHitParticle(ParticleSystem particleSystem) {
 		var main = particleSystem.main;
 		main.duration = 0.18f;
 		main.loop = false;
@@ -115,24 +206,21 @@ public class HitFeedbackView : MonoBehaviour {
 		size.enabled = true;
 		size.size = new ParticleSystem.MinMaxCurve(1f, AnimationCurve.EaseInOut(0f, 1f, 1f, 0f));
 
-		ParticleSystemRenderer renderer = particleSystem.GetComponent<ParticleSystemRenderer>();
-		renderer.sortingOrder = 45;
+		ConfigureParticleRenderer(particleSystem);
 	}
 
-	private static DamageNumberView CreateRuntimeDamageNumber(Transform anchor) {
+	private DamageNumberView CreateRuntimeDamageNumber() {
 		GameObject numberObject = new("Damage Number");
-		numberObject.transform.SetParent(anchor, false);
 
 		var text = numberObject.AddComponent<TMPro.TextMeshPro>();
 		text.fontSize = 4.5f;
 		text.alignment = TMPro.TextAlignmentOptions.Center;
 		text.color = new Color(1f, 0.23f, 0.08f, 1f);
-		text.enableWordWrapping = false;
+		text.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
 		text.richText = false;
 
-		MeshRenderer renderer = numberObject.GetComponent<MeshRenderer>();
-		if (renderer != null) renderer.sortingOrder = 50;
-
-		return numberObject.AddComponent<DamageNumberView>();
+		DamageNumberView damageNumber = numberObject.AddComponent<DamageNumberView>();
+		damageNumber.SetSorting(_feedbackSortingLayerName, _damageNumberSortingOrder);
+		return damageNumber;
 	}
 }

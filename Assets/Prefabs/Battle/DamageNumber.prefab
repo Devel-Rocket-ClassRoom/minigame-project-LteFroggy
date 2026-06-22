@@ -82,8 +82,8 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1450392085
+  m_SortingLayer: 1
   m_SortingOrder: 50
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -176,9 +176,9 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  _SortingLayer: 0
-  _SortingLayerID: 0
-  _SortingOrder: 0
+  _SortingLayer: 1
+  _SortingLayerID: 1450392085
+  _SortingOrder: 50
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 4687841291392804627}
   m_maskType: 0
