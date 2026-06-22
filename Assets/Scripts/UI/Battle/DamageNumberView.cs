@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class DamageNumberView : MonoBehaviour {
 	[SerializeField] private Color _endColor = new(1f, 0.9f, 0.35f, 0f);
 
 	private Coroutine _playCoroutine;
+	private Action<DamageNumberView> _onComplete;
 
 	private void Awake() {
 		if (_damageText == null) _damageText = GetComponent<TextMeshPro>();
@@ -19,15 +21,48 @@ public class DamageNumberView : MonoBehaviour {
 		if (textRenderer != null) textRenderer.sortingOrder = 50;
 	}
 
-	public void Play(int damage, Vector3 localOffset) {
+	public void Play(int damage, Vector3 localOffset, Action<DamageNumberView> onComplete) {
 		if (_damageText == null) _damageText = GetComponent<TextMeshPro>();
 
+		_onComplete = onComplete;
 		transform.localPosition = localOffset;
+		transform.localScale = Vector3.one;
 		_damageText.text = damage.ToString();
 		_damageText.color = _startColor;
 
 		if (_playCoroutine != null) StopCoroutine(_playCoroutine);
 		_playCoroutine = StartCoroutine(CoPlay());
+	}
+
+	public void SetSorting(string sortingLayerName, int sortingOrder) {
+		if (_damageText == null) _damageText = GetComponent<TextMeshPro>();
+
+		int sortingLayerId = SortingLayer.NameToID(sortingLayerName);
+		_damageText.sortingLayerID = sortingLayerId;
+		_damageText.sortingOrder = sortingOrder;
+
+		var textRenderer = GetComponent<MeshRenderer>();
+		if (textRenderer == null) return;
+
+		textRenderer.sortingLayerID = sortingLayerId;
+		textRenderer.sortingOrder = sortingOrder;
+	}
+
+	public void ResetForPool() {
+		if (_playCoroutine != null) {
+			StopCoroutine(_playCoroutine);
+			_playCoroutine = null;
+		}
+
+		if (_damageText == null) _damageText = GetComponent<TextMeshPro>();
+		if (_damageText != null) {
+			_damageText.text = string.Empty;
+			_damageText.color = _startColor;
+		}
+
+		_onComplete = null;
+		transform.localPosition = Vector3.zero;
+		transform.localScale = Vector3.one;
 	}
 
 	private IEnumerator CoPlay() {
@@ -44,7 +79,8 @@ public class DamageNumberView : MonoBehaviour {
 			yield return null;
 		}
 
-		Destroy(gameObject);
+		_playCoroutine = null;
+		_onComplete?.Invoke(this);
 	}
 
 	private static float EaseOut(float t) {
