@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -21,6 +22,7 @@ public class BattleManager : BattleSystemManager {
 	[SerializeField] private InsufficientEnergyPanel _insufficientEnergyPanel;
 
 	public DeckManager DeckManager => _deckManager;
+	public EnemyManager EnemyManager => _enemyManager;
 	public RelicManager RelicManager => _relicManager;
 	public CardUseManager CardUseManager => _cardUseManager;
 	public PlayerCharacter Player => _characterManager.Player;
@@ -63,6 +65,7 @@ public class BattleManager : BattleSystemManager {
 		IsGameEnd = true;
 		StopBattleInteraction();
 		RemoveBattleEndListeners();
+		SaveRunResultAsync(RunResult.Defeat).Forget();
 		DefeatResultPanel.Show();
 	}
 
@@ -79,6 +82,7 @@ public class BattleManager : BattleSystemManager {
 		GamePlayData.Instance.AddGold(goldReward);
 
 		if (nodeType == MapNodeType.Boss) {
+			SaveRunResultAsync(RunResult.Victory).Forget();
 			GameEvents.RunCleared();
 			UISceneBootstrapper.Instance.TransitionTo(k_FinalEndingSceneName);
 			RemoveBattleEndListeners();
@@ -113,6 +117,16 @@ public class BattleManager : BattleSystemManager {
 
 	private void StopBattleInteraction() {
 		_mouseController?.StopBattleInteraction();
+	}
+
+	private async UniTask SaveRunResultAsync(RunResult result) {
+		FirebaseBootstrapper bootstrapper = FirebaseBootstrapper.Instance;
+		if (bootstrapper == null || bootstrapper.RunResultSaveManager == null)
+			return;
+
+		var (success, error) = await bootstrapper.RunResultSaveManager.SaveRunData(result, this);
+		if (!success)
+			Debug.LogWarning(error);
 	}
 
 	private void OnEnable() {
