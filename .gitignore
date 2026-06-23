@@ -106,3 +106,9 @@ desktop.ini
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Firebase local config files
+[Aa]ssets/google-services.json
+[Aa]ssets/google-services.json.meta
+[Aa]ssets/StreamingAssets/google-services-desktop.json
+[Aa]ssets/StreamingAssets/google-services-desktop.json.meta
