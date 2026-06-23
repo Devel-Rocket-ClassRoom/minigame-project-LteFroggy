@@ -303,7 +303,7 @@ public class EventNodeManager : MonoBehaviour
         }
 
         var result = new List<RelicBase>();
-        foreach (RelicBase relic in GamePlayData.AllLoadoutRelics)
+        foreach (RelicBase relic in GameContentCatalog.AllLoadoutRelics)
         {
             if (relic != null && !ownedIds.Contains(relic.relicId))
                 result.Add(relic);

@@ -39,44 +39,6 @@ public class GamePlayData : Singleton<GamePlayData> {
 	public int CurrentHealth { get; private set; }
 	public int Gold { get; private set; }
 
-	// 로드아웃 화면에서 선택할 수 있는 유물 전체 목록 (게임 내내 고정)
-	// 새 유물을 추가하려면 여기에 등록하고 KorStringData.csv에 이름/설명 키를 추가한다
-	public static IReadOnlyList<RelicBase> AllLoadoutRelics { get; } = new List<RelicBase> {
-		new Greatsword(),
-		new Dagger(),
-		new ThickShield(),
-		new SageGlasses(),
-		new RuneOfReturn(),
-		new OathOfIncineration(),
-		new CrownShardOfDesire(),
-		new OathOfRebel(),
-		new RustedThornArmor(),
-		new FrozenChains(),
-		new PromiseOfRing(),
-		new HungrySword(),
-		new AshGuide(),
-		new ForgottenBook(),
-		new CrownKiss(),
-		new ExecutionChain(),
-		new GraveBreath(),
-		new SandsOfTime(),
-		new SmallBrazier(),
-		new AshCache(),
-		new WarDrum(),
-		new LeadDice(),
-		new OldMap(),
-		new BloodstainedBandage(),
-		new Whetstone(),
-		new HeavyBoots(),
-		new DryGunpowder(),
-		new ColdHeart(),
-		new WatchmanBell(),
-		new QuickHand(),
-		new RoyalEmblem(),
-		new BrokenChalice(),
-		new BlackCandlestick(),
-	};
-
 	protected override void Awake() {
 		base.Awake();
 		InitializeRunData();

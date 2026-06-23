@@ -60,7 +60,7 @@ public class LoadoutManager : MonoBehaviour {
 		_selectedRelics.Clear();
 		_totalCost = 0;
 
-		foreach (RelicBase relic in GamePlayData.AllLoadoutRelics) {
+		foreach (RelicBase relic in GameContentCatalog.AllLoadoutRelics) {
 			RelicBase captured = relic;
 			GameObject entry = Instantiate(_relicEntryPrefab, _relicListParent);
 
