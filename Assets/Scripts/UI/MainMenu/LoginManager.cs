@@ -81,8 +81,8 @@ public class LoginManager : MonoBehaviour, ILoginManager {
 	}
 
 	private static FirebaseSettings LoadSettings() {
-		if (FirebaseBootstrapper.Instance != null)
-			return FirebaseBootstrapper.Instance.Settings;
+		if (GamePlayData.Instance != null)
+			return GamePlayData.Instance.FirebaseSettings;
 
 		return Resources.Load<FirebaseSettings>("Datas/FirebaseSettings");
 	}

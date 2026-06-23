@@ -1,6 +1,5 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Triggers;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
@@ -13,8 +12,6 @@ public class FirebaseBootstrapper : MonoBehaviour {
 	private const string LogPrefix = "[" + nameof(FirebaseBootstrapper) + "]";
 
 	public static FirebaseBootstrapper Instance { get; private set; }
-	
-	[SerializeField] public FirebaseSettings Settings;
 
 	public InitState State { get; private set; } = InitState.Pending;
 	public bool IsReady => State == InitState.Ready;
@@ -43,9 +40,10 @@ public class FirebaseBootstrapper : MonoBehaviour {
 		Debug.Log($"{LogPrefix} 초기화 시작");
 
 		try {
-			// Firebase 사용하지 않거나, 세팅을 넣지 않았다면 Disable
-			if (Settings == null || !Settings.UseFirebase) {
-				NoUse();
+			// Firebase 사용하지 않거나, 세팅을 넣지 않았다면 DisableFirebase
+			if (GamePlayData.Instance.FirebaseSettings == null
+			    || !GamePlayData.Instance.FirebaseSettings.UseFirebase) {
+				DisableFirebase();
 				return;
 			}
 			
@@ -95,7 +93,7 @@ public class FirebaseBootstrapper : MonoBehaviour {
 		Debug.LogError($"{LogPrefix} 초기화 실패 : {LastError}");
 	}
 	
-	private void NoUse() {
+	private void DisableFirebase() {
 		LastError = $"Firebase 사용하지 않음";
 		State = InitState.Disabled;
 		Debug.Log($"{LogPrefix} 초기화 하지 않음 : {LastError}");
