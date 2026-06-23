@@ -109,12 +109,13 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 			}
 			damageContext.battleManager.RelicManager.OnEnemyKilled(damageContext, this);
 		}
+		
+		OnHealthChanged();
 
 		if (wasAlive && IsDead) {
 			PlayDeathAnimation();
 			OnDeath?.Invoke();
 		}
-		OnHealthChanged();
 	}
 
 	//  화상 등의 특별한 효과들은 방어도 고려 않고 바로 체력을 깎는다.
