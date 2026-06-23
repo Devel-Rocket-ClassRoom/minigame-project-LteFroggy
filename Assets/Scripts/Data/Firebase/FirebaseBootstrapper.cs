@@ -1,4 +1,6 @@
+using System;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
@@ -8,20 +10,11 @@ using UnityEngine;
 // 다른 스크립트는 Firebase를 직접 초기화하지 말고,
 // 이 클래스가 준비한 App/Auth/Database를 기다렸다가 사용합니다.
 public class FirebaseBootstrapper : MonoBehaviour {
-	public static FirebaseBootstrapper Instance { get; private set; }
-	[SerializeField] public FirebaseSettings Settings;
+	private const string LogPrefix = "[" + nameof(FirebaseBootstrapper) + "]";
 
-	// Firebase 초기화 진행 상태입니다.
-	public enum InitState {
-		// 초기화가 아직 끝나지 않은 상태입니다.
-		Pending,
-		// 초기화가 성공해서 Firebase 기능을 사용할 수 있는 상태입니다.
-		Ready,
-		// 초기화에 실패해 Firebase 기능을 사용할 수 없는 상태입니다.
-		Failed,
-		// Firebase 기능을 사용하지 않아 초기화를 시도하지 않은 상태입니다. 
-		Disabled,
-	}
+	public static FirebaseBootstrapper Instance { get; private set; }
+	
+	[SerializeField] public FirebaseSettings Settings;
 
 	public InitState State { get; private set; } = InitState.Pending;
 	public bool IsReady => State == InitState.Ready;
@@ -29,7 +22,7 @@ public class FirebaseBootstrapper : MonoBehaviour {
 
 	// Firebase 기본 앱과 자주 쓰는 서비스 참조입니다.
 	public FirebaseApp App { get; private set; }
-	public FirebaseAuth Auth { get; private set; }
+	public FirebaseAuthManager AuthManager { get; private set; }
 	public FirebaseDatabase Database { get; private set; }
 
 	private void Awake() {
@@ -47,7 +40,7 @@ public class FirebaseBootstrapper : MonoBehaviour {
 	}
 
 	private async UniTaskVoid InitializeAsync() {
-		Debug.Log("[FirebaseBootstrapper] 초기화 시작");
+		Debug.Log($"{LogPrefix} 초기화 시작");
 
 		try {
 			// Firebase 사용하지 않거나, 세팅을 넣지 않았다면 Disable
@@ -59,19 +52,29 @@ public class FirebaseBootstrapper : MonoBehaviour {
 			// 현재 플랫폼에서 Firebase 의존성이 사용 가능한지 확인합니다.
 			DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync().AsUniTask();
 			if (status != DependencyStatus.Available) {
-				Fail($"[FirebaseBootstrapper] 의존성 오류: {status}");
+				Fail($"{LogPrefix} 의존성 오류: {status}");
 				return;
 			}
 
 			// google-services 설정 파일을 기반으로 기본 Firebase 인스턴스를 가져옵니다.
 			App = FirebaseApp.DefaultInstance;
-			Auth = FirebaseAuth.GetAuth(App);
 			Database = FirebaseDatabase.GetInstance(App);
+			
+			// 완료하면, 붙여주기
+			AuthManager = gameObject.AddComponent<FirebaseAuthManager>();
+			AuthManager.Initialize(FirebaseAuth.GetAuth(FirebaseApp.DefaultInstance));
 
 			State = InitState.Ready;
-			Debug.Log($"[FirebaseBootstrapper] 초기화 완료: {App.Name}");
+			Debug.Log($"{LogPrefix} 초기화 완료: {App.Name}");
+			
+			var app = FirebaseApp.DefaultInstance;
+			var options = app.Options;
+			
+			Debug.Log($"Firebase ProjectId : {options.ProjectId}");
+			Debug.Log($"Firebase AppId : {options.AppId}");
+			Debug.Log($"Firebase ApiKey : {options.ApiKey}");
 		}
-		catch (System.Exception ex) {
+		catch (Exception ex) {
 			Fail(ex.Message);
 		}
 	}
@@ -87,13 +90,13 @@ public class FirebaseBootstrapper : MonoBehaviour {
 	private void Fail(string error) {
 		LastError = error;
 		State = InitState.Failed;
-		Debug.LogError($"[FirebaseBootstrapper] 초기화 실패 : {LastError}");
+		Debug.LogError($"{LogPrefix} 초기화 실패 : {LastError}");
 	}
 	
 	private void NoUse() {
 		LastError = $"Firebase 사용하지 않음";
 		State = InitState.Disabled;
-		Debug.Log($"[FirebaseBootstrapper] 초기화 하지 않음 : {LastError}");
+		Debug.Log($"{LogPrefix} 초기화 하지 않음 : {LastError}");
 	}
 
 	private void OnDestroy() {
