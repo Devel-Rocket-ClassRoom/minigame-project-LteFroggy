@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: "\uB18D\uBD80 1"
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_farmer_01
   enemyList:
   - {fileID: 11400000, guid: 22971a9058ea07140b34d1059075c7e8, type: 2}

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: 톱날 자동인형
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_saw_automaton
   enemyList:
   - {fileID: 11400000, guid: 4acf6bd452164211b5054a0662a131aa, type: 2}

@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 
 public class EnemyManager : BattleSystemManager {
 	public List<EnemyInstance> EnemyList => _enemyList;
+	public EnemySpawnTable CurrentSpawnTable { get; private set; }
 	private readonly List<EnemyInstance> _enemyList = new();
 
 	[Header("=== BattleContext 생성을 위해 저장 ===")]
@@ -35,16 +36,16 @@ public class EnemyManager : BattleSystemManager {
 		var nodeConfig = GamePlayData.Instance.InGameMapData.NodeNow.Config;
 		var tables = ResolveSpawnTables(nodeConfig);
 		// 테이블에서 랜덤한 인스턴스 고르기
-		var enemySpawnTable = SelectRandomTable(tables);
-		if (enemySpawnTable == null) {
+		CurrentSpawnTable = SelectRandomTable(tables);
+		if (CurrentSpawnTable == null) {
 			Debug.LogError($"Enemy spawn table is empty for node type {nodeConfig.Type}.");
 			return;
 		}
 		
-		for (int i = 0; i < enemySpawnTable.enemyList.Length; i++) {
+		for (int i = 0; i < CurrentSpawnTable.enemyList.Length; i++) {
 			EnemyInstance enemy = Instantiate(_enemyPrefab);
 			enemy.transform.position = _enemySpawnPoint + (Vector3.right * i * _enemySpawnSpacing);
-			enemy.Init(enemySpawnTable.enemyList[i], this);
+			enemy.Init(CurrentSpawnTable.enemyList[i], this);
 			enemy.SetBattleManager(_battleManager);
 			
 			_enemyList.Add(enemy);

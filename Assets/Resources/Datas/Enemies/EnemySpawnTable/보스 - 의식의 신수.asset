@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: "\uBCF4\uC2A4 - \uC758\uC2DD\uC758 \uC2E0\uC218"
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: boss_ritual_beast
   enemyList:
   - {fileID: 11400000, guid: c50fb3d41b27e9441a6563d594b170f2, type: 2}
