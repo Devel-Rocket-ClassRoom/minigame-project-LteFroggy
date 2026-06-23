@@ -14,6 +14,9 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 	
 	public void Initialize(FirebaseAuth auth) {
 		_auth = auth;
+		_currentUser = _auth.CurrentUser;
+		Debug.Log($"{(_currentUser != null ? $"{LogPrefix} 이미 로그인된 상태입니다." : $"{LogPrefix} 로그인이 필요합니다")}");
+		NotifyLoginState();
 	}
 
 	public async UniTask<(bool success, string error)> SignUp(string email, string password) {
@@ -67,6 +70,9 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 		}
 	}
 	private void Start() {
+		if (_auth == null)
+			return;
+
 		_currentUser = _auth.CurrentUser;
 		Debug.Log($"{(_currentUser != null ? $"{LogPrefix} 이미 로그인된 상태입니다." : $"{LogPrefix} 로그인이 필요합니다")}");
 		NotifyLoginState();

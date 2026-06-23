@@ -9,6 +9,8 @@ public class GamePlayData : Singleton<GamePlayData> {
 	public List<CardInstance> Deck { get; } = new();
 	// 현재 게임의 맵
 	public InGameMapData InGameMapData { get; private set; }
+	// Firebase 세팅
+	[SerializeField] public FirebaseSettings FirebaseSettings;
 
 	// 가지고 있는 유물들 목록
 	private readonly List<RelicBase> _relics = new();
