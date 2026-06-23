@@ -107,6 +107,17 @@ PR을 생성하거나 PR 본문을 작성할 때는 별도 지시가 없는 한 
 
 ---
 
+## PowerShell 한글 인코딩 확인 규칙
+
+PowerShell에서 한글이 포함된 파일이나 로그를 확인할 때는 터미널 출력 깨짐을 실제 파일/Unity 문제로 단정하지 않는다.
+
+- `Get-Content`로 한글 포함 파일을 읽을 때는 `-Encoding UTF8`을 명시한다.
+- 필요하면 `[Console]::OutputEncoding = [System.Text.Encoding]::UTF8` 설정 후 다시 확인한다.
+- PowerShell 출력에서 한글이 깨져 보여도 Unity Editor, IDE, 파일 자체가 정상 표시되면 코드 인코딩 문제가 아닌 터미널 출력 문제로 판단한다.
+- 사용자에게 "한글이 깨졌다"고 말하기 전에 UTF-8 명시 읽기 또는 Unity/IDE 기준 표시를 먼저 확인한다.
+
+---
+
 ## GitHub CLI 인증 처리 규칙
 
 Codex 샌드박스 내부 일반 실행에서 `gh auth status`가 invalid token으로 보이더라도, 사용자의 Windows keyring 인증은 정상일 수 있다.
