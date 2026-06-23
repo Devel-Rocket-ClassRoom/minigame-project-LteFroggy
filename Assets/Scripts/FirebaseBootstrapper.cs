@@ -9,6 +9,7 @@ using UnityEngine;
 // 이 클래스가 준비한 App/Auth/Database를 기다렸다가 사용합니다.
 public class FirebaseBootstrapper : MonoBehaviour {
 	public static FirebaseBootstrapper Instance { get; private set; }
+	[SerializeField] public FirebaseSettings Settings;
 
 	// Firebase 초기화 진행 상태입니다.
 	public enum InitState {
@@ -16,8 +17,10 @@ public class FirebaseBootstrapper : MonoBehaviour {
 		Pending,
 		// 초기화가 성공해서 Firebase 기능을 사용할 수 있는 상태입니다.
 		Ready,
-		// 초기화가 실패해서 Firebase 기능을 사용할 수 없는 상태입니다.
-		Failed
+		// 초기화에 실패해 Firebase 기능을 사용할 수 없는 상태입니다.
+		Failed,
+		// Firebase 기능을 사용하지 않아 초기화를 시도하지 않은 상태입니다. 
+		Disabled,
 	}
 
 	public InitState State { get; private set; } = InitState.Pending;
@@ -40,8 +43,6 @@ public class FirebaseBootstrapper : MonoBehaviour {
 		DontDestroyOnLoad(gameObject);
 
 		// Firebase 초기화는 여기서 한 번만 시작합니다.
-		// WaitForInitializationAsync는 이 작업이 끝나길 기다릴 뿐,
-		// 초기화를 다시 실행하지 않습니다.
 		InitializeAsync().Forget();
 	}
 
@@ -49,6 +50,12 @@ public class FirebaseBootstrapper : MonoBehaviour {
 		Debug.Log("[FirebaseBootstrapper] 초기화 시작");
 
 		try {
+			// Firebase 사용하지 않거나, 세팅을 넣지 않았다면 Disable
+			if (Settings == null || !Settings.UseFirebase) {
+				NoUse();
+				return;
+			}
+			
 			// 현재 플랫폼에서 Firebase 의존성이 사용 가능한지 확인합니다.
 			DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync().AsUniTask();
 			if (status != DependencyStatus.Available) {
@@ -70,17 +77,23 @@ public class FirebaseBootstrapper : MonoBehaviour {
 	}
 
 	// Firebase 초기화가 끝날 때까지 기다리는 함수입니다.
-	// Pending이면 대기하고, 이미 Ready 또는 Failed라면 바로 결과를 반환합니다.
+	// Pending이면 대기하고, 아니라면 바로 결과를 반환합니다.
 	// 이 함수는 초기화를 다시 시도하지 않습니다.
-	public async UniTask<bool> WaitForInitializationAsync() {
+	public async UniTask<InitState> WaitForInitializationAsync() {
 		await UniTask.WaitUntil(() => State != InitState.Pending);
-		return State == InitState.Ready;
+		return State;
 	}
 
 	private void Fail(string error) {
 		LastError = error;
 		State = InitState.Failed;
-		Debug.LogError($"[FirebaseBootstrapper] 초기화 실패: {error}");
+		Debug.LogError($"[FirebaseBootstrapper] 초기화 실패 : {LastError}");
+	}
+	
+	private void NoUse() {
+		LastError = $"Firebase 사용하지 않음";
+		State = InitState.Disabled;
+		Debug.Log($"[FirebaseBootstrapper] 초기화 하지 않음 : {LastError}");
 	}
 
 	private void OnDestroy() {
