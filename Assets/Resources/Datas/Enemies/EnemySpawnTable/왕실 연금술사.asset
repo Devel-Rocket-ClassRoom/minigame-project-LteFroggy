@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: 왕실 연금술사
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_royal_alchemist
   enemyList:
   - {fileID: 11400000, guid: 6033f468519b415ea83ddc1fe994336c, type: 2}

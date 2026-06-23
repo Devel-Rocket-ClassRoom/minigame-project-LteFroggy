@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: "\uC2AC\uB77C\uC784 \uBB34\uB9AC"
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_slime_pack
   enemyList:
   - {fileID: 11400000, guid: 95c63038eb36286408e94d6e01aaa6e3, type: 2}
   - {fileID: 11400000, guid: 95c63038eb36286408e94d6e01aaa6e3, type: 2}

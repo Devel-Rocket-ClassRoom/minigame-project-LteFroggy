@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: "\uB9C8\uB825 \uACE8\uB818 \uD30C\uC218\uAFBC"
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_mana_golem_sentinel
   enemyList:
   - {fileID: 11400000, guid: 2d50fe339bd32ab43a006c0b12399ffa, type: 2}

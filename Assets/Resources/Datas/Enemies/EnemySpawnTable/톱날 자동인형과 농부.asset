@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: 톱날 자동인형과 농부
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_saw_automaton_farmer
   enemyList:
   - {fileID: 11400000, guid: 4acf6bd452164211b5054a0662a131aa, type: 2}
   - {fileID: 11400000, guid: 22971a9058ea07140b34d1059075c7e8, type: 2}

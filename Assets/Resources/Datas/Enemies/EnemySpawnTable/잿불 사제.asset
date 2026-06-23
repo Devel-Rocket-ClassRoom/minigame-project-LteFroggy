@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: 잿불 사제
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_ember_priest
   enemyList:
   - {fileID: 11400000, guid: b97007037b044bd1a15e8027f2393a71, type: 2}

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: "\uC544\uCF00\uC778 \uBC15\uC950 \uB5BC"
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_arcane_bat_swarm
   enemyList:
   - {fileID: 11400000, guid: 04180b46e0956c54cacb5ee443ab8b8c, type: 2}
   - {fileID: 11400000, guid: 04180b46e0956c54cacb5ee443ab8b8c, type: 2}

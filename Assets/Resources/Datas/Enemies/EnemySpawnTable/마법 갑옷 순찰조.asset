@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: "\uB9C8\uBC95 \uAC11\uC637 \uC21C\uCC30\uC870"
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_magic_armor_patrol
   enemyList:
   - {fileID: 11400000, guid: e69b40d7cff0a71448254354670405b2, type: 2}
   - {fileID: 11400000, guid: 04180b46e0956c54cacb5ee443ab8b8c, type: 2}

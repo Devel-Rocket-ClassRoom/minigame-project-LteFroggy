@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0019ab27b845f3be145818b922ee72, type: 3}
   m_Name: 왕실 연금술사와 아케인 박쥐
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnTable
+  encounterId: normal_royal_alchemist_arcane_bat
   enemyList:
   - {fileID: 11400000, guid: 6033f468519b415ea83ddc1fe994336c, type: 2}
   - {fileID: 11400000, guid: 04180b46e0956c54cacb5ee443ab8b8c, type: 2}
