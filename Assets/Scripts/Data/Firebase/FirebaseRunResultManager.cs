@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using Firebase.Database;
 using UnityEngine;
 
-public class FirebaseRunResultSaveManager : MonoBehaviour {
+public class FirebaseRunResultManager : MonoBehaviour {
 	private FirebaseAuthManager _authManager;
 	private FirebaseDatabase _database;
 
@@ -15,13 +15,13 @@ public class FirebaseRunResultSaveManager : MonoBehaviour {
 
 	public async UniTask<(bool success, string error)> SaveRunData(RunResult result, BattleManager battleManager = null) {
 		if (_database == null)
-			return (false, "[FirebaseRunResultSaveManager] Firebase Database가 초기화되지 않았습니다.");
+			return (false, "[FirebaseRunResultManager] Firebase Database가 초기화되지 않았습니다.");
 
 		if (_authManager == null || !_authManager.IsLoggedIn)
-			return (false, "[FirebaseRunResultSaveManager] 로그인 정보가 없습니다.");
+			return (false, "[FirebaseRunResultManager] 로그인 정보가 없습니다.");
 
 		try {
-			Debug.Log($"[FirebaseRunResultSaveManager] 런 결과 저장 시도");
+			Debug.Log($"[FirebaseRunResultManager] 런 결과 저장 시도");
 			RunResultData runResult = BuildRunResultData(result, battleManager);
 			string json = JsonUtility.ToJson(runResult);
 
@@ -34,11 +34,11 @@ public class FirebaseRunResultSaveManager : MonoBehaviour {
 				.AsUniTask();
 
 			
-			Debug.Log($"[FirebaseRunResultSaveManager] 런 결과 저장 성공");
+			Debug.Log($"[FirebaseRunResultManager] 런 결과 저장 성공");
 			return (true, null);
 		}
 		catch (Exception e) {
-			Debug.LogError($"[FirebaseRunResultSaveManager] 런 결과 저장 실패: {e.Message}");
+			Debug.LogError($"[FirebaseRunResultManager] 런 결과 저장 실패: {e.Message}");
 			return (false, e.Message);
 		}
 	}
