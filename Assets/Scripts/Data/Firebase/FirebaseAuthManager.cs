@@ -27,7 +27,7 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 			_currentUser = result.User;
 			NotifyLoginState();
 
-			Debug.Log($"{LogPrefix} 이메일 회원가입 성공 {_currentUser.UserId}");
+			Debug.Log($"{LogPrefix} 이메일 회원가입 성공");
 	
 			return (true, null);	
 		} catch (Exception e) {
@@ -44,7 +44,7 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 			_currentUser = result.User;
 			NotifyLoginState();
 
-			Debug.Log($"{LogPrefix} 이메일 로그인 성공 {_currentUser.UserId}");
+			Debug.Log($"{LogPrefix} 이메일 로그인 성공");
 		
 			return (true, null);	
 		} catch (Exception e) {
@@ -61,7 +61,7 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 			_currentUser = result.User;
 			NotifyLoginState();
 		    
-			Debug.Log($"{LogPrefix} 익명 로그인 성공 {_currentUser.UserId}");
+			Debug.Log($"{LogPrefix} 익명 로그인 성공");
 		    
 			return (true, null);
 		} catch (Exception e) {
@@ -82,6 +82,8 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 			_auth.SignOut();
 			_currentUser = _auth.CurrentUser;
 			NotifyLoginState();
+			if (_currentUser == null)
+				Debug.Log($"{LogPrefix} 로그아웃 성공");
 			return (_currentUser == null, _currentUser == null ? null : "로그아웃 처리 후에도 로그인 세션이 남아 있습니다.");
 		}
 		catch (Exception e) {
@@ -102,7 +104,12 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 	}
 	
 	private void NotifyLoginState() {
-		Debug.Log(_currentUser != null ? $"{LogPrefix} 로그인 상태 : {_currentUser.UserId}" : $"{LogPrefix} 로그아웃 상태");
+		if (_currentUser == null) {
+			Debug.Log($"{LogPrefix} 로그아웃 상태");
+			return;
+		}
+
+		Debug.Log($"{LogPrefix} 로그인 상태: {(_currentUser.IsAnonymous ? "익명 계정" : "이메일 계정")}");
 	}
 	
 	private string ParseFirebaseError(string error)
