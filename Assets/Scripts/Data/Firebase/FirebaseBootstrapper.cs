@@ -48,21 +48,27 @@ public class FirebaseBootstrapper : MonoBehaviour {
 			}
 			
 			// 현재 플랫폼에서 Firebase 의존성이 사용 가능한지 확인합니다.
+			Debug.Log($"{LogPrefix} 의존성 확인 시작");
 			DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync().AsUniTask();
 			if (status != DependencyStatus.Available) {
 				Fail($"{LogPrefix} 의존성 오류: {status}");
 				return;
 			}
+			Debug.Log($"{LogPrefix} 의존성 확인 완료");
 
 			// google-services 설정 파일을 기반으로 기본 Firebase 인스턴스를 가져옵니다.
 			App = FirebaseApp.DefaultInstance;
 			
 			// 완료하면, 붙여주기
+			Debug.Log($"{LogPrefix} Auth 서비스 초기화 시작");
 			AuthManager = gameObject.AddComponent<FirebaseAuthManager>();
 			AuthManager.Initialize(FirebaseAuth.GetAuth(FirebaseApp.DefaultInstance));
+			Debug.Log($"{LogPrefix} Auth 서비스 초기화 완료");
 			
+			Debug.Log($"{LogPrefix} 런 결과 서비스 초기화 시작");
 			RunResultManager = gameObject.AddComponent<FirebaseRunResultManager>();
 			RunResultManager.Initialize(AuthManager, FirebaseDatabase.GetInstance(App));
+			Debug.Log($"{LogPrefix} 런 결과 서비스 초기화 완료");
 
 			State = InitState.Ready;
 			Debug.Log($"{LogPrefix} 초기화 완료: {App.Name}");
@@ -71,8 +77,6 @@ public class FirebaseBootstrapper : MonoBehaviour {
 			var options = app.Options;
 			
 			Debug.Log($"Firebase ProjectId : {options.ProjectId}");
-			Debug.Log($"Firebase AppId : {options.AppId}");
-			Debug.Log($"Firebase ApiKey : {options.ApiKey}");
 		}
 		catch (Exception ex) {
 			Fail(ex.Message);
