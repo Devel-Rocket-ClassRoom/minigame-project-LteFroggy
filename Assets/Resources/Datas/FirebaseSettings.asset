@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac8634f005140448840d19083f30cc3, type: 3}
   m_Name: FirebaseSettings
   m_EditorClassIdentifier: Assembly-CSharp::FirebaseSettings
-  UseFirebase: 1
-  Type: 1
+  RequireEmailLogin: 1

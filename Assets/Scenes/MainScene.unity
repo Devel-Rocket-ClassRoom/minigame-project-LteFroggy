@@ -4150,7 +4150,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1098079456
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6571,14 +6571,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f084b7b82d71433aad7c701a99e0a377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoginManager
-  _settings: {fileID: 11400000, guid: 80b0eaa612e0cd44aa746262d7648913, type: 2}
   _emailInput: {fileID: 2064076859}
   _passwordInput: {fileID: 1893767490}
   _emailFormRoot: {fileID: 265944192}
   _emailActionRoot: {fileID: 514960115}
   _loginButton: {fileID: 966913365}
   _signUpButton: {fileID: 1960188355}
-  _guestButton: {fileID: 1098079457}
   _closeButton: {fileID: 2020186365}
   _descriptionText: {fileID: 1470679715}
   _statusText: {fileID: 1176096608}

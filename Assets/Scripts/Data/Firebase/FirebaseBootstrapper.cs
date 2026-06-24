@@ -40,9 +40,10 @@ public class FirebaseBootstrapper : MonoBehaviour {
 		Debug.Log($"{LogPrefix} 초기화 시작");
 
 		try {
-			// Firebase 사용하지 않거나, 세팅을 넣지 않았다면 DisableFirebase
-			if (GamePlayData.Instance.FirebaseSettings == null
-			    || !GamePlayData.Instance.FirebaseSettings.UseFirebase) {
+			FirebaseSettings settings = GamePlayData.Instance != null ? GamePlayData.Instance.FirebaseSettings : null;
+
+			// 세팅을 넣지 않았다면 Firebase를 초기화하지 않습니다.
+			if (settings == null) {
 				DisableFirebase();
 				return;
 			}
