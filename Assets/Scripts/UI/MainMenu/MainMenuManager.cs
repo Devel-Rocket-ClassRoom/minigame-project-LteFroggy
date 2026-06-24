@@ -8,15 +8,19 @@ using UnityEngine.UI;
 public class MainMenuManager : MonoBehaviour {
 	[SerializeField] private Button _continueButton;
 	[SerializeField] private Button _newRunButton;
+	[SerializeField] private Button _statsButton;
 	[SerializeField] private Button _loginButton;
 	[SerializeField] private Button _quitButton;
 	[SerializeField] private GameObject _loadoutPanel;
 	[SerializeField] private LoginManager _loginPanel;
+	[SerializeField] private UserStatsPanelController _statsPanel;
 	[SerializeField] private Image _loginStatusPanel;
 
 	private async void OnEnable() {
 		_quitButton.onClick.AddListener(QuitGame);
 		_newRunButton.onClick.AddListener(OpenLoadout);
+		if (_statsButton != null)
+			_statsButton.onClick.AddListener(OpenStats);
 		_loginButton.onClick.AddListener(OpenLogin);
 
 		ShowLoginButton(false);
@@ -26,6 +30,8 @@ public class MainMenuManager : MonoBehaviour {
 
 	private void OnDisable() {
 		_newRunButton.onClick.RemoveListener(OpenLoadout);
+		if (_statsButton != null)
+			_statsButton.onClick.RemoveListener(OpenStats);
 		_loginButton.onClick.RemoveListener(OpenLogin);
 		_quitButton.onClick.RemoveListener(QuitGame);
 		UnsubscribeLoginPanelEvents();
@@ -40,7 +46,7 @@ public class MainMenuManager : MonoBehaviour {
 
 		if (state == InitState.Ready) {
 			if (bootstrapper.AuthManager != null && bootstrapper.AuthManager.IsLoggedIn) {
-				ShowStartButton("로그인됨");
+				ShowStartButton();
 				return;
 			}
 
@@ -48,13 +54,24 @@ public class MainMenuManager : MonoBehaviour {
 			return;
 		}
 
-		ShowStartButton(string.Empty);
+		ShowStartButton();
 	}
 	
 	private void OpenLoadout() {
 		_loadoutPanel.SetActive(true);
+		if (_statsPanel != null)
+			_statsPanel.Hide();
 		if (_loadoutPanel.TryGetComponent(out LoadoutManager loadoutManager))
 			loadoutManager.RefreshRelicList();
+	}
+
+	private void OpenStats() {
+		if (_loadoutPanel != null)
+			_loadoutPanel.SetActive(false);
+		if (_loginPanel != null)
+			_loginPanel.gameObject.SetActive(false);
+		if (_statsPanel != null)
+			_statsPanel.Show();
 	}
 	
 	private void OpenLogin() {
@@ -102,34 +119,44 @@ public class MainMenuManager : MonoBehaviour {
 		if (_loginPanel != null)
 			_loginPanel.gameObject.SetActive(false);
 
-		ShowStartButton("로그인됨");
+		ShowStartButton();
 	}
 
 	private void ShowLoginButton(bool interactable) {
 		_newRunButton.interactable = false;
 		_newRunButton.gameObject.SetActive(false);
+		SetStatsButton(false);
 
 		_loginButton.interactable = interactable;
 		_loginButton.gameObject.SetActive(true);
 
-		SetLoginStatus(string.Empty);
+		HideLoginStatus();
 	}
 
-	private void ShowStartButton(string statusText) {
+	private void ShowStartButton() {
 		_loginButton.gameObject.SetActive(false);
 		_loginButton.interactable = false;
 
 		_newRunButton.interactable = true;
 		_newRunButton.gameObject.SetActive(true);
+		SetStatsButton(true);
 
-		SetLoginStatus(statusText);
+		HideLoginStatus();
 	}
 
-	private void SetLoginStatus(string statusText) {
+	private void SetStatsButton(bool visible) {
+		if (_statsButton == null)
+			return;
+
+		_statsButton.interactable = visible;
+		_statsButton.gameObject.SetActive(visible);
+	}
+
+	private void HideLoginStatus() {
 		if (_loginStatusPanel == null)
 			return;
 
-		_loginStatusPanel.gameObject.SetActive(!string.IsNullOrEmpty(statusText));
+		_loginStatusPanel.gameObject.SetActive(false);
 	}
 
 	private void UnsubscribeLoginPanelEvents() {

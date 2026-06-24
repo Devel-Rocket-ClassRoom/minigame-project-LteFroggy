@@ -121,10 +121,10 @@ public class BattleManager : BattleSystemManager {
 
 	private async UniTask SaveRunResultAsync(RunResult result) {
 		FirebaseBootstrapper bootstrapper = FirebaseBootstrapper.Instance;
-		if (bootstrapper == null || bootstrapper.RunResultSaveManager == null)
+		if (bootstrapper == null || bootstrapper.RunResultManager == null)
 			return;
 
-		var (success, error) = await bootstrapper.RunResultSaveManager.SaveRunData(result, this);
+		var (success, error) = await bootstrapper.RunResultManager.SaveRunData(result, this);
 		if (!success)
 			Debug.LogWarning(error);
 	}
