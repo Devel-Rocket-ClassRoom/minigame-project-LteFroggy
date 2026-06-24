@@ -69,6 +69,29 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 			return (false, ParseFirebaseError(e.Message));
 		}
 	}
+
+	public (bool success, string error) SignOut() {
+		if (_auth == null) {
+			_currentUser = null;
+			NotifyLoginState();
+			return (false, "Firebase 인증이 준비되지 않았습니다.");
+		}
+
+		try {
+			Debug.Log($"{LogPrefix} 로그아웃 시도");
+			_auth.SignOut();
+			_currentUser = _auth.CurrentUser;
+			NotifyLoginState();
+			return (_currentUser == null, _currentUser == null ? null : "로그아웃 처리 후에도 로그인 세션이 남아 있습니다.");
+		}
+		catch (Exception e) {
+			Debug.LogWarning($"{LogPrefix} 로그아웃 실패 : {e.Message}");
+			_currentUser = _auth.CurrentUser;
+			NotifyLoginState();
+			return (false, "로그아웃 처리에 실패했습니다.");
+		}
+	}
+
 	private void Start() {
 		if (_auth == null)
 			return;
