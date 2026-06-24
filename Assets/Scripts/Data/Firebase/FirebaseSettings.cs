@@ -2,6 +2,5 @@
 
 [CreateAssetMenu(fileName = "FirebaseSettings", menuName = "Firebase/Settings")]
 public class FirebaseSettings : ScriptableObject {
-	public bool UseFirebase;
-	public VerificationType Type;
+	public bool RequireEmailLogin;
 }

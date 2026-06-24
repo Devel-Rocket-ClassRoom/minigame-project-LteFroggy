@@ -23,20 +23,23 @@ public class MainMenuManager : MonoBehaviour {
 		_logoutButton = EnsureLogoutButton();
 
 		_quitButton.onClick.AddListener(QuitGame);
-		_newRunButton.onClick.AddListener(OpenLoadout);
+		_newRunButton.onClick.AddListener(OnNewRunClicked);
 		if (_statsButton != null)
 			_statsButton.onClick.AddListener(OpenStats);
 		_loginButton.onClick.AddListener(OpenLogin);
 		if (_logoutButton != null)
 			_logoutButton.onClick.AddListener(OnLogoutClicked);
 
-		ShowLoginButton(false);
+		if (RequiresEmailLogin())
+			ShowLoginButton(false);
+		else
+			ShowStartButton(false);
 
 		PrepareButtonAsync().Forget();
 	}
 
 	private void OnDisable() {
-		_newRunButton.onClick.RemoveListener(OpenLoadout);
+		_newRunButton.onClick.RemoveListener(OnNewRunClicked);
 		if (_statsButton != null)
 			_statsButton.onClick.RemoveListener(OpenStats);
 		_loginButton.onClick.RemoveListener(OpenLogin);
@@ -47,15 +50,28 @@ public class MainMenuManager : MonoBehaviour {
 	}
 	
 	private async UniTaskVoid PrepareButtonAsync() {
-		// Firebase 사용 시, 로딩 후 로그인 버튼 켜주기
+		// Firebase 초기화와 필요한 로그인이 끝난 뒤 메뉴 버튼을 활성화합니다.
 		await UniTask.WaitUntil(() => FirebaseBootstrapper.Instance != null);
 
 		FirebaseBootstrapper bootstrapper = FirebaseBootstrapper.Instance;
 		InitState state = await bootstrapper.WaitForInitializationAsync();
 
 		if (state == InitState.Ready) {
+			if (!RequiresEmailLogin()) {
+				bool isLoggedIn = bootstrapper.AuthManager != null && bootstrapper.AuthManager.IsLoggedIn;
+				if (!isLoggedIn && bootstrapper.AuthManager != null) {
+					var (result, error) = await bootstrapper.AuthManager.SignIn();
+					isLoggedIn = result;
+					if (!result)
+						Debug.LogWarning($"[MainMenuManager] 익명 로그인 실패: {error}");
+				}
+
+				ShowStartButton(isLoggedIn);
+				return;
+			}
+
 			if (bootstrapper.AuthManager != null && bootstrapper.AuthManager.IsLoggedIn) {
-				ShowStartButton();
+				ShowStartButton(true);
 				return;
 			}
 
@@ -63,10 +79,10 @@ public class MainMenuManager : MonoBehaviour {
 			return;
 		}
 
-		ShowStartButton();
+		ShowStartButton(state == InitState.Disabled);
 	}
 	
-	private void OpenLoadout() {
+	private void OnNewRunClicked() {
 		_loadoutPanel.SetActive(true);
 		if (_statsPanel != null)
 			_statsPanel.Hide();
@@ -98,17 +114,10 @@ public class MainMenuManager : MonoBehaviour {
 		}
 
 		UnsubscribeLoginPanelEvents();
-		_loginPanel.OnAnonymousSignInClicked += OnAnonymousSignInClicked;
 		_loginPanel.OnEmailSignInClicked += OnEmailSignInClicked;
 		_loginPanel.OnEmailSignUpClicked += OnEmailSignUpClicked;
 
 		_loginPanel.gameObject.SetActive(true);
-	}
-	
-	private async void OnAnonymousSignInClicked() {
-		var (result, error) = await FirebaseBootstrapper.Instance.AuthManager.SignIn();
-		if (result) { LoginSuccess(); }
-		else { _loginPanel.ShowError(error); }
 	}
 	
 	private async void OnEmailSignUpClicked(string email, string password) {
@@ -170,15 +179,15 @@ public class MainMenuManager : MonoBehaviour {
 		HideLoginStatus();
 	}
 
-	private void ShowStartButton() {
+	private void ShowStartButton(bool interactable = true) {
 		_loginButton.gameObject.SetActive(false);
 		_loginButton.interactable = false;
 
-		_newRunButton.interactable = true;
+		_newRunButton.interactable = interactable;
 		_newRunButton.gameObject.SetActive(true);
-		SetStatsButton(true);
+		SetStatsButton(interactable);
 
-		SetLogoutButtonVisible(IsLoggedIn());
+		SetLogoutButtonVisible(interactable && RequiresEmailLogin() && IsLoggedIn());
 		HideLoginStatus();
 	}
 
@@ -205,6 +214,13 @@ public class MainMenuManager : MonoBehaviour {
 	private FirebaseAuthManager GetAuthManager() {
 		FirebaseBootstrapper bootstrapper = FirebaseBootstrapper.Instance;
 		return bootstrapper != null ? bootstrapper.AuthManager : null;
+	}
+
+	private static bool RequiresEmailLogin() {
+		FirebaseSettings settings = GamePlayData.Instance != null
+			? GamePlayData.Instance.FirebaseSettings
+			: Resources.Load<FirebaseSettings>("Datas/FirebaseSettings");
+		return settings != null && settings.RequireEmailLogin;
 	}
 
 	private Button EnsureLogoutButton() {
@@ -282,7 +298,6 @@ public class MainMenuManager : MonoBehaviour {
 		if (_loginPanel == null)
 			return;
 
-		_loginPanel.OnAnonymousSignInClicked -= OnAnonymousSignInClicked;
 		_loginPanel.OnEmailSignInClicked -= OnEmailSignInClicked;
 		_loginPanel.OnEmailSignUpClicked -= OnEmailSignUpClicked;
 	}
