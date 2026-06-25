@@ -13,6 +13,7 @@ public class CardAssetGenerator {
 		var actions = CreateCardActionAssets();
 		AssetDatabase.SaveAssets();
 
+		CreateStarterCardDefinitionAssets(actions);
 		CreateCardDefinitionAssets(actions);
 		AssetDatabase.SaveAssets();
 
@@ -23,41 +24,13 @@ public class CardAssetGenerator {
 
 	[MenuItem("Tools/Card/Migrate Starter Cards to Canonical Actions")]
 	public static void MigrateStarterCardsToCanonicalActions() {
-		string[] required = { "Deal6Damage", "Draw1Card", "Get5Armor", "Get3Armor", "Draw2Card", "Weakness2" };
-		foreach (var name in required) {
-			if (AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/{name}.asset") == null) {
-				Debug.LogError($"[CardAssetGenerator] 루트 에셋 '{name}.asset' 없음. Generate Card Assets를 먼저 실행하세요.");
-				return;
-			}
-		}
+		var actions = CreateCardActionAssets();
+		AssetDatabase.SaveAssets();
 
-		var deal6Damage = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Deal6Damage.asset");
-		var get5Armor = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Get5Armor.asset");
-		var get3Armor = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Get3Armor.asset");
-		var draw1Card = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Draw1Card.asset");
-		var draw2Card = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Draw2Card.asset");
-		var weakness2 = AssetDatabase.LoadAssetAtPath<CardAction>($"{ActionPath}/Weakness2.asset");
-
-		UpdateStarterCardActions($"{CardPath}/Attack.asset", new[] { deal6Damage });
-		UpdateStarterCardActions($"{CardPath}/Defence.asset", new[] { get5Armor });
-		UpdateStarterCardActions($"{CardPath}/Evade.asset", new[] { get3Armor, draw1Card });
-		UpdateStarterCardActions($"{CardPath}/Concentrate.asset", new[] { draw2Card });
-		UpdateStarterCardActions($"{CardPath}/HuntingSign.asset", new[] { weakness2 });
-
+		CreateStarterCardDefinitionAssets(actions);
 		AssetDatabase.SaveAssets();
 		AssetDatabase.Refresh();
-		Debug.Log("[CardAssetGenerator] 시작 카드 마이그레이션 완료");
-	}
-
-	private static void UpdateStarterCardActions(string cardPath, CardAction[] newActions) {
-		var card = AssetDatabase.LoadAssetAtPath<CardDefinition>(cardPath);
-		if (card == null) {
-			Debug.LogWarning($"[CardAssetGenerator] 카드 에셋 없음, 건너뜀: {cardPath}");
-			return;
-		}
-
-		card.actions = new List<CardAction>(newActions);
-		EditorUtility.SetDirty(card);
+		Debug.Log("[CardAssetGenerator] 시작 카드 동기화 완료");
 	}
 
 	[MenuItem("Tools/Card/Register Cards to Reward Pool")]
@@ -105,6 +78,7 @@ public class CardAssetGenerator {
 		map["Get5Armor"] = GetOrCreate<GainArmorCardAction>("Get5Armor", a => a.amount = 5);
 		map["Get6Armor"] = GetOrCreate<GainArmorCardAction>("Get6Armor", a => a.amount = 6);
 		map["Get7Armor"] = GetOrCreate<GainArmorCardAction>("Get7Armor", a => a.amount = 7);
+		map["Get9Armor"] = GetOrCreate<GainArmorCardAction>("Get9Armor", a => a.amount = 9);
 		map["Get10Armor"] = GetOrCreate<GainArmorCardAction>("Get10Armor", a => a.amount = 10);
 		map["Get18Armor"] = GetOrCreate<GainArmorCardAction>("Get18Armor", a => a.amount = 18);
 		map["Get20Armor"] = GetOrCreate<GainArmorCardAction>("Get20Armor", a => a.amount = 20);
@@ -126,6 +100,7 @@ public class CardAssetGenerator {
 		map["Deal10Damage"] = GetOrCreate<DealDamageCardAction>("Deal10Damage", a => a.amount = 10);
 		map["Deal14Damage"] = GetOrCreate<DealDamageCardAction>("Deal14Damage", a => a.amount = 14);
 		map["Deal16Damage"] = GetOrCreate<DealDamageCardAction>("Deal16Damage", a => a.amount = 16);
+		map["Deal18Damage"] = GetOrCreate<DealDamageCardAction>("Deal18Damage", a => a.amount = 18);
 		map["Deal24Damage"] = GetOrCreate<DealDamageCardAction>("Deal24Damage", a => a.amount = 24);
 
 		map["Burn2"] = GetOrCreate<BurnCardAction>("Burn2", a => a.amount = 2);
@@ -172,6 +147,17 @@ public class CardAssetGenerator {
 		configure(asset);
 		EditorUtility.SetDirty(asset);
 		return asset;
+	}
+
+	private static void CreateStarterCardDefinitionAssets(Dictionary<string, CardAction> a) {
+		var usedIds = new HashSet<int>();
+		CollectExistingIds(usedIds);
+
+		CreateStarterCard("Attack", 0, 1, CardTag.Attack, true, CardRarity.Common, CardKeywordType.None, "Assets/Sprites/Player/Actions/Attack.png", new[] { a["Deal6Damage"] }, usedIds);
+		CreateStarterCard("Defence", 1, 1, CardTag.Defense, false, CardRarity.Common, CardKeywordType.None, "Assets/Sprites/Player/Actions/Defense.png", new[] { a["Get5Armor"] }, usedIds);
+		CreateStarterCard("Concentrate", 2, 1, CardTag.Util, false, CardRarity.Common, CardKeywordType.Innate, "Assets/Sprites/Player/Actions/Focus.png", new[] { a["Draw2Card"] }, usedIds);
+		CreateStarterCard("Evade", 3, 0, CardTag.Defense, false, CardRarity.Common, CardKeywordType.None, "Assets/Sprites/Player/Actions/Evasion.png", new[] { a["Get3Armor"], a["Draw1Card"] }, usedIds);
+		CreateStarterCard("HuntingSign", 4, 1, CardTag.Util, true, CardRarity.Common, CardKeywordType.None, "Assets/Sprites/Player/Actions/HuntingMark.png", new[] { a["Weakness2"] }, usedIds);
 	}
 
 	private static void CreateCardDefinitionAssets(Dictionary<string, CardAction> a) {
@@ -222,6 +208,13 @@ public class CardAssetGenerator {
 		CreateCard("CrownBreaker", 45, 3, CardTag.Attack, true, CardRarity.Rare, CardKeywordType.Exhaust, "CrownBreaker", new[] { a["Deal24Damage"] }, usedIds);
 		CreateCard("FlameBarrier", 46, 2, CardTag.Fire, true, CardRarity.Uncommon, CardKeywordType.None, "FlameBarrier", new[] { a["Get10Armor"], a["Burn3"] }, usedIds);
 		CreateCard("BloodRevenge", 47, 1, CardTag.Attack, true, CardRarity.Rare, CardKeywordType.None, "BloodRevenge", new[] { a["LostHealthDamage6Plus20"] }, usedIds);
+
+		CreateCard("HeavyStrike", 48, 2, CardTag.Attack, true, CardRarity.Uncommon, CardKeywordType.Overload, "HeavyStrike", new[] { a["Deal18Damage"] }, usedIds);
+		CreateCard("Barrier", 49, 1, CardTag.Defense, false, CardRarity.Common, CardKeywordType.Retain, "Barrier", new[] { a["Get7Armor"] }, usedIds);
+		CreateCard("DefensivePosture", 50, 1, CardTag.Defense, false, CardRarity.Uncommon, CardKeywordType.Innate, "DefensivePosture", new[] { a["Get6Armor"] }, usedIds);
+		CreateCard("EmergencyGuard", 51, 1, CardTag.Defense, false, CardRarity.Uncommon, CardKeywordType.Return, "EmergencyGuard", new[] { a["Get9Armor"] }, usedIds);
+		CreateCard("Fireball", 52, 2, CardTag.Fire, true, CardRarity.Uncommon, CardKeywordType.Exhaust, "Fireball", new[] { a["Deal6Damage"], a["Burn5"] }, usedIds);
+		CreateCard("BookOfReturn", 53, 1, CardTag.Util, false, CardRarity.Uncommon, CardKeywordType.Return, "BookOfReturn", new[] { a["Draw2Card"] }, usedIds);
 	}
 
 	private static void CollectExistingIds(HashSet<int> usedIds) {
@@ -230,6 +223,21 @@ public class CardAssetGenerator {
 			var card = AssetDatabase.LoadAssetAtPath<CardDefinition>(AssetDatabase.GUIDToAssetPath(guid));
 			if (card != null) usedIds.Add(card.cardId);
 		}
+	}
+
+	private static void CreateStarterCard(
+		string fileName,
+		int cardId,
+		int cost,
+		CardTag tag,
+		bool needsTarget,
+		CardRarity rarity,
+		CardKeywordType keywords,
+		string iconPath,
+		CardAction[] actions,
+		HashSet<int> usedIds
+	) {
+		SyncCard(fileName, cardId, cost, tag, needsTarget, rarity, keywords, LoadSprite(iconPath), actions, usedIds);
 	}
 
 	private static void CreateCard(
@@ -241,6 +249,21 @@ public class CardAssetGenerator {
 		CardRarity rarity,
 		CardKeywordType keywords,
 		string iconName,
+		CardAction[] actions,
+		HashSet<int> usedIds
+	) {
+		SyncCard(fileName, cardId, cost, tag, needsTarget, rarity, keywords, LoadIcon(iconName), actions, usedIds);
+	}
+
+	private static void SyncCard(
+		string fileName,
+		int cardId,
+		int cost,
+		CardTag tag,
+		bool needsTarget,
+		CardRarity rarity,
+		CardKeywordType keywords,
+		Sprite icon,
 		CardAction[] actions,
 		HashSet<int> usedIds
 	) {
@@ -259,7 +282,7 @@ public class CardAssetGenerator {
 			existingCard.needsTarget = needsTarget;
 			existingCard.keywords = keywords;
 			existingCard.actions = new List<CardAction>(actions);
-			existingCard.icon = LoadIcon(iconName);
+			existingCard.icon = icon;
 			EditorUtility.SetDirty(existingCard);
 			Debug.Log($"{fileName}.asset updated (cardId: {cardId})");
 			return;
@@ -277,12 +300,16 @@ public class CardAssetGenerator {
 		card.needsTarget = needsTarget;
 		card.keywords = keywords;
 		card.actions = new List<CardAction>(actions);
-		card.icon = LoadIcon(iconName);
+		card.icon = icon;
 		AssetDatabase.CreateAsset(card, path);
 		Debug.Log($"{fileName}.asset 생성됨 (cardId: {cardId})");
 	}
 
 	private static Sprite LoadIcon(string iconName) {
 		return AssetDatabase.LoadAssetAtPath<Sprite>($"Assets/Sprites/Cards/{iconName}.png");
+	}
+
+	private static Sprite LoadSprite(string path) {
+		return AssetDatabase.LoadAssetAtPath<Sprite>(path);
 	}
 }
