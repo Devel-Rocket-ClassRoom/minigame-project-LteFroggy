@@ -247,6 +247,12 @@ public class BattleManager : BattleSystemManager {
 		return GetCardUseContext(cardInstance, _mouseController.TargetInstance);
 	}
 
+	public CardUseContext GetPreviewCardUseContext(CardInstance cardInstance) {
+		CardUseContext context = GetCardUseContext(cardInstance);
+		_relicManager.OnPreviewCardUse(context);
+		return context;
+	}
+
 	public CardUseContext GetCardUseContext(CardInstance cardInstance, EnemyInstance enemyInstance) {
 		return new CardUseContext(
 			this,

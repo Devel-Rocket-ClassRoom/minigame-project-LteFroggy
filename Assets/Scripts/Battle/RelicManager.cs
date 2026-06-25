@@ -24,6 +24,10 @@ public class RelicManager : BattleSystemManager {
 		foreach (var relic in _relics) relic.OnBeforeCardUse(context);
 	}
 
+	public void OnPreviewCardUse(CardUseContext context) {
+		foreach (var relic in _relics) relic.OnPreviewCardUse(context);
+	}
+
 	public void OnAfterCardUse(CardUseContext context) {
 		foreach (var relic in _relics) relic.OnAfterCardUse(context);
 	}
