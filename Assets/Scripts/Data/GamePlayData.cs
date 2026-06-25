@@ -95,6 +95,7 @@ public class GamePlayData : Singleton<GamePlayData> {
 
 	public void AddRelic(RelicBase relic) {
 		_relics.Add(relic.CreateRuntimeCopy());
+		AudioManager.Instance.PlaySfx(GameAudioCue.RelicTrigger);
 		OnRelicsChanged?.Invoke();
 	}
 
