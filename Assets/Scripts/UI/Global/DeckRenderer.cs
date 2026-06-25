@@ -20,14 +20,21 @@ public class DeckRenderer : MonoBehaviour {
 	// 눌렀을 때 수행할 함수까지 Init으로 받기
 	public void Init(IEnumerable<CardInstance> cardInstances, string descriptionText, UnityAction<CardInstance> action) {
 		Clear();
-		_descriptionText.text = descriptionText;
+		int cardCount = 0;
 		
-		foreach (CardInstance cardInstance in cardInstances) {
-			var card = Instantiate(_cardPrefab, _cardParent);
-			_renderedCards.Add(card);
-			
-			card.Init(cardInstance, action);
+		if (cardInstances != null) {
+			foreach (CardInstance cardInstance in cardInstances) {
+				var card = Instantiate(_cardPrefab, _cardParent);
+				_renderedCards.Add(card);
+				cardCount++;
+
+				card.Init(cardInstance, action);
+			}
 		}
+
+		_descriptionText.text = cardCount == 0
+			? $"{descriptionText}\n표시할 카드가 없습니다."
+			: descriptionText;
 	}
 
 	/// <summary>

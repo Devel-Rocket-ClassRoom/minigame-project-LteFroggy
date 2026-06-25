@@ -14,8 +14,17 @@ public class CardPileController : MonoBehaviour {
 		_button = GetComponent<Button>();
 	}
 
-	public void SetCountText(string text) => _countText.text = text;
-	public void OnButtonPressed(UnityAction action) => _button.onClick.AddListener(action);
+	public void SetCountText(string text) {
+		if (_countText != null)
+			_countText.text = text;
+	}
+
+	public void OnButtonPressed(UnityAction action) {
+		if (_button == null)
+			_button = GetComponent<Button>();
+		if (_button != null)
+			_button.onClick.AddListener(action);
+	}
 
 	public void SetTooltip(string title, string description) {
 		if (_tooltipTrigger == null) {
@@ -27,6 +36,7 @@ public class CardPileController : MonoBehaviour {
 	}
 
 	private void OnDisable() {
-		_button.onClick.RemoveAllListeners();
+		if (_button != null)
+			_button.onClick.RemoveAllListeners();
 	}
 }
