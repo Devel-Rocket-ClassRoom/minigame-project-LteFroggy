@@ -256,6 +256,7 @@ public class BattleManager : BattleSystemManager {
 
 	public CardUseContext GetPreviewCardUseContext(CardInstance cardInstance) {
 		CardUseContext context = GetCardUseContext(cardInstance);
+		context.IsPreview = true;
 		_relicManager.OnPreviewCardUse(context);
 		return context;
 	}

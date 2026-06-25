@@ -4,8 +4,9 @@ using UnityEngine;
 public abstract class AdditionalRelicBase : RelicBase {
 	public override string iconName => GetType().Name;
 	protected static bool IsPlayer(CharacterBase character) => character is PlayerCharacter;
-	protected static void PlayTriggerSfx(float volumeScale = 0.55f) {
+	protected void PlayTriggerFeedback(float volumeScale = 0.55f) {
 		AudioManager.Instance.PlaySfx(GameAudioCue.RelicTrigger, volumeScale);
+		GameEvents.RelicTriggered(this);
 	}
 
 	protected static void AddWeakness(CharacterBase target, int amount) {
@@ -46,7 +47,7 @@ public class SageGlasses : AdditionalRelicBase {
 		if (_usedThisTurn || context.cardInfo._cardDefinition.tag != CardTag.Util) return;
 		_usedThisTurn = true;
 		context.battleManager.CardUseManager.GainEnergy(effectAmount);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -58,7 +59,7 @@ public class RuneOfReturn : AdditionalRelicBase {
 
 	public override void OnReturnedCardToHand(BattleManager battleManager, CardInstance card) {
 		battleManager.Player.AddBlock(effectAmount);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -71,7 +72,7 @@ public class OathOfIncineration : AdditionalRelicBase {
 	public override void OnAfterCardUse(CardUseContext context) {
 		if (!context.cardInfo.Keyword.IsExhaust) return;
 		context.battleManager.DeckManager.DrawCard(CardDrawSource.RelicEffect);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -96,7 +97,7 @@ public class OathOfRebel : AdditionalRelicBase {
 		var context = new DamageContext(battleManager, battleManager.Player, battleManager.Player, null, null, DamageSourceType.Relic, true, true);
 		battleManager.Player.GetDamage(3, context);
 		battleManager.DeckManager.AddNextTurnDrawBonus(effectAmount);
-		PlayTriggerSfx(0.45f);
+		PlayTriggerFeedback(0.45f);
 	}
 }
 
@@ -111,7 +112,7 @@ public class RustedThornArmor : AdditionalRelicBase {
 		int reflectDamage = Mathf.RoundToInt(damageTaken * (effectAmount / 100f));
 		var context = new DamageContext(owner.BattleManager, owner, attacker, null, null, DamageSourceType.Relic);
 		attacker.GetDamage(reflectDamage, context);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -133,7 +134,7 @@ public class FrozenChains : AdditionalRelicBase {
 
 		if (candidates.Count == 0) return;
 		AddWeakness(candidates[Random.Range(0, candidates.Count)], effectAmount);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -160,7 +161,7 @@ public class HungrySword : AdditionalRelicBase {
 		var hand = context.cardContext.battleManager.DeckManager.HandPile;
 		if (hand.Count == 0) return;
 		hand[Random.Range(0, hand.Count)].AddBattleAmountMultiplier(1f + effectAmount / 100f);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -175,7 +176,7 @@ public class AshGuide : AdditionalRelicBase {
 		var player = enemy.BattleManager.Player;
 		int lostHealth = player.MaxHealth - player.CurrentHealth;
 		player.GetHeal(Mathf.RoundToInt(lostHealth * (effectAmount / 100f)));
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -194,7 +195,7 @@ public class ForgottenBook : AdditionalRelicBase {
 		if (_usedThisTurn) return;
 		_usedThisTurn = true;
 		ApplyFirstCardBonus(context);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 
 	public override void OnPreviewCardUse(CardUseContext context) {
@@ -246,7 +247,7 @@ public class ExecutionChain : AdditionalRelicBase {
 		if (context.target == null) return;
 		string key = GetKey(context);
 		_useCounts[key] = _useCounts.TryGetValue(key, out int count) ? count + 1 : 1;
-		PlayTriggerSfx(0.35f);
+		PlayTriggerFeedback(0.35f);
 	}
 
 	private static string GetKey(CardUseContext context) {
@@ -265,7 +266,7 @@ public class GraveBreath : AdditionalRelicBase {
 		if (_used || !IsPlayer(owner)) return false;
 		_used = true;
 		owner.SetCurrentHealth(Mathf.Max(1, Mathf.RoundToInt(owner.MaxHealth * (effectAmount / 100f))));
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 
 		if (owner.BattleManager == null) return true;
 		foreach (var card in owner.BattleManager.DeckManager.HandPile) {
@@ -290,7 +291,7 @@ public class SandsOfTime : AdditionalRelicBase {
 	public override bool ConsumeSkipEnemyTurn() {
 		if (!_skipEnemyTurn) return false;
 		_skipEnemyTurn = false;
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 		return true;
 	}
 }
@@ -313,7 +314,7 @@ public class SmallBrazier : AdditionalRelicBase {
 	public override void OnAfterCardUse(CardUseContext context) {
 		if (!HasBurnAction(context)) return;
 		_usedThisBattle = true;
-		PlayTriggerSfx(0.35f);
+		PlayTriggerFeedback(0.35f);
 	}
 
 	private static bool HasBurnAction(CardUseContext context) {
@@ -334,7 +335,7 @@ public class AshCache : AdditionalRelicBase {
 	public override void OnAfterCardUse(CardUseContext context) {
 		if (context.cardInfo._cardDefinition.tag != CardTag.Fire) return;
 		context.user.AddBlock(effectAmount);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -359,7 +360,7 @@ public class WarDrum : AdditionalRelicBase {
 	public override void OnAfterCardUse(CardUseContext context) {
 		if (context.cardInfo._cardDefinition.tag != CardTag.Attack) return;
 		_usedThisTurn = true;
-		PlayTriggerSfx(0.35f);
+		PlayTriggerFeedback(0.35f);
 	}
 }
 
@@ -417,7 +418,7 @@ public class Whetstone : AdditionalRelicBase {
 	public override void OnEnemyKilled(DamageContext context, CharacterBase enemy) {
 		if (context.cardContext == null || context.cardContext.cardInfo._cardDefinition.tag != CardTag.Attack) return;
 		context.cardContext.battleManager.DeckManager.DrawCard(CardDrawSource.RelicEffect);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -474,7 +475,7 @@ public class ColdHeart : AdditionalRelicBase {
 
 	public override void OnAfterCardUse(CardUseContext context) {
 		_usedCardThisTurn = true;
-		PlayTriggerSfx(0.35f);
+		PlayTriggerFeedback(0.35f);
 	}
 
 	public override void OnPlayerTurnEnd(BattleManager battleManager, int turnNumber) {
@@ -515,7 +516,7 @@ public class QuickHand : AdditionalRelicBase {
 		if (_usedThisTurn || context.cardInfo.Cost != 0) return;
 		_usedThisTurn = true;
 		context.battleManager.DeckManager.DrawCard(CardDrawSource.RelicEffect);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }
 
@@ -539,7 +540,7 @@ public class BrokenChalice : AdditionalRelicBase {
 	public override void OnBattleStart(BattleManager battleManager) {
 		var context = new DamageContext(battleManager, battleManager.Player, battleManager.Player, null, null, DamageSourceType.Relic, true, true);
 		battleManager.Player.GetDamage(1, context);
-		PlayTriggerSfx(0.45f);
+		PlayTriggerFeedback(0.45f);
 	}
 
 	public override int ModifyHeal(CardUseContext context, CardAction action, int amount) {
@@ -556,6 +557,6 @@ public class BlackCandlestick : AdditionalRelicBase {
 	public override void OnAfterCardUse(CardUseContext context) {
 		if (!context.cardInfo.Keyword.IsExhaust || context.target == null) return;
 		AddBurn(context.target, effectAmount);
-		PlayTriggerSfx();
+		PlayTriggerFeedback();
 	}
 }

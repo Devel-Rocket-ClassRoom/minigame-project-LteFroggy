@@ -94,9 +94,11 @@ public class GamePlayData : Singleton<GamePlayData> {
 	}
 
 	public void AddRelic(RelicBase relic) {
-		_relics.Add(relic.CreateRuntimeCopy());
+		RelicBase runtimeRelic = relic.CreateRuntimeCopy();
+		_relics.Add(runtimeRelic);
 		AudioManager.Instance.PlaySfx(GameAudioCue.RelicTrigger);
 		OnRelicsChanged?.Invoke();
+		GameEvents.RelicTriggered(runtimeRelic);
 	}
 
 	public void RemoveRelic(RelicBase relic) {

@@ -21,6 +21,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 
 	[Header("=== 체력바 이미지 ===")]
 	[SerializeField] private Image _healthBarImage;
+	[SerializeField] private float _healthBarTweenDuration = 0.24f;
 
 	[Header("=== 방어도 표시 관련 이미지 ===")] 
 	[SerializeField] private Image _blockExistImage;
@@ -36,6 +37,7 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 	// 현재 캐릭터에게 걸린 상태 효과 저장용
 	private readonly Dictionary<Type, StatusRenderer> _statusRenderers = new();
 	protected Animator _animator;
+	private float _displayedHealthFill = -1f;
 	
 	public virtual void Init() {
 		// MaxHealth, CurrentHealth는 시작하면서 설정
@@ -361,7 +363,16 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		// 체력 값 갱신
 		_healthText.text = $"{CurrentHealth}/{MaxHealth}";
 		// 체력바 갱신
-		_healthBarImage.fillAmount = (float)CurrentHealth / MaxHealth;
+		float targetFill = MaxHealth > 0 ? (float)CurrentHealth / MaxHealth : 0f;
+		if (_displayedHealthFill < 0f)
+			_displayedHealthFill = targetFill;
+		else
+			_displayedHealthFill = Mathf.MoveTowards(
+				_displayedHealthFill,
+				targetFill,
+				Time.deltaTime / Mathf.Max(0.01f, _healthBarTweenDuration)
+			);
+		_healthBarImage.fillAmount = _displayedHealthFill;
 		
 		// 방어도가 있다면, 방어도 표시 표현
 		if (Block > 0) {

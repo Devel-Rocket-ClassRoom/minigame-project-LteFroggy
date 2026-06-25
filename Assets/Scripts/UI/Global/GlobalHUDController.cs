@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +32,7 @@ public class GlobalHUDController : MonoBehaviour {
 	private GamePlayData _gamePlayData;
 	private PauseMenuController _pauseMenu;
 	private int _openOverlayCount;
+	private readonly Dictionary<string, RelicIconController> _relicIconsById = new();
 
 	private void OnEnable() {
 		_gamePlayData = GamePlayData.Instance;
@@ -41,6 +43,7 @@ public class GlobalHUDController : MonoBehaviour {
 
 		GameEvents.OnNodeCompleted += OpenMapOverlay;
 		GameEvents.OnNextNodeSelected += _mapOverlay.Close;
+		GameEvents.OnRelicTriggered += OnRelicTriggered;
 
 		OverlayPanelController.OnVisibilityChanged += OnOverlayVisibilityChanged;
 	}
@@ -48,6 +51,7 @@ public class GlobalHUDController : MonoBehaviour {
 	private void OnDisable() {
 		GameEvents.OnNodeCompleted -= OpenMapOverlay;
 		GameEvents.OnNextNodeSelected -= _mapOverlay.Close;
+		GameEvents.OnRelicTriggered -= OnRelicTriggered;
 
 		OverlayPanelController.OnVisibilityChanged -= OnOverlayVisibilityChanged;
 		_openOverlayCount = 0;
@@ -160,6 +164,7 @@ public class GlobalHUDController : MonoBehaviour {
 	private void OnRelicsChanged() {
 		ConfigureRelicRow();
 		var hudFont = GetHudFont();
+		_relicIconsById.Clear();
 
 		foreach (Transform child in _relicRow) Destroy(child.gameObject);
 
@@ -167,7 +172,14 @@ public class GlobalHUDController : MonoBehaviour {
 		foreach (var relic in _gamePlayData.Relics) {
 			var icon = Instantiate(_relicIconPrefab, _relicRow);
 			icon.Set(relic, hudFont);
+			_relicIconsById[relic.relicId] = icon;
 		}
+	}
+
+	private void OnRelicTriggered(RelicBase relic) {
+		if (relic == null) return;
+		if (_relicIconsById.TryGetValue(relic.relicId, out RelicIconController icon))
+			icon.PlayTriggerFlash();
 	}
 
 	private TMP_FontAsset GetHudFont() {
