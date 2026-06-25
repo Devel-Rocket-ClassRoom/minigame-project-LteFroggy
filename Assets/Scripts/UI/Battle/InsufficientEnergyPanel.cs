@@ -22,8 +22,8 @@ public class InsufficientEnergyPanel : MonoBehaviour {
 	}
 
 	public void Show(string messageKey) {
-		EnsureReferences(messageKey);
 		if (!gameObject.activeSelf) gameObject.SetActive(true);
+		EnsureReferences(messageKey);
 
 		if (_showCoroutine != null) StopCoroutine(_showCoroutine);
 		_showCoroutine = StartCoroutine(CoShow());
