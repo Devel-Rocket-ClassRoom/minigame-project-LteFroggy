@@ -108,7 +108,7 @@ public class CardOnHandController : MonoBehaviour, IPointerEnterHandler, IPointe
 		_cardPool = cardPool;
 		
 		// 값 할당
-		GetBattleContext = () => battleManager.GetCardUseContext(_cardInstance);
+		GetBattleContext = () => battleManager.GetPreviewCardUseContext(_cardInstance);
 		_cardIcon.sprite = _cardInstance.Icon;
 		_cardNameText.text = _cardInstance.CardName;
 		_cardNameText.fontSize = 40 - 2 * _cardInstance.CardName.Length;

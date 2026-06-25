@@ -34,6 +34,7 @@ public abstract class RelicBase {
 	public virtual void OnPlayerTurnStart(BattleManager battleManager, int turnNumber) { }
 	public virtual void OnPlayerTurnEnd(BattleManager battleManager, int turnNumber) { }
 	public virtual void OnBeforeCardUse(CardUseContext context) { }
+	public virtual void OnPreviewCardUse(CardUseContext context) { }
 	public virtual void OnAfterCardUse(CardUseContext context) { }
 	public virtual void OnCardDrawn(BattleManager battleManager, CardInstance card, CardDrawSource source) { }
 	public virtual void OnReturnedCardToHand(BattleManager battleManager, CardInstance card) { }

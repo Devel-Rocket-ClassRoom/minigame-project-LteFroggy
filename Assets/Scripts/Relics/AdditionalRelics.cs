@@ -182,13 +182,17 @@ public class ForgottenBook : AdditionalRelicBase {
 	public override void OnBeforeCardUse(CardUseContext context) {
 		if (_usedThisTurn) return;
 		_usedThisTurn = true;
-		context.AmountMultiplier *= effectAmount;
-		context.ForceExhaustAfterUse = true;
+		ApplyFirstCardBonus(context);
 	}
 
-	public override int CalculateAmount(CardAction action, CardUseContext context, int amount) {
-		if (_usedThisTurn) return amount;
-		return amount * effectAmount;
+	public override void OnPreviewCardUse(CardUseContext context) {
+		if (_usedThisTurn) return;
+		ApplyFirstCardBonus(context);
+	}
+
+	private void ApplyFirstCardBonus(CardUseContext context) {
+		context.AmountMultiplier *= effectAmount;
+		context.ForceExhaustAfterUse = true;
 	}
 }
 
