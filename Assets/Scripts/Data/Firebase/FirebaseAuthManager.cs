@@ -10,6 +10,7 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 	private FirebaseUser _currentUser;
 	
 	public bool IsLoggedIn => _currentUser != null;
+	public bool IsAnonymous => _currentUser != null && _currentUser.IsAnonymous;
 	public string UserId => _currentUser?.UserId;
 	
 	public void Initialize(FirebaseAuth auth) {
@@ -32,6 +33,27 @@ public class FirebaseAuthManager : MonoBehaviour, IEmailAuthManager, IAnonymousA
 			return (true, null);	
 		} catch (Exception e) {
 			Debug.Log($"{LogPrefix} 이메일 회원가입 실패 : {e.Message}");
+			return (false, ParseFirebaseError(e.Message));
+		}
+	}
+
+	public async UniTask<(bool success, string error)> LinkAnonymousWithEmail(string email, string password) {
+		if (_currentUser == null)
+			return (false, "연결할 익명 계정이 없습니다.");
+		if (!_currentUser.IsAnonymous)
+			return (false, "이미 이메일 계정으로 로그인되어 있습니다.");
+
+		try {
+			Debug.Log($"{LogPrefix} 익명 계정 이메일 연결 시도");
+			Credential credential = EmailAuthProvider.GetCredential(email, password);
+			AuthResult result = await _currentUser.LinkWithCredentialAsync(credential);
+			_currentUser = result.User;
+			NotifyLoginState();
+			Debug.Log($"{LogPrefix} 익명 계정 이메일 연결 성공");
+			return (true, null);
+		}
+		catch (Exception e) {
+			Debug.Log($"{LogPrefix} 익명 계정 이메일 연결 실패 : {e.Message}");
 			return (false, ParseFirebaseError(e.Message));
 		}
 	}

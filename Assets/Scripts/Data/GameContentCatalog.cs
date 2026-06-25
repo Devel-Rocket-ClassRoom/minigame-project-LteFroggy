@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class GameContentCatalog {
+	public const int DefaultUnlockedRelicCount = 3;
+
 	private const string CardDefinitionResourcePath = "Datas/Cards/CardDescription";
 	private const string EnemyDataResourcePath = "Datas/Enemies/EnemyData";
 
@@ -48,6 +50,27 @@ public static class GameContentCatalog {
 	private static Dictionary<int, EnemyData> _enemiesById;
 
 	public static IReadOnlyList<RelicBase> AllLoadoutRelics => _allLoadoutRelics;
+
+	public static string[] GetDefaultUnlockedRelicIds() {
+		int count = Mathf.Min(DefaultUnlockedRelicCount, _allLoadoutRelics.Count);
+		var relicIds = new string[count];
+		for (int i = 0; i < count; i++)
+			relicIds[i] = _allLoadoutRelics[i].relicId;
+		return relicIds;
+	}
+
+	public static bool IsDefaultUnlockedLoadoutRelic(RelicBase relic) {
+		if (relic == null)
+			return false;
+
+		int count = Mathf.Min(DefaultUnlockedRelicCount, _allLoadoutRelics.Count);
+		for (int i = 0; i < count; i++) {
+			if (_allLoadoutRelics[i].relicId == relic.relicId)
+				return true;
+		}
+
+		return false;
+	}
 
 	public static bool TryGetCardDefinition(int cardId, out CardDefinition definition) {
 		return CardsById.TryGetValue(cardId, out definition);

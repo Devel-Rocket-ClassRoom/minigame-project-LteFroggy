@@ -60,7 +60,7 @@ public class LoadoutManager : MonoBehaviour {
 		_selectedRelics.Clear();
 		_totalCost = 0;
 
-		foreach (RelicBase relic in GameContentCatalog.AllLoadoutRelics) {
+		foreach (RelicBase relic in GetUnlockedLoadoutRelics()) {
 			RelicBase captured = relic;
 			GameObject entry = Instantiate(_relicEntryPrefab, _relicListParent);
 
@@ -76,6 +76,23 @@ public class LoadoutManager : MonoBehaviour {
 		}
 
 		UpdateCostDisplay();
+	}
+
+	private static IEnumerable<RelicBase> GetUnlockedLoadoutRelics() {
+		FirebaseMetaProgressManager metaProgressManager = FirebaseBootstrapper.Instance != null
+			? FirebaseBootstrapper.Instance.MetaProgressManager
+			: null;
+
+		foreach (RelicBase relic in GameContentCatalog.AllLoadoutRelics) {
+			if (metaProgressManager != null && metaProgressManager.HasData) {
+				if (metaProgressManager.IsRelicUnlocked(relic))
+					yield return relic;
+				continue;
+			}
+
+			if (GameContentCatalog.IsDefaultUnlockedLoadoutRelic(relic))
+				yield return relic;
+		}
 	}
 
 	private void ShowCardSelection() {

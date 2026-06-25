@@ -17,6 +17,7 @@ public class BattleManager : BattleSystemManager {
 	[Header("=== 카드 보상 패널 ===")]
 	[SerializeField] private CardRewardController _cardRewardController;
 	[SerializeField] private int _goldReward = 20;
+	[SerializeField] private int _runClearGoldBonus = 100;
 
 	[Header("=== 에너지 부족 안내 패널 ===")]
 	[SerializeField] private InsufficientEnergyPanel _insufficientEnergyPanel;
@@ -36,6 +37,7 @@ public class BattleManager : BattleSystemManager {
 	[HideInInspector] public UnityEvent OnCardUse;
 
 	private bool IsGameEnd;
+	private bool _metaRewardCommitted;
 	private const string k_FinalEndingSceneName = "EndingScene";
 
 	private void Start() {
@@ -65,7 +67,9 @@ public class BattleManager : BattleSystemManager {
 		IsGameEnd = true;
 		StopBattleInteraction();
 		RemoveBattleEndListeners();
+		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
 		SaveRunResultAsync(RunResult.Defeat).Forget();
+		CommitMetaProgressRewardAsync(RunResult.Defeat).Forget();
 		DefeatResultPanel.Show();
 	}
 
@@ -82,7 +86,9 @@ public class BattleManager : BattleSystemManager {
 		GamePlayData.Instance.AddGold(goldReward);
 
 		if (nodeType == MapNodeType.Boss) {
+			GamePlayData.Instance.AddGold(_runClearGoldBonus);
 			SaveRunResultAsync(RunResult.Victory).Forget();
+			CommitMetaProgressRewardAsync(RunResult.Victory).Forget();
 			GameEvents.RunCleared();
 			UISceneBootstrapper.Instance.TransitionTo(k_FinalEndingSceneName);
 			RemoveBattleEndListeners();
@@ -127,6 +133,26 @@ public class BattleManager : BattleSystemManager {
 		var (success, error) = await bootstrapper.RunResultManager.SaveRunData(result, this);
 		if (!success)
 			Debug.LogWarning(error);
+	}
+
+	private async UniTask CommitMetaProgressRewardAsync(RunResult result) {
+		if (_metaRewardCommitted)
+			return;
+
+		_metaRewardCommitted = true;
+		int rewardGold = GamePlayData.Instance.Gold;
+		if (rewardGold <= 0)
+			return;
+
+		FirebaseMetaProgressManager manager = FirebaseBootstrapper.Instance != null
+			? FirebaseBootstrapper.Instance.MetaProgressManager
+			: null;
+		if (manager == null)
+			return;
+
+		var (success, error) = await manager.AddGold(rewardGold);
+		if (!success)
+			Debug.LogWarning($"[BattleManager] 메타 진행 골드 적립 실패({result}): {error}");
 	}
 
 	private void OnEnable() {

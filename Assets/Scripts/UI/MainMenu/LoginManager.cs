@@ -36,10 +36,31 @@ public class LoginManager : MonoBehaviour, ILoginManager {
 	private void ApplySettings() {
 		if (_emailFormRoot != null) _emailFormRoot.SetActive(true);
 		if (_emailActionRoot != null) _emailActionRoot.SetActive(true);
+		if (_loginButton != null) _loginButton.gameObject.SetActive(true);
+		if (_signUpButton != null) _signUpButton.gameObject.SetActive(true);
 
 		if (_descriptionText != null) {
 			_descriptionText.text = "이메일 계정으로 로그인하거나 새 계정을 만듭니다.";
 		}
+
+		SetButtonText(_loginButton, "로그인");
+		SetButtonText(_signUpButton, "회원가입");
+	}
+
+	public void ConfigureForEmailLink() {
+		if (_descriptionText != null)
+			_descriptionText.text = "현재 익명 계정의 진행 데이터를 유지한 채 이메일 계정으로 연결합니다.";
+		if (_loginButton != null)
+			_loginButton.gameObject.SetActive(false);
+		if (_signUpButton != null)
+			_signUpButton.gameObject.SetActive(true);
+		SetButtonText(_signUpButton, "이메일 연결");
+		ClearStatus();
+	}
+
+	public void ConfigureForEmailAuth() {
+		ApplySettings();
+		ClearStatus();
 	}
 
 	public void ShowError(string message) {
@@ -59,6 +80,15 @@ public class LoginManager : MonoBehaviour, ILoginManager {
 
 		_statusText.text = message;
 		_statusText.color = color;
+	}
+
+	private static void SetButtonText(Button button, string text) {
+		if (button == null)
+			return;
+
+		TextMeshProUGUI label = button.GetComponentInChildren<TextMeshProUGUI>(true);
+		if (label != null)
+			label.text = text;
 	}
 
 	private void OnLoginClicked() {

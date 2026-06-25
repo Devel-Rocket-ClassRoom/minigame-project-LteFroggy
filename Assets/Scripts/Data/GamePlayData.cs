@@ -40,6 +40,8 @@ public class GamePlayData : Singleton<GamePlayData> {
 	public int MaxHealth { get => _maxHealth; private set => _maxHealth = value; }
 	public int CurrentHealth { get; private set; }
 	public int Gold { get; private set; }
+	public int TotalGoldEarned { get; private set; }
+	public int TotalGoldSpent { get; private set; }
 
 	protected override void Awake() {
 		base.Awake();
@@ -55,6 +57,8 @@ public class GamePlayData : Singleton<GamePlayData> {
 	private void InitializeRunData() {
 		CurrentHealth = _maxHealth;
 		Gold = _startGold;
+		TotalGoldEarned = 0;
+		TotalGoldSpent = 0;
 
 		Deck.Clear();
 		foreach (CardDefinition card in _startCards)
@@ -75,12 +79,16 @@ public class GamePlayData : Singleton<GamePlayData> {
 
 	public void AddGold(int amount) {
 		Gold += amount;
+		if (amount > 0)
+			TotalGoldEarned += amount;
 		OnGoldChanged?.Invoke(Gold);
 	}
 
 	public bool SpendGold(int amount) {
+		if (amount <= 0) return true;
 		if (Gold < amount) return false;
 		Gold -= amount;
+		TotalGoldSpent += amount;
 		OnGoldChanged?.Invoke(Gold);
 		return true;
 	}
