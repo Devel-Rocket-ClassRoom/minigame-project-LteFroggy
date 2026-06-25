@@ -108,13 +108,15 @@ public class FirebaseRunResultManager : MonoBehaviour {
 			currentHealth = data.CurrentHealth,
 			maxHealth = data.MaxHealth,
 			gold = data.Gold,
+			totalGoldEarned = data.TotalGoldEarned,
+			totalGoldSpent = data.TotalGoldSpent,
 			deckCount = data.Deck.Count,
 			relicCount = data.Relics.Count,
 			cardIds = data.Deck
 				.Select(card => card._cardDefinition.cardId.ToString())
 				.ToArray(),
 			relicIds = data.Relics
-				.Select(relic => relic.GetType().Name)
+				.Select(relic => relic.relicId)
 				.ToArray(),
 			savedAtUnixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
 		};

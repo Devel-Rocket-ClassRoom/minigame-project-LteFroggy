@@ -21,6 +21,8 @@ public class FirebaseBootstrapper : MonoBehaviour {
 	public FirebaseApp App { get; private set; }
 	public FirebaseAuthManager AuthManager { get; private set; }
 	public FirebaseRunResultManager RunResultManager { get; private set; }
+	public FirebaseMetaProgressManager MetaProgressManager { get; private set; }
+	public FirebaseRunSnapshotManager RunSnapshotManager { get; private set; }
 
 	private void Awake() {
 		// 씬 전환이나 중복 배치로 Bootstrapper가 여러 개 생기는 것을 막습니다.
@@ -70,6 +72,16 @@ public class FirebaseBootstrapper : MonoBehaviour {
 			RunResultManager = gameObject.AddComponent<FirebaseRunResultManager>();
 			RunResultManager.Initialize(AuthManager, FirebaseDatabase.GetInstance(App));
 			Debug.Log($"{LogPrefix} 런 결과 서비스 초기화 완료");
+
+			Debug.Log($"{LogPrefix} 메타 진행 서비스 초기화 시작");
+			MetaProgressManager = gameObject.AddComponent<FirebaseMetaProgressManager>();
+			MetaProgressManager.Initialize(AuthManager, FirebaseDatabase.GetInstance(App));
+			Debug.Log($"{LogPrefix} 메타 진행 서비스 초기화 완료");
+
+			Debug.Log($"{LogPrefix} 현재 런 스냅샷 서비스 초기화 시작");
+			RunSnapshotManager = gameObject.AddComponent<FirebaseRunSnapshotManager>();
+			RunSnapshotManager.Initialize(AuthManager, FirebaseDatabase.GetInstance(App));
+			Debug.Log($"{LogPrefix} 현재 런 스냅샷 서비스 초기화 완료");
 
 			State = InitState.Ready;
 			Debug.Log($"{LogPrefix} 초기화 완료: {App.Name}");

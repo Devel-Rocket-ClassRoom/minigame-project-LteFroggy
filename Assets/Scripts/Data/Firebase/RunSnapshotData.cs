@@ -1,8 +1,7 @@
-﻿[System.Serializable]
-public class RunResultData {
-	public string result;
-	public string enemyEncounterId;
-	public int[] enemyIds;
+using System;
+
+[Serializable]
+public class RunSnapshotData {
 	public int currentHealth;
 	public int maxHealth;
 	public int gold;
@@ -12,5 +11,9 @@ public class RunResultData {
 	public int relicCount;
 	public string[] cardIds;
 	public string[] relicIds;
+	public string currentNodeType;
+	public int currentNodeLayer;
+	public int currentNodeIndex;
+	public string[] visitedNodeTypes;
 	public long savedAtUnixTime;
 }
