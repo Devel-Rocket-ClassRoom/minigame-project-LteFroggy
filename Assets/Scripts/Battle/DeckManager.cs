@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class DeckManager : BattleSystemManager {
@@ -9,6 +10,8 @@ public class DeckManager : BattleSystemManager {
 	private const string DrawPileTooltipDescription = "앞으로 뽑을 카드가 들어 있는 더미입니다. 클릭하면 카드 목록을 확인합니다.";
 	private const string DiscardPileTooltipTitle = "버린 카드 더미";
 	private const string DiscardPileTooltipDescription = "사용했거나 버려진 카드가 모이는 더미입니다. 클릭하면 카드 목록을 확인합니다.";
+	private const string ExhaustPileTooltipTitle = "소멸된 카드 더미";
+	private const string ExhaustPileTooltipDescription = "이번 전투 동안 덱으로 돌아오지 않는 소멸 카드가 모이는 더미입니다. 클릭하면 카드 목록을 확인합니다.";
 
 	[Header("=== 실제 UI카드상에 보이는 카드를 관리할 Controller ===")]
 	[SerializeField] private HandLayoutController _handLayoutController;
@@ -16,6 +19,8 @@ public class DeckManager : BattleSystemManager {
 	[Header("=== 뽑을 카드 더미, 사용한 카드 더미 텍스트 ===")]
 	[SerializeField] private CardPileController _drawPileController;
 	[SerializeField] private CardPileController _discardPileController;
+	[SerializeField] private CardPileController _exhaustPileController;
+	[SerializeField] private Vector2 _runtimeExhaustPileOffset = new(-120f, 0f);
 	[SerializeField] private DeckShuffleAnimator _deckShuffleAnimator;
 
 	private readonly List<CardInstance> _drawPile = new();
@@ -36,6 +41,7 @@ public class DeckManager : BattleSystemManager {
 	public int DrawCountOnNextTurn { get; set; } = 5;
 	public bool BlockAdditionalDrawThisTurn { get; set; }
 	public IReadOnlyList<CardInstance> HandPile => _handPile;
+	public IReadOnlyList<CardInstance> ExhaustPile => _exhaustPile;
 
 	public void SetBattleManager(BattleManager battleManager) {
 		_battleManager = battleManager;
@@ -51,10 +57,13 @@ public class DeckManager : BattleSystemManager {
 		}
 		_isFirstTurn = true;
 
-		_drawPileController.OnButtonPressed(ShowDrawPile);
-		_discardPileController.OnButtonPressed(ShowDiscardPile);
-		_drawPileController.SetTooltip(DrawPileTooltipTitle, DrawPileTooltipDescription);
-		_discardPileController.SetTooltip(DiscardPileTooltipTitle, DiscardPileTooltipDescription);
+		EnsureExhaustPileController();
+		_drawPileController?.OnButtonPressed(ShowDrawPile);
+		_discardPileController?.OnButtonPressed(ShowDiscardPile);
+		_exhaustPileController?.OnButtonPressed(ShowExhaustPile);
+		_drawPileController?.SetTooltip(DrawPileTooltipTitle, DrawPileTooltipDescription);
+		_discardPileController?.SetTooltip(DiscardPileTooltipTitle, DiscardPileTooltipDescription);
+		_exhaustPileController?.SetTooltip(ExhaustPileTooltipTitle, ExhaustPileTooltipDescription);
 
 		OnCardStateChanged.Invoke();
 	}
@@ -309,8 +318,30 @@ public class DeckManager : BattleSystemManager {
 		CardListOverlayController.Instance?.Show(_discardPile, "버린 카드 더미");
 	}
 
+	private void ShowExhaustPile() {
+		DescriptionSystem.Hide();
+		CardListOverlayController.Instance?.Show(_exhaustPile, "소멸된 카드 더미");
+	}
+
 	private void UpdateCardText() {
-		_drawPileController.SetCountText(_drawPile.Count.ToString());
-		_discardPileController.SetCountText(_discardPile.Count.ToString());
+		_drawPileController?.SetCountText(_drawPile.Count.ToString());
+		_discardPileController?.SetCountText(_discardPile.Count.ToString());
+		_exhaustPileController?.SetCountText(_exhaustPile.Count.ToString());
+	}
+
+	private void EnsureExhaustPileController() {
+		if (_exhaustPileController != null || _discardPileController == null)
+			return;
+
+		_exhaustPileController = Instantiate(_discardPileController, _discardPileController.transform.parent);
+		_exhaustPileController.gameObject.name = "ExhaustPileUI";
+
+		RectTransform rectTransform = _exhaustPileController.RectTransform;
+		if (rectTransform != null)
+			rectTransform.anchoredPosition += _runtimeExhaustPileOffset;
+
+		Image image = _exhaustPileController.GetComponent<Image>();
+		if (image != null)
+			image.color = new Color(0.32f, 0.18f, 0.38f, image.color.a);
 	}
 }
