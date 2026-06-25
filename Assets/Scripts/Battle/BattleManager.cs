@@ -45,6 +45,7 @@ public class BattleManager : BattleSystemManager {
 	}
 
 	public override void StartBattle() {
+		AudioManager.Instance.PlayBattleBgm();
 		_deckManager.SetBattleManager(this);
 		_deckManager.StartBattle();
 		_cardUseManager.StartBattle();
@@ -67,6 +68,8 @@ public class BattleManager : BattleSystemManager {
 		IsGameEnd = true;
 		StopBattleInteraction();
 		RemoveBattleEndListeners();
+		AudioManager.Instance.PlaySfx(GameAudioCue.Defeat);
+		AudioManager.Instance.StopBgm();
 		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
 		SaveRunResultAsync(RunResult.Defeat).Forget();
 		CommitMetaProgressRewardAsync(RunResult.Defeat).Forget();
@@ -79,6 +82,8 @@ public class BattleManager : BattleSystemManager {
 		IsGameEnd = true;
 		StopBattleInteraction();
 		SetCleareNodeButtonInteractable(false);
+		AudioManager.Instance.PlaySfx(GameAudioCue.Victory);
+		AudioManager.Instance.StopBgm();
 
 		MapNodeType nodeType = GamePlayData.Instance.InGameMapData.NodeNow.Config.Type;
 		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
@@ -181,6 +186,7 @@ public class BattleManager : BattleSystemManager {
 	}
 
 	public override void EndPlayerTurn() {
+		AudioManager.Instance.PlaySfx(GameAudioCue.TurnEnd);
 		_turnManager.EndPlayerTurn();
 		_cardUseManager.EndPlayerTurn();
 		_characterManager.EndPlayerTurn();
@@ -226,6 +232,7 @@ public class BattleManager : BattleSystemManager {
 		CardUseContext context = GetCardUseContext(cardInstance, enemyInstance);
 		_relicManager.OnBeforeCardUse(context);
 		_cardUseManager.UseCard(cardInstance, context);
+		AudioManager.Instance.PlaySfx(GameAudioCue.CardUse);
 		_characterManager.Player.NotifyCardUsed();
 		_relicManager.OnAfterCardUse(context);
 

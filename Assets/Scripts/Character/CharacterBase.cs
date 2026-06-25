@@ -94,6 +94,8 @@ public abstract class CharacterBase : MonoBehaviour, IHasHealth, IHasBlock {
 		int actualDamage = Mathf.Max(healthBefore - CurrentHealth, 0);
 
 		_hitFeedbackView?.Play(actualDamage);
+		if (actualDamage > 0)
+			AudioManager.Instance.PlaySfx(GameAudioCue.Hit);
 
 		// 맞으면 맞는 애니메이션
 		PlayHitAnimation();
