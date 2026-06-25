@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardDefinition
   cardId: 50
   rarity: 1
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1378c33bcfc445f4ae786a23451d51fb, type: 3}
   cost: 1
   tag: 1
   needsTarget: 0
