@@ -41,17 +41,29 @@ public class RelicManager : BattleSystemManager {
 	}
 
 	public int ModifySelfDamage(CardUseContext context, int amount) {
-		foreach (var relic in _relics) amount = relic.ModifySelfDamage(context, amount);
+		foreach (var relic in _relics) {
+			int before = amount;
+			amount = relic.ModifySelfDamage(context, amount);
+			NotifyIfChanged(context, relic, before, amount);
+		}
 		return amount;
 	}
 
 	public int ModifyHeal(CardUseContext context, CardAction action, int amount) {
-		foreach (var relic in _relics) amount = relic.ModifyHeal(context, action, amount);
+		foreach (var relic in _relics) {
+			int before = amount;
+			amount = relic.ModifyHeal(context, action, amount);
+			NotifyIfChanged(context, relic, before, amount);
+		}
 		return amount;
 	}
 
 	public int ModifyIncomingDamage(DamageContext context, int amount) {
-		foreach (var relic in _relics) amount = relic.ModifyIncomingDamage(context, amount);
+		foreach (var relic in _relics) {
+			int before = amount;
+			amount = relic.ModifyIncomingDamage(context, amount);
+			NotifyIfChanged(relic, before, amount);
+		}
 		return amount;
 	}
 
@@ -95,7 +107,11 @@ public class RelicManager : BattleSystemManager {
 	}
 
 	public int CalculateAmountWithRelics(CardUseContext context, CardAction action, int amount) {
-		foreach (var relic in _relics) amount = relic.CalculateAmount(action, context, amount);
+		foreach (var relic in _relics) {
+			int before = amount;
+			amount = relic.CalculateAmount(action, context, amount);
+			NotifyIfChanged(context, relic, before, amount);
+		}
 		amount = UnityEngine.Mathf.RoundToInt(amount * context.AmountMultiplier * context.cardInfo.BattleAmountMultiplier);
 		return amount;
 	}
@@ -107,12 +123,26 @@ public class RelicManager : BattleSystemManager {
 	}
 
 	public int CalculateRepeatWithRelics(CardUseContext context, CardAction action, int repeat) {
-		foreach (var relic in _relics) repeat = relic.CalculateRepeat(action, context, repeat);
+		foreach (var relic in _relics) {
+			int before = repeat;
+			repeat = relic.CalculateRepeat(action, context, repeat);
+			NotifyIfChanged(context, relic, before, repeat);
+		}
 		return repeat;
 	}
 
 	public int CalculateRepeatWithRelics(CardInstance card, CardAction action, int repeat) {
 		foreach (var relic in _relics) repeat = relic.CalculateRepeat(action, card, repeat);
 		return repeat;
+	}
+
+	private static void NotifyIfChanged(RelicBase relic, int before, int after) {
+		if (before != after)
+			GameEvents.RelicTriggered(relic);
+	}
+
+	private static void NotifyIfChanged(CardUseContext context, RelicBase relic, int before, int after) {
+		if (context != null && context.IsPreview) return;
+		NotifyIfChanged(relic, before, after);
 	}
 }
