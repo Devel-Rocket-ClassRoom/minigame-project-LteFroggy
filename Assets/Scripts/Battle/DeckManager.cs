@@ -339,9 +339,28 @@ public class DeckManager : BattleSystemManager {
 		RectTransform rectTransform = _exhaustPileController.RectTransform;
 		if (rectTransform != null)
 			rectTransform.anchoredPosition += _runtimeExhaustPileOffset;
+		if (rectTransform != null) {
+			rectTransform.anchorMin = Vector2.one;
+			rectTransform.anchorMax = Vector2.one;
+			rectTransform.pivot = Vector2.one;
+			rectTransform.anchoredPosition = new Vector2(-36f, -184f);
+			rectTransform.sizeDelta = new Vector2(104f, 104f);
+		}
 
-		Image image = _exhaustPileController.GetComponent<Image>();
+		Image image = _exhaustPileController.GetComponentInChildren<Image>();
 		if (image != null)
 			image.color = new Color(0.32f, 0.18f, 0.38f, image.color.a);
+		if (image != null) {
+			Sprite exhaustPileSprite = Resources.Load<Sprite>("Sprites/UI/ExhaustPile");
+			if (exhaustPileSprite != null) {
+				image.sprite = exhaustPileSprite;
+				image.preserveAspect = true;
+			}
+			else {
+				Debug.LogError("[DeckManager] 소멸 카드 더미 스프라이트를 찾을 수 없습니다: Resources/Sprites/UI/ExhaustPile");
+			}
+
+			image.color = Color.white;
+		}
 	}
 }
