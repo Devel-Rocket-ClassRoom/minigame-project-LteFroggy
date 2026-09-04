@@ -117,7 +117,7 @@ public class MetaShopPanelController : MonoBehaviour {
 		VerticalLayoutGroup layout = content.GetComponent<VerticalLayoutGroup>();
 		layout.padding = new RectOffset(12, 12, 12, 12);
 		layout.spacing = 10f;
-		layout.childControlHeight = false;
+		layout.childControlHeight = true;
 		layout.childControlWidth = true;
 		layout.childForceExpandHeight = false;
 		layout.childForceExpandWidth = true;
@@ -185,7 +185,7 @@ public class MetaShopPanelController : MonoBehaviour {
 		group.spacing = 12f;
 		group.childAlignment = TextAnchor.MiddleLeft;
 		group.childControlHeight = true;
-		group.childControlWidth = false;
+		group.childControlWidth = true;
 		group.childForceExpandHeight = true;
 		group.childForceExpandWidth = false;
 
@@ -197,12 +197,28 @@ public class MetaShopPanelController : MonoBehaviour {
 		descLayout.preferredWidth = 820f;
 		descLayout.flexibleWidth = 1f;
 
+		int price = FirebaseMetaProgressManager.GetRelicPrice(relic);
+		bool canAfford = _metaProgressManager.Current.gold >= price;
 		bool unlocked = _metaProgressManager.IsRelicUnlocked(relic);
 		string buttonText = unlocked ? "보유" : $"{FirebaseMetaProgressManager.GetRelicPrice(relic)} G";
 		Button buyButton = CreateButton("Buy Button", row.transform, buttonText, Vector2.zero, Vector2.one, () => OnBuyClicked(relic).Forget());
 		LayoutElement buttonLayout = buyButton.gameObject.AddComponent<LayoutElement>();
 		buttonLayout.preferredWidth = 150f;
-		buyButton.interactable = !unlocked;
+		buyButton.interactable = !unlocked && canAfford;
+
+		Image buttonBackground = buyButton.GetComponent<Image>();
+		TextMeshProUGUI buttonLabel = buyButton.GetComponentInChildren<TextMeshProUGUI>();
+		bool unavailable = !unlocked && !canAfford;
+		if (buttonLabel != null)
+			buttonLabel.text = unlocked
+				? "보유"
+				: unavailable ? $"골드 부족\n{price} G 필요" : $"구매\n{price} G";
+		if (buttonBackground != null)
+			buttonBackground.color = unlocked
+				? ColorFromHex(0x343038ff)
+				: unavailable ? ColorFromHex(0x29242aff) : ColorFromHex(0x3b1018ff);
+		if (buttonLabel != null && unavailable)
+			buttonLabel.color = ColorFromHex(0xaaa0a8ff);
 	}
 
 	private async UniTaskVoid OnBuyClicked(RelicBase relic) {
