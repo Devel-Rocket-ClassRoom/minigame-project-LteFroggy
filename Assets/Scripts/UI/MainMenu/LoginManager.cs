@@ -15,12 +15,14 @@ public class LoginManager : MonoBehaviour, ILoginManager {
 	[SerializeField] private TextMeshProUGUI _descriptionText;
 	[SerializeField] private TextMeshProUGUI _statusText;
 	private Button _guestLoginButton;
+	private bool _guestDataWarningAcknowledged;
 
 	public event Action<string, string> OnEmailSignInClicked;
 	public event Action<string, string> OnEmailSignUpClicked;
 	public event Action OnAnonymousSignInClicked;
 
 	private void OnEnable() {
+		_guestDataWarningAcknowledged = false;
 		EnsureGuestLoginButton();
 		ApplySettings();
 		ClearStatus();
@@ -32,6 +34,7 @@ public class LoginManager : MonoBehaviour, ILoginManager {
 	}
 
 	private void OnDisable() {
+		_guestDataWarningAcknowledged = false;
 		if (_loginButton != null) _loginButton.onClick.RemoveListener(OnLoginClicked);
 		if (_signUpButton != null) _signUpButton.onClick.RemoveListener(OnSignUpClicked);
 		if (_guestLoginButton != null) _guestLoginButton.onClick.RemoveListener(OnGuestLoginClicked);
@@ -132,6 +135,13 @@ public class LoginManager : MonoBehaviour, ILoginManager {
 	}
 
 	private void OnGuestLoginClicked() {
+		if (!_guestDataWarningAcknowledged) {
+			_guestDataWarningAcknowledged = true;
+			ShowError("주의: 게스트 계정은 기기를 변경하거나 앱 데이터를 삭제하면 진행 데이터를 복구할 수 없습니다.\n계속하려면 게스트로 시작 버튼을 한 번 더 눌러주세요.");
+			SetButtonText(_guestLoginButton, "경고 확인 후 다시 클릭");
+			return;
+		}
+
 		ClearStatus();
 		ShowInfo("게스트 로그인 중...");
 		OnAnonymousSignInClicked?.Invoke();
