@@ -148,6 +148,7 @@ public class MainMenuManager : MonoBehaviour {
 		UnsubscribeLoginPanelEvents();
 		_loginPanel.OnEmailSignInClicked += OnEmailSignInClicked;
 		_loginPanel.OnEmailSignUpClicked += OnEmailSignUpClicked;
+		_loginPanel.OnAnonymousSignInClicked += OnAnonymousSignInClicked;
 
 		_loginPanel.gameObject.SetActive(true);
 		_loginPanel.ConfigureForEmailAuth();
@@ -190,6 +191,18 @@ public class MainMenuManager : MonoBehaviour {
 		if (result) { LoginSuccess(); }
 		else { _loginPanel.ShowError(error); }
 	}
+	private async void OnAnonymousSignInClicked() {
+		FirebaseAuthManager authManager = GetAuthManager();
+		if (authManager == null) {
+			_loginPanel.ShowError("Firebase 인증이 준비되지 않았습니다.");
+			return;
+		}
+
+		var (result, error) = await authManager.SignIn();
+		if (result) { LoginSuccess(); }
+		else { _loginPanel.ShowError(error); }
+	}
+
 	
 	private void LoginSuccess() {
 		_emailLinkMode = false;
@@ -466,6 +479,7 @@ public class MainMenuManager : MonoBehaviour {
 
 		_loginPanel.OnEmailSignInClicked -= OnEmailSignInClicked;
 		_loginPanel.OnEmailSignUpClicked -= OnEmailSignUpClicked;
+		_loginPanel.OnAnonymousSignInClicked -= OnAnonymousSignInClicked;
 	}
 
 	private void QuitGame() {
