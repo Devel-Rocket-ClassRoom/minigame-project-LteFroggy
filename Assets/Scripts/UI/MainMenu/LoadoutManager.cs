@@ -60,22 +60,33 @@ public class LoadoutManager : MonoBehaviour {
 		_selectedRelics.Clear();
 		_totalCost = 0;
 
-		foreach (RelicBase relic in GameContentCatalog.AllLoadoutRelics) {
+		foreach (RelicBase relic in GetUnlockedLoadoutRelics()) {
 			RelicBase captured = relic;
 			GameObject entry = Instantiate(_relicEntryPrefab, _relicListParent);
-
-			SetChildText(entry, "RelicName", captured.displayName);
-			SetChildText(entry, "EffectText", captured.effectDescription);
-			SetChildText(entry, "CostBadge/CostValue", $"{captured.cost}");
-			SetChildText(entry, "RarityBadge/RarityText", StringTableManager.StringTable[captured.rarity.ToString()]);
-			SetRelicIcon(entry, captured.icon);
-
-			var toggle = entry.GetComponent<Toggle>();
-			toggle.SetIsOnWithoutNotify(false);
-			toggle.onValueChanged.AddListener(isOn => OnRelicToggleChanged(captured, toggle, isOn));
+			RelicCardController controller = entry.GetComponent<RelicCardController>();
+			if (controller == null)
+				controller = entry.AddComponent<RelicCardController>();
+			controller.Init(captured, OnRelicToggleChanged);
 		}
 
 		UpdateCostDisplay();
+	}
+
+	private static IEnumerable<RelicBase> GetUnlockedLoadoutRelics() {
+		FirebaseMetaProgressManager metaProgressManager = FirebaseBootstrapper.Instance != null
+			? FirebaseBootstrapper.Instance.MetaProgressManager
+			: null;
+
+		foreach (RelicBase relic in GameContentCatalog.AllLoadoutRelics) {
+			if (metaProgressManager != null && metaProgressManager.HasData) {
+				if (metaProgressManager.IsRelicUnlocked(relic))
+					yield return relic;
+				continue;
+			}
+
+			if (GameContentCatalog.IsDefaultUnlockedLoadoutRelic(relic))
+				yield return relic;
+		}
 	}
 
 	private void ShowCardSelection() {
@@ -120,23 +131,6 @@ public class LoadoutManager : MonoBehaviour {
 		_scrollRect.verticalNormalizedPosition = 1f;
 	}
 
-	private static void SetChildText(GameObject root, string path, string text) {
-		Transform t = root.transform.Find(path);
-		if (t != null)
-			t.GetComponent<TextMeshProUGUI>().text = text;
-	}
-
-	private static void SetRelicIcon(GameObject root, Sprite icon) {
-		Transform iconBg = root.transform.Find("IconBg");
-		if (iconBg == null) return;
-
-		if (icon != null) {
-			iconBg.GetComponent<Image>().sprite = icon;
-			Transform placeholder = iconBg.Find("IconPlaceholder");
-			if (placeholder != null) placeholder.gameObject.SetActive(false);
-		}
-	}
-
 	private void OnRelicToggleChanged(RelicBase relic, Toggle toggle, bool isOn) {
 		if (isOn) {
 			if (_totalCost + relic.cost > _costLimit) {
@@ -151,13 +145,18 @@ public class LoadoutManager : MonoBehaviour {
 				_totalCost -= relic.cost;
 		}
 
-		SetHighlight(toggle.gameObject, isOn && _selectedRelics.Contains(relic));
+		SetRelicCardSelected(toggle, isOn && _selectedRelics.Contains(relic));
 		UpdateCostDisplay();
 	}
 
-	private static void SetHighlight(GameObject card, bool active) {
-		Transform t = card.transform.Find("SelectHighlight");
-		if (t != null) t.gameObject.SetActive(active);
+	private static void SetRelicCardSelected(Toggle toggle, bool selected) {
+		if (toggle != null && toggle.TryGetComponent(out RelicCardController controller)) {
+			controller.SetSelected(selected);
+			return;
+		}
+
+		Transform highlight = toggle != null ? toggle.transform.Find("SelectHighlight") : null;
+		if (highlight != null) highlight.gameObject.SetActive(selected);
 	}
 
 	private void ToggleStartCard(CardDefinition definition) {

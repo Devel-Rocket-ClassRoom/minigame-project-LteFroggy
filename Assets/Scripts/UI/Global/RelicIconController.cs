@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,10 +15,13 @@ public class RelicIconController : MonoBehaviour, IPointerEnterHandler, IPointer
 	private const float CardWidth = 74f;
 	private const float CardHeight = 82f;
 	private const float IconSize = 52f;
+	private const float TriggerFlashDuration = 0.28f;
 
 	private Image _background;
+	private Image _flashOverlay;
 	private TextMeshProUGUI _nameText;
 	private RelicBase _relic;
+	private Coroutine _triggerFlashCoroutine;
 
 	public void Set(RelicBase relic, TMP_FontAsset fontAsset) {
 		_relic = relic;
@@ -53,7 +57,12 @@ public class RelicIconController : MonoBehaviour, IPointerEnterHandler, IPointer
 		}
 
 		ConfigureIconRect((RectTransform)_icon.transform);
+		_flashOverlay = GetOrCreateChildImage("TriggerFlash");
+		ConfigureFlashRect((RectTransform)_flashOverlay.transform);
+		_flashOverlay.color = Color.clear;
+		_flashOverlay.raycastTarget = false;
 		_nameText = GetOrCreateNameText();
+		_nameText.transform.SetAsLastSibling();
 	}
 
 	private Image GetOrCreateChildImage(string childName) {
@@ -73,6 +82,14 @@ public class RelicIconController : MonoBehaviour, IPointerEnterHandler, IPointer
 		iconRect.pivot = new Vector2(0.5f, 1f);
 		iconRect.anchoredPosition = new Vector2(0f, -8f);
 		iconRect.sizeDelta = new Vector2(IconSize, IconSize);
+	}
+
+	private static void ConfigureFlashRect(RectTransform flashRect) {
+		flashRect.anchorMin = Vector2.zero;
+		flashRect.anchorMax = Vector2.one;
+		flashRect.pivot = new Vector2(0.5f, 0.5f);
+		flashRect.anchoredPosition = Vector2.zero;
+		flashRect.sizeDelta = Vector2.zero;
 	}
 
 	private TextMeshProUGUI GetOrCreateNameText() {
@@ -101,6 +118,37 @@ public class RelicIconController : MonoBehaviour, IPointerEnterHandler, IPointer
 		text.raycastTarget = false;
 
 		return text;
+	}
+
+	public void PlayTriggerFlash() {
+		EnsureVisuals();
+		if (_triggerFlashCoroutine != null)
+			StopCoroutine(_triggerFlashCoroutine);
+
+		_triggerFlashCoroutine = StartCoroutine(CoTriggerFlash());
+	}
+
+	private IEnumerator CoTriggerFlash() {
+		Vector3 baseScale = Vector3.one;
+		Color baseBackgroundColor = _background.color;
+		Color flashColor = new(1f, 0.76f, 0.28f, 0f);
+		float elapsed = 0f;
+
+		while (elapsed < TriggerFlashDuration) {
+			elapsed += Time.deltaTime;
+			float t = Mathf.Clamp01(elapsed / TriggerFlashDuration);
+			float pulse = Mathf.Sin(t * Mathf.PI);
+			transform.localScale = Vector3.Lerp(baseScale, baseScale * 1.12f, pulse);
+			_background.color = Color.Lerp(baseBackgroundColor, new Color(0.42f, 0.24f, 0.07f, 0.96f), pulse);
+			flashColor.a = Mathf.Lerp(0f, 0.68f, pulse);
+			_flashOverlay.color = flashColor;
+			yield return null;
+		}
+
+		transform.localScale = baseScale;
+		_background.color = baseBackgroundColor;
+		_flashOverlay.color = Color.clear;
+		_triggerFlashCoroutine = null;
 	}
 
 	// 마우스 커서가 들어오면, 팝업 띄우기

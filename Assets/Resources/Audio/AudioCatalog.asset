@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2253c765cfc141b999c2fade2a17a5f3, type: 3}
+  m_Name: AudioCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::AudioCatalog
+  battleBgm: {fileID: 8300000, guid: f92407bc310224f4fbb8c4012404c0d5, type: 3}
+  cardUse: {fileID: 8300000, guid: b94d29076a82cbc4798d6c7934a327c0, type: 3}
+  hit: {fileID: 8300000, guid: 490ca568f2c9ab248bd41319f5f84b5f, type: 3}
+  relicTrigger: {fileID: 8300000, guid: e9c1081a3aa33fc4bbfea1ca41d19964, type: 3}
+  turnEnd: {fileID: 8300000, guid: b548718d67adbb941bc7c6f5680fe2a0, type: 3}
+  victory: {fileID: 8300000, guid: b7aba821fd20b334b9fdd6d10dbf1891, type: 3}
+  defeat: {fileID: 8300000, guid: ce34640663846ea418f79cdac2b0ca46, type: 3}

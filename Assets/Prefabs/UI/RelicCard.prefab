@@ -1576,6 +1576,7 @@ GameObject:
   - component: {fileID: 5823698967085405027}
   - component: {fileID: 1033264318616805798}
   - component: {fileID: 92673454384615685}
+  - component: {fileID: 6453854522971148302}
   m_Layer: 0
   m_Name: RelicCard
   m_TagString: Untagged
@@ -1700,6 +1701,26 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &6453854522971148302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7921030280172104456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2af798ec616b4298a3970f253152173f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RelicCardController
+  _nameText: {fileID: 5663883047998934455}
+  _effectText: {fileID: 4406552134913298957}
+  _costText: {fileID: 7450495567414553001}
+  _rarityText: {fileID: 6713667924109304778}
+  _icon: {fileID: 259816762680453936}
+  _iconPlaceholder: {fileID: 7646421980522857653}
+  _selectHighlight: {fileID: 8865912195010006365}
+  _toggle: {fileID: 92673454384615685}
 --- !u!1 &8855376929433128312
 GameObject:
   m_ObjectHideFlags: 0

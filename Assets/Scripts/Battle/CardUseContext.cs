@@ -7,6 +7,7 @@ public class CardUseContext : BattleContextBase {
 	public readonly RelicManager relicManager;
 	public bool ForceExhaustAfterUse { get; set; }
 	public float AmountMultiplier { get; set; } = 1f;
+	public bool IsPreview { get; set; }
 	
 	public CardUseContext(BattleManager battleManager, RelicManager relicManager, CharacterBase user, List<CharacterBase> targets, CharacterBase target, CardInstance cardInfo) : base(user, target) {
 		this.targets = targets;

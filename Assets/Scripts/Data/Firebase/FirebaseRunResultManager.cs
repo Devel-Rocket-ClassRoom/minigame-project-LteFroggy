@@ -59,15 +59,19 @@ public class FirebaseRunResultManager : MonoBehaviour {
 			return (false, "[FirebaseRunResultManager] 로그인 정보가 없습니다.", null);
 		}
 
+		DatabaseReference resultsReference = null;
+		System.Threading.Tasks.Task<DataSnapshot> loadTask = null;
+
 		try {
 			Debug.Log("[FirebaseRunResultManager] 런 결과 조회 시작");
 
-			DataSnapshot snapshot = await _database.RootReference
+			resultsReference = _database.RootReference
 				.Child("users")
 				.Child(_authManager.UserId)
-				.Child("runResults")
-				.GetValueAsync()
-				.AsUniTask();
+				.Child("runResults");
+
+			loadTask = resultsReference.GetValueAsync();
+			DataSnapshot snapshot = await loadTask.AsUniTask();
 
 			var results = new List<RunResultData>();
 			foreach (DataSnapshot child in snapshot.Children) {
@@ -86,6 +90,8 @@ public class FirebaseRunResultManager : MonoBehaviour {
 		}
 		catch (Exception e) {
 			Debug.LogError($"[FirebaseRunResultManager] 런 결과 조회 실패: {e.Message}");
+			Debug.LogError(
+				$"[FirebaseRunResultManager] 런 결과 조회 상세 오류\n경로: {resultsReference}\n발생 예외: {e}\n원본 Firebase Task 예외: {loadTask?.Exception?.Flatten() ?? e}");
 			return (false, e.Message, null);
 		}
 	}
@@ -108,13 +114,15 @@ public class FirebaseRunResultManager : MonoBehaviour {
 			currentHealth = data.CurrentHealth,
 			maxHealth = data.MaxHealth,
 			gold = data.Gold,
+			totalGoldEarned = data.TotalGoldEarned,
+			totalGoldSpent = data.TotalGoldSpent,
 			deckCount = data.Deck.Count,
 			relicCount = data.Relics.Count,
 			cardIds = data.Deck
 				.Select(card => card._cardDefinition.cardId.ToString())
 				.ToArray(),
 			relicIds = data.Relics
-				.Select(relic => relic.GetType().Name)
+				.Select(relic => relic.relicId)
 				.ToArray(),
 			savedAtUnixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
 		};

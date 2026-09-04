@@ -17,6 +17,7 @@ public class BattleManager : BattleSystemManager {
 	[Header("=== 카드 보상 패널 ===")]
 	[SerializeField] private CardRewardController _cardRewardController;
 	[SerializeField] private int _goldReward = 20;
+	[SerializeField] private int _runClearGoldBonus = 100;
 
 	[Header("=== 에너지 부족 안내 패널 ===")]
 	[SerializeField] private InsufficientEnergyPanel _insufficientEnergyPanel;
@@ -36,6 +37,7 @@ public class BattleManager : BattleSystemManager {
 	[HideInInspector] public UnityEvent OnCardUse;
 
 	private bool IsGameEnd;
+	private bool _metaRewardCommitted;
 	private const string k_FinalEndingSceneName = "EndingScene";
 
 	private void Start() {
@@ -43,6 +45,7 @@ public class BattleManager : BattleSystemManager {
 	}
 
 	public override void StartBattle() {
+		AudioManager.Instance.PlayBattleBgm();
 		_deckManager.SetBattleManager(this);
 		_deckManager.StartBattle();
 		_cardUseManager.StartBattle();
@@ -65,7 +68,11 @@ public class BattleManager : BattleSystemManager {
 		IsGameEnd = true;
 		StopBattleInteraction();
 		RemoveBattleEndListeners();
+		AudioManager.Instance.PlaySfx(GameAudioCue.Defeat);
+		AudioManager.Instance.StopBgm();
+		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
 		SaveRunResultAsync(RunResult.Defeat).Forget();
+		CommitMetaProgressRewardAsync(RunResult.Defeat).Forget();
 		DefeatResultPanel.Show();
 	}
 
@@ -75,6 +82,8 @@ public class BattleManager : BattleSystemManager {
 		IsGameEnd = true;
 		StopBattleInteraction();
 		SetCleareNodeButtonInteractable(false);
+		AudioManager.Instance.PlaySfx(GameAudioCue.Victory);
+		AudioManager.Instance.StopBgm();
 
 		MapNodeType nodeType = GamePlayData.Instance.InGameMapData.NodeNow.Config.Type;
 		GamePlayData.Instance.SetHealth(_characterManager.Player.CurrentHealth);
@@ -82,7 +91,9 @@ public class BattleManager : BattleSystemManager {
 		GamePlayData.Instance.AddGold(goldReward);
 
 		if (nodeType == MapNodeType.Boss) {
+			GamePlayData.Instance.AddGold(_runClearGoldBonus);
 			SaveRunResultAsync(RunResult.Victory).Forget();
+			CommitMetaProgressRewardAsync(RunResult.Victory).Forget();
 			GameEvents.RunCleared();
 			UISceneBootstrapper.Instance.TransitionTo(k_FinalEndingSceneName);
 			RemoveBattleEndListeners();
@@ -129,6 +140,26 @@ public class BattleManager : BattleSystemManager {
 			Debug.LogWarning(error);
 	}
 
+	private async UniTask CommitMetaProgressRewardAsync(RunResult result) {
+		if (_metaRewardCommitted)
+			return;
+
+		_metaRewardCommitted = true;
+		int rewardGold = GamePlayData.Instance.Gold;
+		if (rewardGold <= 0)
+			return;
+
+		FirebaseMetaProgressManager manager = FirebaseBootstrapper.Instance != null
+			? FirebaseBootstrapper.Instance.MetaProgressManager
+			: null;
+		if (manager == null)
+			return;
+
+		var (success, error) = await manager.AddGold(rewardGold);
+		if (!success)
+			Debug.LogWarning($"[BattleManager] 메타 진행 골드 적립 실패({result}): {error}");
+	}
+
 	private void OnEnable() {
 		_enemyManager.OnEnemyTurnEnd.AddListener(StartPlayerTurn);
 
@@ -155,6 +186,7 @@ public class BattleManager : BattleSystemManager {
 	}
 
 	public override void EndPlayerTurn() {
+		AudioManager.Instance.PlaySfx(GameAudioCue.TurnEnd);
 		_turnManager.EndPlayerTurn();
 		_cardUseManager.EndPlayerTurn();
 		_characterManager.EndPlayerTurn();
@@ -200,6 +232,7 @@ public class BattleManager : BattleSystemManager {
 		CardUseContext context = GetCardUseContext(cardInstance, enemyInstance);
 		_relicManager.OnBeforeCardUse(context);
 		_cardUseManager.UseCard(cardInstance, context);
+		AudioManager.Instance.PlaySfx(GameAudioCue.CardUse);
 		_characterManager.Player.NotifyCardUsed();
 		_relicManager.OnAfterCardUse(context);
 
@@ -219,6 +252,13 @@ public class BattleManager : BattleSystemManager {
 
 	public CardUseContext GetCardUseContext(CardInstance cardInstance) {
 		return GetCardUseContext(cardInstance, _mouseController.TargetInstance);
+	}
+
+	public CardUseContext GetPreviewCardUseContext(CardInstance cardInstance) {
+		CardUseContext context = GetCardUseContext(cardInstance);
+		context.IsPreview = true;
+		_relicManager.OnPreviewCardUse(context);
+		return context;
 	}
 
 	public CardUseContext GetCardUseContext(CardInstance cardInstance, EnemyInstance enemyInstance) {
