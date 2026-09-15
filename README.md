@@ -1,5 +1,9 @@
 # Break the Crown
 
+<p align="center">
+  <img src="Assets/Resources/Sprites/btc_mainImage_store-logo.png" alt="Break the Crown 메인 비주얼" width="100%" />
+</p>
+
 > **"카드와 유물의 시너지를 완성하여, 왕좌를 지키는 보스를 격파하라!"**  
 > *Break the Crown*은 매 런마다 변화하는 경로를 탐험하며 덱을 강화하고 최적의 전략으로 적을 공략하는 **덱빌딩 로그라이크(Deck-building Roguelike)** 게임입니다.
 
